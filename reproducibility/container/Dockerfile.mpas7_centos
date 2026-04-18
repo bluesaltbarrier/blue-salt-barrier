@@ -1,0 +1,575 @@
+FROM centos:7
+
+# Create a helper script to set up our custom vault repositories
+# This allows us to re-apply the configuration easily.
+RUN echo '#!/bin/sh' > /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo 'echo "Removing existing CentOS-*.repo files..."' >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo 'rm -f /etc/yum.repos.d/CentOS-*.repo' >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo 'echo "Creating CentOS-Vault-Custom.repo..."' >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo 'cat > /etc/yum.repos.d/CentOS-Vault-Custom.repo <<EOF' >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "[C7vault-base]" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "name=CentOS-7.9.2009 - Base - Vault" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "baseurl=http://vault.centos.org/7.9.2009/os/x86_64/" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "gpgcheck=1" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "enabled=1" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "[C7vault-updates]" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "name=CentOS-7.9.2009 - Updates - Vault" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "baseurl=http://vault.centos.org/7.9.2009/updates/x86_64/" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "gpgcheck=1" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "enabled=1" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "[C7vault-extras]" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "name=CentOS-7.9.2009 - Extras - Vault" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "baseurl=http://vault.centos.org/7.9.2009/extras/x86_64/" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "gpgcheck=1" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "enabled=1" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    echo "EOF" >> /usr/local/bin/setup_custom_vault_repos.sh && \
+    chmod +x /usr/local/bin/setup_custom_vault_repos.sh
+
+# Initial repository setup
+RUN /usr/local/bin/setup_custom_vault_repos.sh
+
+# Import the CentOS 7 GPG key
+RUN rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+# Clean Yum cache and rebuild it using only our custom vault repos
+RUN yum clean all && rm -rf /var/cache/yum/*
+RUN yum --disablerepo='*' --enablerepo='C7vault-base,C7vault-updates,C7vault-extras' makecache
+
+# Update the system. This step might re-install default CentOS repo files.
+RUN yum -y --disablerepo='*' --enablerepo='C7vault-base,C7vault-updates,C7vault-extras' --disableplugin=fastestmirror update
+
+# Re-apply our custom vault repository configuration to ensure they are the ones used.
+RUN /usr/local/bin/setup_custom_vault_repos.sh
+RUN yum clean all && rm -rf /var/cache/yum/*
+RUN yum --disablerepo='*' --enablerepo='C7vault-base,C7vault-updates,C7vault-extras' makecache
+
+# Install SCL repository packages. These packages also install SCL GPG keys.
+RUN yum -y --disablerepo='*' --enablerepo='C7vault-extras' --disableplugin=fastestmirror install \
+    centos-release-scl centos-release-scl-rh
+
+# Remove the SCL repo files that were just installed to avoid conflicts and use our own.
+RUN rm -f /etc/yum.repos.d/CentOS-SCLo-scl.repo /etc/yum.repos.d/CentOS-SCLo-scl-rh.repo
+
+# Create our custom SCL Vault repository file using cat and heredoc
+RUN cat > /etc/yum.repos.d/CentOS-SCLo-Vault.repo <<'EOF'
+[centos-sclo-rh]
+name=CentOS-7 - SCLo rh - Vault
+baseurl=http://vault.centos.org/7.9.2009/sclo/$basearch/rh/
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-SCLo
+
+[centos-sclo-sclo]
+name=CentOS-7 - SCLo sclo - Vault
+baseurl=http://vault.centos.org/7.9.2009/sclo/$basearch/sclo/
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-SCLo
+EOF
+
+# --- BEGIN DEBUG --- (These were your existing debug curl tests, kept as is)
+RUN echo "--- Content of /etc/yum.repos.d/CentOS-SCLo-Vault.repo ---" && \
+    cat /etc/yum.repos.d/CentOS-SCLo-Vault.repo && \
+    echo "--------------------------------------------------------"
+RUN echo "--- Testing SCLo rh repomd.xml URL with curl (verbose) ---" && \
+    curl -L --verbose http://vault.centos.org/7/sclo/x86_64/rh/repodata/repomd.xml -o /tmp/rh_repomd.xml && \
+    echo "Curl exit code for rh: $?" && ls -l /tmp/rh_repomd.xml && head /tmp/rh_repomd.xml
+RUN echo "--- Testing SCLo sclo repomd.xml URL with curl (verbose) ---" && \
+    curl -L --verbose http://vault.centos.org/7/sclo/x86_64/sclo/repodata/repomd.xml -o /tmp/sclo_repomd.xml && \
+    echo "Curl exit code for sclo: $?" && ls -l /tmp/sclo_repomd.xml && head /tmp/sclo_repomd.xml
+# --- END DEBUG ---
+
+# Modify /etc/yum.conf
+RUN echo "" >> /etc/yum.conf && \
+    echo "# Custom additions for debugging vault access" >> /etc/yum.conf && \
+    echo "sslverify=False" >> /etc/yum.conf && \
+    echo "ip_resolve=4" >> /etc/yum.conf && \
+    echo "http_caching=none" >> /etc/yum.conf && \
+    echo "enabled_plugins=" >> /etc/yum.conf && \
+    echo "--- Content of /etc/yum.conf (with additions) ---" && \
+    cat /etc/yum.conf && \
+    echo "--------------------------------------------------"
+
+# Clean Yum cache again and rebuild, explicitly enabling our custom C7vault and SCL repos.
+RUN yum clean all && rm -rf /var/cache/yum/*
+
+RUN echo "--- Making cache for C7vault-base ---" && \
+    yum --noplugins --disablerepo='*' --enablerepo='C7vault-base' makecache -d 9 || \
+    (echo "ERROR: Failed C7vault-base makecache" && exit 1)
+
+RUN echo "--- Making cache for C7vault-updates ---" && \
+    yum --noplugins --disablerepo='*' --enablerepo='C7vault-updates' makecache -d 9 || \
+    (echo "ERROR: Failed C7vault-updates makecache" && exit 1)
+
+RUN echo "--- Making cache for C7vault-extras ---" && \
+    yum --noplugins --disablerepo='*' --enablerepo='C7vault-extras' makecache -d 9 || \
+    (echo "ERROR: Failed C7vault-extras makecache" && exit 1)
+
+RUN echo "--- Making cache for centos-sclo-rh ---" && \
+    yum --noplugins --disablerepo='*' --enablerepo='centos-sclo-rh' makecache -d 9
+    # Let this one fail if it's problematic, to see the error.
+
+RUN echo "--- Making cache for centos-sclo-sclo ---" && \
+    yum --noplugins --disablerepo='*' --enablerepo='centos-sclo-sclo' makecache -d 9 || \
+    (echo "ERROR: Failed centos-sclo-sclo makecache" && exit 1)
+
+RUN echo "--- Making cache for all required repos (combined) ---" && \
+    yum --noplugins --disablerepo='*' \
+    --enablerepo='C7vault-base,C7vault-updates,C7vault-extras,centos-sclo-rh,centos-sclo-sclo' \
+    makecache -d 9
+
+# Install devtoolset-8 and other required packages
+RUN yum -y --noplugins --disablerepo='*' \
+    --enablerepo='C7vault-base,C7vault-updates,C7vault-extras,centos-sclo-rh,centos-sclo-sclo,epel' \
+    install \
+    scl file gcc gcc-gfortran gcc-c++ glibc.i686 libgcc.i686 libpng-devel jasper \
+    jasper-devel hostname m4 make perl tar bash tcsh time wget which zlib zlib-devel \
+    openssh-clients openssh-server net-tools fontconfig libgfortran libXext libXrender \
+    ImageMagick sudo epel-release git \
+    devtoolset-8 devtoolset-8-gcc devtoolset-8-gcc-gfortran devtoolset-8-gcc-c++ && \
+    yum clean all
+
+# After installing epel-release, ensure its repo file also uses vault or reliable base URLs if needed.
+RUN \
+    echo "Fixing EPEL repository files to point to archives..." && \
+    EPEL_REPO_FILE="/etc/yum.repos.d/epel.repo" && \
+    EPEL_TESTING_REPO_FILE="/etc/yum.repos.d/epel-testing.repo" && \
+    ARCHIVE_EPEL_BASEURL="baseurl=https://archives.fedoraproject.org/pub/archive/epel/7/\$basearch" && \
+    OLD_EPEL_BASEURL_PATTERN_COMMENTED="^#baseurl=http://download.fedoraproject.org/pub/epel/7/\\\$basearch" && \
+    OLD_EPEL_BASEURL_PATTERN_HTTP="^baseurl=http://download.fedoraproject.org/pub/epel/7/\\\$basearch" && \
+    OLD_EPEL_BASEURL_PATTERN_HTTPS="^baseurl=https://download.fedoraproject.org/pub/epel/7/\\\$basearch" && \
+    ARCHIVE_EPEL_TESTING_BASEURL="baseurl=https://archives.fedoraproject.org/pub/archive/epel/testing/7/\$basearch" && \
+    OLD_EPEL_TESTING_BASEURL_PATTERN_COMMENTED="^#baseurl=http://download.fedoraproject.org/pub/epel/testing/7/\\\$basearch" && \
+    OLD_EPEL_TESTING_BASEURL_PATTERN_HTTP="^baseurl=http://download.fedoraproject.org/pub/epel/testing/7/\\\$basearch" && \
+    OLD_EPEL_TESTING_BASEURL_PATTERN_HTTPS="^baseurl=https://download.fedoraproject.org/pub/epel/testing/7/\\\$basearch" && \
+    \
+    if [ -f "$EPEL_REPO_FILE" ]; then \
+        echo "Processing $EPEL_REPO_FILE..." && \
+        sed -i -e 's|^metalink=|#metalink=|g' "$EPEL_REPO_FILE" && \
+        sed -i -e "s|$OLD_EPEL_BASEURL_PATTERN_COMMENTED|$ARCHIVE_EPEL_BASEURL|" "$EPEL_REPO_FILE" && \
+        sed -i -e "s|$OLD_EPEL_BASEURL_PATTERN_HTTP|$ARCHIVE_EPEL_BASEURL|" "$EPEL_REPO_FILE" && \
+        sed -i -e "s|$OLD_EPEL_BASEURL_PATTERN_HTTPS|$ARCHIVE_EPEL_BASEURL|" "$EPEL_REPO_FILE" && \
+        echo "--- Content of $EPEL_REPO_FILE (after fix) ---" && cat "$EPEL_REPO_FILE" && echo "--- End of $EPEL_REPO_FILE ---" ; \
+    else \
+        echo "Warning: $EPEL_REPO_FILE not found. This might cause issues if EPEL is expected." ; \
+    fi && \
+    \
+    if [ -f "$EPEL_TESTING_REPO_FILE" ]; then \
+        echo "Processing $EPEL_TESTING_REPO_FILE..." && \
+        sed -i -e 's|^metalink=|#metalink=|g' "$EPEL_TESTING_REPO_FILE" && \
+        sed -i -e "s|$OLD_EPEL_TESTING_BASEURL_PATTERN_COMMENTED|$ARCHIVE_EPEL_TESTING_BASEURL|" "$EPEL_TESTING_REPO_FILE" && \
+        sed -i -e "s|$OLD_EPEL_TESTING_BASEURL_PATTERN_HTTP|$ARCHIVE_EPEL_TESTING_BASEURL|" "$EPEL_TESTING_REPO_FILE" && \
+        sed -i -e "s|$OLD_EPEL_TESTING_BASEURL_PATTERN_HTTPS|$ARCHIVE_EPEL_TESTING_BASEURL|" "$EPEL_TESTING_REPO_FILE" && \
+        echo "--- Content of $EPEL_TESTING_REPO_FILE (after fix) ---" && cat "$EPEL_TESTING_REPO_FILE" && echo "--- End of $EPEL_TESTING_REPO_FILE ---" ; \
+    else \
+        echo "Info: $EPEL_TESTING_REPO_FILE not found (this is often okay as testing repo is usually disabled)." ; \
+    fi
+
+RUN echo "--- Making cache for fixed epel repo ---" && \
+    yum --noplugins --disablerepo='*' --enablerepo='epel' makecache -d 9
+
+
+# Create wrf user and group
+RUN groupadd wrf -g 9999 && \
+    useradd -u 9999 -g wrf -G wheel -M -d /wrf wrfuser && \
+    mkdir /wrf && \
+    chown -R wrfuser:wrf /wrf && \
+    chmod 6755 /wrf
+
+# Set parallel make jobs
+ENV J=4
+
+# Build OpenMPI
+RUN mkdir -p /wrf/libs/openmpi/BUILD_DIR && \
+    cd /wrf/libs/openmpi/BUILD_DIR && \
+    curl -L -O https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-4.0.0.tar.gz && \
+    tar -xf openmpi-4.0.0.tar.gz && \
+    cd openmpi-4.0.0 && \
+    scl enable devtoolset-8 -- \
+    ./configure --prefix=/usr/local &> /wrf/libs/build_log_openmpi_config && \
+    scl enable devtoolset-8 -- \
+    make all install &> /wrf/libs/build_log_openmpi_make && \
+    rm -rf /wrf/libs/openmpi/BUILD_DIR
+
+# Build HDF5 libraries
+RUN mkdir -p /wrf/libs/hdf5/BUILD_DIR && \
+    cd /wrf/libs/hdf5/BUILD_DIR && \
+    wget http://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.4/src/hdf5-1.10.4.tar.gz && \
+    tar -xzf hdf5-1.10.4.tar.gz && \
+    cd hdf5-1.10.4 && \
+    scl enable devtoolset-8 -- ./configure --enable-fortran --enable-cxx --prefix=/usr/local/ &> /wrf/libs/build_log_hdf5_config && \
+    scl enable devtoolset-8 -- make install &> /wrf/libs/build_log_hdf5_make && \
+    cd /wrf/libs/hdf5/BUILD_DIR && \
+    rm -rf hdf5-1.10.4 hdf5-1.10.4.tar.gz
+
+ENV LD_LIBRARY_PATH=/usr/local/lib
+
+# Build netCDF C and Fortran libraries
+ENV NETCDF=/wrf/libs/netcdf
+
+RUN yum -y --noplugins --disablerepo='*' \
+    --enablerepo='C7vault-base,C7vault-updates,C7vault-extras,epel' \
+    install libcurl-devel zlib-devel && \
+    yum clean all && rm -rf /var/cache/yum/* && \
+    mkdir -p ${NETCDF}/BUILD_DIR && \
+    cd ${NETCDF}/BUILD_DIR && \
+    echo "Downloading NetCDF-C v4.6.2..." && \
+    curl -SL --fail --retry 3 --retry-delay 5 -O https://github.com/Unidata/netcdf-c/archive/v4.6.2.tar.gz || \
+        (echo "ERROR: NetCDF-C download failed." && exit 1) && \
+    echo "Extracting NetCDF-C..." && \
+    tar -xf v4.6.2.tar.gz || \
+        (echo "ERROR: NetCDF-C tar extraction failed. File downloaded:" && file v4.6.2.tar.gz && exit 1) && \
+    cd netcdf-c-4.6.2 && \
+    echo "Current directory for NetCDF-C: $(pwd)" && \
+    echo "Configuring NetCDF-C..." && \
+    (scl enable devtoolset-8 -- sh -c \
+    "export LD_LIBRARY_PATH=/usr/local/lib:\$LD_LIBRARY_PATH; \
+     export CPPFLAGS=\"-I/usr/local/include\"; \
+     export LDFLAGS=\"-L/usr/local/lib\"; \
+     ./configure --prefix=${NETCDF}" &> /wrf/libs/build_log_ncc_config) || \
+        (echo "ERROR: NetCDF-C configure failed (command returned non-zero). Dumping configure log:" && \
+         cat /wrf/libs/build_log_ncc_config && \
+         echo "--- End of NetCDF-C configure log dump ---" && \
+         exit 1) && \
+    echo "Building NetCDF-C (make)..." && \
+    (scl enable devtoolset-8 -- make &> /wrf/libs/build_log_ncc_make) || \
+        (cat /wrf/libs/build_log_ncc_make && echo "ERROR: NetCDF-C make failed. Check /wrf/libs/build_log_ncc_make" && exit 1) && \
+    echo "Installing NetCDF-C (make install)..." && \
+    (scl enable devtoolset-8 -- make install &> /wrf/libs/build_log_ncc_make_install) || \
+        (cat /wrf/libs/build_log_ncc_make_install && echo "ERROR: NetCDF-C make install failed. Check /wrf/libs/build_log_ncc_make_install" && exit 1) && \
+    cd .. && \
+    echo "Downloading NetCDF-Fortran v4.4.5..." && \
+    curl -SL --fail --retry 3 --retry-delay 5 -O https://github.com/Unidata/netcdf-fortran/archive/v4.4.5.tar.gz || \
+        (echo "ERROR: NetCDF-Fortran download failed." && exit 1) && \
+    echo "Extracting NetCDF-Fortran..." && \
+    tar -xf v4.4.5.tar.gz || \
+        (echo "ERROR: NetCDF-Fortran tar extraction failed. File downloaded:" && file v4.4.5.tar.gz && exit 1) && \
+    cd netcdf-fortran-4.4.5 && \
+    echo "Current directory for NetCDF-Fortran: $(pwd)" && \
+    echo "Listing contents of current directory (NetCDF-Fortran):" && ls -la && \
+    echo "Checking permissions of NetCDF-Fortran configure script:" && ls -l configure && \
+    echo "Ensuring NetCDF-Fortran configure script is executable:" && chmod +x configure && \
+    \
+    echo "Creating NetCDF-Fortran configure helper script (/tmp/configure_ncf.sh)..." && \
+    echo '#!/bin/bash' > /tmp/configure_ncf.sh && \
+    echo 'set -x' >> /tmp/configure_ncf.sh && \
+    echo "echo '--- Environment for NetCDF-Fortran configure (from script) ---' >> /wrf/libs/build_log_ncf_config" >> /tmp/configure_ncf.sh && \
+    echo 'env >> /wrf/libs/build_log_ncf_config' >> /tmp/configure_ncf.sh && \
+    echo "echo '--- End of Environment (from script) ---' >> /wrf/libs/build_log_ncf_config" >> /tmp/configure_ncf.sh && \
+    echo "echo '--- NetCDF-Fortran configure script output will follow (from script) ---' >> /wrf/libs/build_log_ncf_config" >> /tmp/configure_ncf.sh && \
+    echo 'export CC=gcc' >> /tmp/configure_ncf.sh && \
+    echo 'export CXX=g++' >> /tmp/configure_ncf.sh && \
+    echo 'export FC=gfortran' >> /tmp/configure_ncf.sh && \
+    echo 'export F77=gfortran' >> /tmp/configure_ncf.sh && \
+    echo "export LD_LIBRARY_PATH=${NETCDF}/lib:/usr/local/lib:\$LD_LIBRARY_PATH" >> /tmp/configure_ncf.sh && \
+    echo "export CPPFLAGS=\"-I${NETCDF}/include -I/usr/local/include\"" >> /tmp/configure_ncf.sh && \
+    echo "export LDFLAGS=\"-L${NETCDF}/lib -L/usr/local/lib\"" >> /tmp/configure_ncf.sh && \
+    echo "./configure --prefix=${NETCDF} >> /wrf/libs/build_log_ncf_config 2>&1" >> /tmp/configure_ncf.sh && \
+    echo 'CONFIGURE_EXIT_CODE=$?' >> /tmp/configure_ncf.sh && \
+    echo "echo \"--- End of NetCDF-Fortran configure script output (from script) (Exit Code: \$CONFIGURE_EXIT_CODE) --- \" >> /wrf/libs/build_log_ncf_config" >> /tmp/configure_ncf.sh && \
+    echo 'exit $CONFIGURE_EXIT_CODE' >> /tmp/configure_ncf.sh && \
+    chmod +x /tmp/configure_ncf.sh && \
+    \
+    echo "Configuring NetCDF-Fortran using helper script..." && \
+    echo "" > /wrf/libs/build_log_ncf_config && \
+    (scl enable devtoolset-8 -- /tmp/configure_ncf.sh) || \
+        (echo "ERROR: NetCDF-Fortran configure helper script failed. Dumping combined log:" && \
+         cat /wrf/libs/build_log_ncf_config && \
+         echo "--- End of NetCDF-Fortran combined log dump (from helper script failure) ---" && \
+         exit 1) && \
+    \
+    echo "Checking if NetCDF-Fortran Makefile was created..." && \
+    if [ ! -f Makefile ]; then \
+        echo "ERROR: NetCDF-Fortran Makefile not found after configure. Configure script apparently succeeded but no Makefile. Dumping combined log:" && \
+        cat /wrf/libs/build_log_ncf_config && \
+        echo "--- End of NetCDF-Fortran combined log dump (Makefile not found) ---" && \
+        exit 1; \
+    fi && \
+    echo "NetCDF-Fortran Makefile found. Proceeding with build." && \
+    echo "Building NetCDF-Fortran (make)..." && \
+    (scl enable devtoolset-8 -- make &> /wrf/libs/build_log_ncf_make) || \
+        (cat /wrf/libs/build_log_ncf_make && echo "ERROR: NetCDF-Fortran make failed. Check /wrf/libs/build_log_ncf_make" && exit 1) && \
+    echo "Installing NetCDF-Fortran (make install)..." && \
+    (scl enable devtoolset-8 -- make install &> /wrf/libs/build_log_ncf_make_install) || \
+        (cat /wrf/libs/build_log_ncf_make_install && echo "ERROR: NetCDF-Fortran make install failed. Check /wrf/libs/build_log_ncf_make_install" && exit 1) && \
+    echo "Cleaning up NetCDF build directory..." && \
+    rm -rf ${NETCDF}/BUILD_DIR
+
+# Download NCL
+RUN yum -y --noplugins --disablerepo='*' \
+    --enablerepo='C7vault-base,C7vault-updates,C7vault-extras,epel' \
+    install ncl && \
+    yum clean all && rm -rf /var/cache/yum/*
+ENV NCARG_ROOT=/usr
+
+COPY boulder_snow_fnl.tar.gz /tmp/boulder_snow_fnl.tar.gz
+RUN ls -lh /tmp/boulder_snow_fnl.tar.gz && \
+    file /tmp/boulder_snow_fnl.tar.gz && \
+    chown wrfuser:wrf /tmp/boulder_snow_fnl.tar.gz && \
+    echo "Ownership of /tmp/boulder_snow_fnl.tar.gz changed to wrfuser:wrf" && \
+    ls -lh /tmp/boulder_snow_fnl.tar.gz
+
+COPY namelist.input /namelist.input
+# COPY WRF_NCL_scripts.tar.gz /WRF_NCL_scripts.tar.gz
+
+RUN if [ -f /namelist.input ]; then chown wrfuser:wrf /namelist.input; ls -l /namelist.input; else echo "ERROR: /namelist.input was not COPIED. This is critical." && exit 1; fi && \
+    if [ -f /WRF_NCL_scripts.tar.gz ]; then chown wrfuser:wrf /WRF_NCL_scripts.tar.gz; ls -l /WRF_NCL_scripts.tar.gz; else echo "INFO: /WRF_NCL_scripts.tar.gz was not COPIED. NCL scripts will be missing (this is non-critical)."; fi
+
+COPY default-mca-params.conf /wrf/.openmpi/mca-params.conf
+# chown for default-mca-params.conf happens later
+
+RUN mkdir -p /var/run/sshd && \
+    ssh-keygen -A && \
+    sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/g' /etc/ssh/sshd_config && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/#RSAAuthentication yes/RSAAuthentication yes/g' /etc/ssh/sshd_config && \
+    sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
+
+RUN mkdir -p /wrf/WPS_GEOG /wrf/wrfinput /wrf/wrfoutput && \
+    chown -R wrfuser:wrf /wrf /wrf/WPS_GEOG /wrf/wrfinput /wrf/wrfoutput /usr/local && \
+    chmod -R 775 /usr/local && \
+    chmod -R g+w /usr/local && \
+    chmod 6755 /wrf /wrf/WPS_GEOG /wrf/wrfinput /wrf/wrfoutput
+
+# This RUN command prints the contents of /etc/csh.cshrc BEFORE user setup.
+RUN echo "--- Contents of /etc/csh.cshrc BEFORE user setup ---" && \
+    cat /etc/csh.cshrc && \
+    echo "--- End of /etc/csh.cshrc ---"
+
+RUN echo "source /opt/rh/devtoolset-8/enable" >> /etc/bashrc && \
+    echo "export LDFLAGS=-lm" >> /etc/bashrc && \
+    echo "export NETCDF=${NETCDF}" >> /etc/bashrc && \
+    echo "export JASPERINC=/usr/include/jasper/" >> /etc/bashrc && \
+    echo "export JASPERLIB=/usr/lib64/" >> /etc/bashrc && \
+    echo 'export LD_LIBRARY_PATH=${NETCDF}/lib:\${LD_LIBRARY_PATH}' >> /etc/bashrc && \
+    echo 'export PATH=${NCARG_ROOT}/bin:${NETCDF}/bin:\$PATH' >> /etc/bashrc && \
+    \
+    # For /etc/csh.cshrc, add devtoolset-8 sourcing, but we'll override prompt in user's .tcshrc
+    echo "# Source SCL devtoolset-8 for tcsh (system-wide)" > /etc/csh.cshrc && \
+    echo "if ( -f /opt/rh/devtoolset-8/enable ) then" >> /etc/csh.cshrc && \
+    echo "    source /opt/rh/devtoolset-8/enable" >> /etc/csh.cshrc && \
+    echo "endif" >> /etc/csh.cshrc && \
+    # Original tcsh environment settings from your Dockerfile
+    echo "setenv LDFLAGS -lm" >> /etc/csh.cshrc && \
+    echo "setenv NETCDF ${NETCDF}" >> /etc/csh.cshrc && \
+    echo "setenv JASPERINC /usr/include/jasper/" >> /etc/csh.cshrc && \
+    echo "setenv JASPERLIB /usr/lib64/" >> /etc/csh.cshrc && \
+    echo '# Prepend to LD_LIBRARY_PATH for tcsh if NETCDF is set' >> /etc/csh.cshrc && \
+    echo 'if ( $?NETCDF && $?LD_LIBRARY_PATH ) then' >> /etc/csh.cshrc && \
+    echo "    setenv LD_LIBRARY_PATH \${NETCDF}/lib:\${LD_LIBRARY_PATH}" >> /etc/csh.cshrc && \
+    echo 'else if ( $?NETCDF ) then' >> /etc/csh.cshrc && \
+    echo "    setenv LD_LIBRARY_PATH \${NETCDF}/lib" >> /etc/csh.cshrc && \
+    echo 'endif' >> /etc/csh.cshrc && \
+    echo '# Prepend to PATH for tcsh if NCARG_ROOT and NETCDF are set' >> /etc/csh.cshrc && \
+    echo 'if ( $?NCARG_ROOT && $?NETCDF && $?PATH ) then' >> /etc/csh.cshrc && \
+    echo "    setenv PATH \${NCARG_ROOT}/bin:\${NETCDF}/bin:\$PATH" >> /etc/csh.cshrc && \
+    echo 'else if ( $?NCARG_ROOT && $?NETCDF ) then' >> /etc/csh.cshrc && \
+    echo "    setenv PATH \${NCARG_ROOT}/bin:\${NETCDF}/bin" >> /etc/csh.cshrc && \
+    echo 'endif' >> /etc/csh.cshrc
+
+RUN mkdir -p /wrf/.ssh /wrf/.openmpi && \
+    chown -R wrfuser:wrf /wrf/
+
+COPY default-mca-params.conf /wrf/.openmpi/mca-params.conf
+RUN chown wrfuser:wrf /wrf/.openmpi/mca-params.conf
+
+COPY namelist_colorado.tar.gz namelist_colorado.tar.gz
+COPY WRF_NCL_scripts.tar.gz WRF_NCL_scripts.tar.gz
+RUN chown wrfuser:wrf namelist_colorado.tar.gz WRF_NCL_scripts.tar.gz && \
+    ls -l namelist_colorado.tar.gz WRF_NCL_scripts.tar.gz
+
+# Switch to wrfuser
+USER wrfuser
+# Set WORKDIR to /wrf as this seems to be the user's main directory
+WORKDIR /wrf
+
+# Create a .tcshrc file for wrfuser to set a custom prompt
+# and ensure devtoolset-8 and other environment variables are sourced for interactive shells.
+RUN echo "# User's /wrf/.tcshrc file" > /wrf/.tcshrc && \
+    echo "echo '>>> Sourcing /wrf/.tcshrc...'" >> /wrf/.tcshrc && \
+    echo "" >> /wrf/.tcshrc && \
+    echo "# Source SCL devtoolset if available (again, to ensure user's session gets it)" >> /wrf/.tcshrc && \
+    echo "if ( -f /opt/rh/devtoolset-8/enable ) then" >> /wrf/.tcshrc && \
+    echo "    echo '>>> Sourcing /opt/rh/devtoolset-8/enable from .tcshrc...'" >> /wrf/.tcshrc && \
+    echo "    source /opt/rh/devtoolset-8/enable" >> /wrf/.tcshrc && \
+    echo "endif" >> /wrf/.tcshrc && \
+    echo "" >> /wrf/.tcshrc && \
+    # Set environment variables needed for WRF/WPS/NCL
+    echo "# Setting WRF/WPS Environment Variables in .tcshrc" >> /wrf/.tcshrc && \
+    echo "setenv NML_VERSION 4.0" >> /wrf/.tcshrc && \
+    echo "setenv JASPERINC /usr/include/jasper" >> /wrf/.tcshrc && \
+    echo "setenv JASPERLIB /usr/lib64" >> /wrf/.tcshrc && \
+    echo "setenv NETCDF_classic 1" >> /wrf/.tcshrc && \
+    echo "setenv NETCDF ${NETCDF}" >> /wrf/.tcshrc && \
+    echo "setenv NCARG_ROOT ${NCARG_ROOT}" >> /wrf/.tcshrc && \
+    echo "" >> /wrf/.tcshrc && \
+    # Prepend to LD_LIBRARY_PATH
+    echo "# Setting LD_LIBRARY_PATH in .tcshrc" >> /wrf/.tcshrc && \
+    echo 'if ( $?LD_LIBRARY_PATH ) then' >> /wrf/.tcshrc && \
+    echo '    setenv LD_LIBRARY_PATH /usr/local/lib:${NETCDF}/lib:\${LD_LIBRARY_PATH}' >> /wrf/.tcshrc && \
+    echo 'else' >> /wrf/.tcshrc && \
+    echo '    setenv LD_LIBRARY_PATH /usr/local/lib:${NETCDF}/lib' >> /wrf/.tcshrc && \
+    echo 'endif' >> /wrf/.tcshrc && \
+    echo "" >> /wrf/.tcshrc && \
+    # Prepend to PATH
+    echo "# Setting PATH in .tcshrc" >> /wrf/.tcshrc && \
+    echo 'if ( $?PATH ) then' >> /wrf/.tcshrc && \
+    echo '    setenv PATH ${NCARG_ROOT}/bin:${NETCDF}/bin:/wrf/WRF/main:/wrf/WPS:\${PATH}' >> /wrf/.tcshrc && \
+    echo 'else' >> /wrf/.tcshrc && \
+    echo '    setenv PATH ${NCARG_ROOT}/bin:${NETCDF}/bin:/wrf/WRF/main:/wrf/WPS' >> /wrf/.tcshrc && \
+    echo 'endif' >> /wrf/.tcshrc && \
+    echo "" >> /wrf/.tcshrc && \
+    # Forcefully set a simple prompt AT THE END
+    echo "# Setting a simple, robust prompt in .tcshrc" >> /wrf/.tcshrc && \
+    echo "set prompt='[%n@%m %c]%# '" >> /wrf/.tcshrc && \
+    echo "" >> /wrf/.tcshrc && \
+    echo "echo '>>> /wrf/.tcshrc sourcing complete.'" >> /wrf/.tcshrc
+
+# Define where WRF and WPS source code will be (these are directories inside /wrf)
+ENV WRF_SRC_DIR=/wrf/WRF
+ENV WPS_SRC_DIR=/wrf/WPS
+# Update PATH for the user.
+# This will be further augmented by env_setup.sh during RUN and .tcshrc for interactive.
+ENV PATH=${WRF_SRC_DIR}:${WPS_SRC_DIR}:${PATH}
+
+
+# The echo command here is just a message.
+# The actual cloning is done later, conditioned by 'argname'.
+RUN echo ">>> Build argument 'argname' will determine if/how WRF and WPS are cloned."
+RUN echo ">>> If argname=tutorial, WRF and WPS will be cloned into ${WRF_SRC_DIR} and ${WPS_SRC_DIR} respectively."
+
+# Set the SHELL for subsequent RUN, CMD, ENTRYPOINT instructions that use the shell form.
+# This is a Dockerfile instruction, not a command to be run in a shell.
+SHELL ["/bin/bash", "-c"]
+
+# Create an environment setup script for wrfuser build steps
+RUN echo "#!/bin/bash" > /wrf/env_setup.sh && \
+    echo "echo 'Sourcing /opt/rh/devtoolset-8/enable...'" >> /wrf/env_setup.sh && \
+    echo "source /opt/rh/devtoolset-8/enable" >> /wrf/env_setup.sh && \
+    echo "export NML_VERSION=4.0" >> /wrf/env_setup.sh && \
+    echo "export JASPERINC=/usr/include/jasper" >> /wrf/env_setup.sh && \
+    echo "export JASPERLIB=/usr/lib64" >> /wrf/env_setup.sh && \
+    echo "export NETCDF_classic=1" >> /wrf/env_setup.sh && \
+    echo "export NETCDF=${NETCDF}" >> /wrf/env_setup.sh && \
+    echo "export NCARG_ROOT=${NCARG_ROOT}" >> /wrf/env_setup.sh && \
+    echo 'export LD_LIBRARY_PATH=/usr/local/lib:${NETCDF}/lib:\${LD_LIBRARY_PATH}' >> /wrf/env_setup.sh && \
+    # PATH in env_setup.sh should also include devtoolset-8, NCL, NetCDF, and WRF/WPS executables
+    echo 'export PATH=${NCARG_ROOT}/bin:${NETCDF}/bin:${WRF_SRC_DIR}/main:${WPS_SRC_DIR}:\$PATH' >> /wrf/env_setup.sh && \
+    echo "echo 'Current PATH in env_setup.sh: \$PATH'" >> /wrf/env_setup.sh && \
+    chmod +x /wrf/env_setup.sh
+
+# Set environment variables for WRF (for wrfuser build time and runtime via env_setup.sh and direct ENV)
+# These ENV vars are set for the container environment directly.
+# The env_setup.sh script is for sourcing within specific RUN commands.
+ENV NML_VERSION=4.0
+ENV JASPERINC=/usr/include/jasper
+ENV JASPERLIB=/usr/lib64
+ENV NETCDF_classic=1
+# NETCDF and NCARG_ROOT are already set by previous ENV instructions for root, ensure they are set for wrfuser if not inherited
+# For wrfuser, ensure these point to the correct final locations.
+# LD_LIBRARY_PATH and PATH will also be heavily influenced by sourcing devtoolset-8 and env_setup.sh
+ENV LD_LIBRARY_PATH=/opt/rh/devtoolset-8/root/usr/lib64:/opt/rh/devtoolset-8/root/usr/lib:/usr/local/lib:${NETCDF}/lib:${LD_LIBRARY_PATH}
+ENV PATH=/opt/rh/devtoolset-8/root/usr/bin:${NCARG_ROOT}/bin:/usr/local/bin:${NETCDF}/bin:${WRF_SRC_DIR}/main:${WPS_SRC_DIR}:${PATH}
+
+
+# Download data based on build argument
+ARG argname=tutorial
+RUN . /wrf/env_setup.sh && \
+    echo "Current user: $(whoami)" && \
+    echo "Current PATH: $PATH" && \
+    echo "Current LD_LIBRARY_PATH: $LD_LIBRARY_PATH" && \
+    echo "NETCDF environment variable is: $NETCDF" && \
+    echo "NCARG_ROOT environment variable is: $NCARG_ROOT" && \
+    \
+    if [ "$argname" = "tutorial" ]; then \
+        echo "Downloading WPS GEOG data..." && \
+        curl -SL --fail --retry 3 --retry-delay 5 https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_low_res_mandatory.tar.gz -o /tmp/geog_low_res_mandatory.tar.gz || exit 1 && \
+        tar -xzC /wrf/WPS_GEOG -f /tmp/geog_low_res_mandatory.tar.gz || exit 1 && \
+        rm /tmp/geog_low_res_mandatory.tar.gz && \
+        \
+        echo "Using local FNL data (boulder_snow_fnl.tar.gz)..." && \
+        if [ -f /tmp/boulder_snow_fnl.tar.gz ]; then \
+            echo "Local FNL file found at /tmp/boulder_snow_fnl.tar.gz" && \
+            ls -l /tmp/boulder_snow_fnl.tar.gz && \
+            file /tmp/boulder_snow_fnl.tar.gz && \
+            echo "Extracting FNL data..." && \
+            tar -xzC /wrf/wrfinput -f /tmp/boulder_snow_fnl.tar.gz || (echo "Tar extraction failed for local FNL data" && exit 1) && \
+            rm /tmp/boulder_snow_fnl.tar.gz; \
+        else \
+            echo "ERROR: Local FNL file /tmp/boulder_snow_fnl.tar.gz not found. It should have been COPIED by root and chowned earlier." && exit 1; \
+        fi && \
+        \
+        echo "Processing Namelist data (from COPIED namelist.input)..." && \
+        if [ -f /namelist.input ]; then \
+            echo "Found /namelist.input. Copying to /wrf/wrfinput/namelist.input" && \
+            mkdir -p /wrf/wrfinput && \
+            cp /namelist.input /wrf/wrfinput/namelist.input && \
+            ls -l /wrf/wrfinput/namelist.input; \
+        else \
+            echo "ERROR: /namelist.input was not found (expected to be COPIED from host). This is critical." && exit 1; \
+        fi && \
+        if [ ! -s /wrf/wrfinput/namelist.input ]; then \
+             echo "ERROR: namelist.input is STILL missing or empty after all attempts." && exit 1; \
+        else \
+             echo "Namelist.input successfully placed in /wrf/wrfinput/"; \
+        fi && \
+        \
+        echo "Processing NCL scripts (from COPIED WRF_NCL_scripts.tar.gz if present)..." && \
+        if [ -f /WRF_NCL_scripts.tar.gz ]; then \
+            echo "Found /WRF_NCL_scripts.tar.gz. Copying and extracting..." && \
+            cp /WRF_NCL_scripts.tar.gz /tmp/WRF_NCL_scripts.tar.gz && \
+            ls -l /tmp/WRF_NCL_scripts.tar.gz && \
+            tar -xzC /wrf -f /tmp/WRF_NCL_scripts.tar.gz || (file /tmp/WRF_NCL_scripts.tar.gz && echo "Tar failed for NCL scripts from COPY. These scripts will be missing."); \
+            rm -f /tmp/WRF_NCL_scripts.tar.gz; \
+        else \
+            echo "INFO: /WRF_NCL_scripts.tar.gz was not COPIED. NCL scripts will be missing. This is non-critical for running WRF itself." ; \
+        fi; \
+    elif [ "$argname" = "regtest" ]; then \
+        echo "Downloading Regtest DATA_small..." && \
+        curl -SL --fail --retry 3 --retry-delay 5 http://www2.mmm.ucar.edu/wrf/dave/DATA/Data_small/data_SMALL.tar.gz | tar -xzC /wrf || exit 1 && \
+        echo "Downloading Regtest nml..." && \
+        curl -SL --fail --retry 3 --retry-delay 5 http://www2.mmm.ucar.edu/wrf/dave/nml.tar.gz | tar -xzC /wrf || exit 1 && \
+        echo "Downloading Regtest script..." && \
+        curl -SL --fail --retry 3 --retry-delay 5 http://www2.mmm.ucar.edu/wrf/dave/script.tar | tar -xC /wrf || exit 1; \
+    fi
+
+# Download WPS source (if tutorial) and clone into WPS_SRC_DIR
+RUN . /wrf/env_setup.sh && \
+    if [ "$argname" = "tutorial" ]; then \
+        echo "Cloning WPS into ${WPS_SRC_DIR}"; \
+        git clone https://github.com/wrf-model/WPS.git ${WPS_SRC_DIR}; \
+        ls -la ${WPS_SRC_DIR}; \
+    fi
+
+# Download WRF source and clone into WRF_SRC_DIR
+RUN . /wrf/env_setup.sh && \
+    echo "Cloning WRF from davegill/WRF pull/4/merge into ${WRF_SRC_DIR}"; \
+    git clone https://github.com/davegill/WRF.git WRF_temp_clone && \
+    cd WRF_temp_clone && \
+    git fetch origin +refs/pull/4/merge:FETCH_HEAD && \
+    git checkout -qf FETCH_HEAD && \
+    cd .. && \
+    mv WRF_temp_clone ${WRF_SRC_DIR} && \
+    rm -rf WRF_temp_clone && \
+    ls -la ${WRF_SRC_DIR}
+
+# Configure SSH keys for wrfuser
+RUN . /wrf/env_setup.sh && \
+    mkdir -p /wrf/.ssh && \
+    echo "StrictHostKeyChecking no" > /wrf/.ssh/config && \
+    ssh-keygen -f /wrf/.ssh/id_rsa -t rsa -N '' && \
+    cp /wrf/.ssh/id_rsa.pub /wrf/.ssh/authorized_keys && \
+    chmod 700 /wrf/.ssh && \
+    chmod 600 /wrf/.ssh/config && \
+    chmod 600 /wrf/.ssh/authorized_keys && \
+    chmod 600 /wrf/.ssh/id_rsa
+
+# Set volume and default command
+VOLUME /wrf
+CMD ["/bin/tcsh", "-l"]

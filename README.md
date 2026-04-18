@@ -32,9 +32,15 @@ Equatorial rainforest trees emit hygroscopic salt aerosols that act as giant clo
 
 ## Reproduce This Research
 
-Everything needed to reproduce the simulations is in this repository. The Docker container, namelists, modified MPAS source, analysis scripts, and GFS initial conditions.
+The `reproducibility/` folder contains the Dockerfiles, the GCCN physics patch, MPAS namelists, and analysis scripts needed to reproduce the experiments.
 
-Minimum hardware: 16 GB RAM, 4 cores, 50 GB disk space. No GPU required.
+See [**reproducibility/REPRODUCE.md**](reproducibility/REPRODUCE.md) for the full step-by-step guide — from building the container to downloading initial conditions to running the analysis.
+
+**What is included:** Dockerfiles, physics modifications, namelists, analysis Python scripts, full paper and website.
+
+**What is NOT included (due to size):** the ~200 GB of simulation output NetCDF files, and the WPS preprocessing toolchain (GFS→MPAS intermediate conversion). The REPRODUCE guide explains how to obtain or regenerate these.
+
+**Minimum hardware:** 16 GB RAM, 4 cores, 100 GB disk. Recommended: 64 GB RAM, 12 cores. No GPU required.
 
 ## How to Contribute
 

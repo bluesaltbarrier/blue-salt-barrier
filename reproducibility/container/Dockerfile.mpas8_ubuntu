@@ -1,0 +1,80 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=UTC
+
+# System packages
+RUN apt-get update && apt-get install -y \
+    build-essential gfortran gcc g++ \
+    libopenmpi-dev openmpi-bin \
+    libhdf5-openmpi-dev \
+    libnetcdf-dev libnetcdff-dev \
+    libpnetcdf-dev \
+    libcurl4-openssl-dev \
+    git cmake python3 python3-pip \
+    wget curl m4 csh file \
+    libjpeg-dev libpng-dev zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Environment
+ENV NETCDF=/usr
+ENV PNETCDF=/usr
+ENV HDF5=/usr
+ENV CC=gcc
+ENV FC=gfortran
+ENV CXX=g++
+
+# Build PnetCDF from source (Ubuntu package missing Fortran bindings)
+RUN cd /tmp && \
+    wget -q https://parallel-netcdf.github.io/Release/pnetcdf-1.12.3.tar.gz && \
+    tar -xzf pnetcdf-1.12.3.tar.gz && cd pnetcdf-1.12.3 && \
+    ./configure --prefix=/usr/local/pnetcdf MPICC=mpicc MPICXX=mpicxx MPIF77=mpif77 MPIF90=mpif90 && \
+    make -j$(nproc) && make install && \
+    rm -rf /tmp/pnetcdf-1.12.3*
+
+ENV PNETCDF=/usr/local/pnetcdf
+
+# Build PIO2 from source
+RUN cd /tmp && \
+    git clone --depth 1 --branch pio2_6_2 https://github.com/NCAR/ParallelIO.git && \
+    mkdir pio_build && cd pio_build && \
+    CC=mpicc FC=mpif90 cmake /tmp/ParallelIO \
+      -DCMAKE_INSTALL_PREFIX=/usr/local/pio \
+      -DNetCDF_C_PATH=/usr \
+      -DNetCDF_Fortran_PATH=/usr \
+      -DPnetCDF_PATH=/usr/local/pnetcdf \
+      -DPIO_ENABLE_TIMING=OFF \
+      -DPIO_ENABLE_TESTS=OFF \
+      -DPIO_ENABLE_EXAMPLES=OFF && \
+    make -j$(nproc) && make install && \
+    rm -rf /tmp/ParallelIO /tmp/pio_build
+
+ENV PIO=/usr/local/pio
+
+# Install METIS for mesh partitioning
+RUN apt-get update && apt-get install -y metis && rm -rf /var/lib/apt/lists/*
+
+# Clone MPAS v8.3.1
+RUN cd /opt && \
+    git clone --branch v8.3.1 https://github.com/MPAS-Dev/MPAS-Model.git && \
+    cd MPAS-Model && \
+    python3 ./src/core_atmosphere/tools/manage_externals/checkout_externals \
+      --externals ./src/core_atmosphere/Externals.cfg
+
+# Compile MPAS atmosphere + init_atmosphere
+RUN cd /opt/MPAS-Model && \
+    make -j$(nproc) gnu CORE=atmosphere USE_PIO2=true && \
+    make -j$(nproc) gnu CORE=init_atmosphere USE_PIO2=true AUTOCLEAN=true && \
+    make -j$(nproc) gnu CORE=atmosphere USE_PIO2=true AUTOCLEAN=true
+
+# Create run directories
+RUN mkdir -p /mpas/run /mpas/data /mpas/results_control /mpas/results_nosalt
+
+# Copy executables and physics tables
+RUN cp /opt/MPAS-Model/atmosphere_model /mpas/run/ && \
+    cp /opt/MPAS-Model/init_atmosphere_model /mpas/run/ && \
+    cp /opt/MPAS-Model/src/core_atmosphere/physics/physics_wrf/files/* /mpas/run/ 2>/dev/null || true && \
+    cp /opt/MPAS-Model/stream_list.atmosphere.* /mpas/run/ 2>/dev/null || true
+
+WORKDIR /mpas/run
+CMD ["/bin/bash"]
