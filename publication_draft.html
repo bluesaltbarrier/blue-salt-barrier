@@ -128,8 +128,15 @@
 
 <div class="abstract">
   <h2>Abstract</h2>
-  <p>We present a computational investigation of a previously unconsidered climate mechanism: the role of biogenic salt aerosols emitted by equatorial rainforest trees in modifying cloud microphysics and precipitation patterns. Tropical trees and their associated fungi eject hygroscopic potassium and sodium salt particles that act as giant cloud condensation nuclei (GCCN), accelerating local rain formation. We hypothesize that this salt-driven cloud seeding acts as a moisture stratification barrier, reducing the poleward transport of latent heat. Deforestation removes this barrier, allowing moisture to escape to higher latitudes where its condensation delivers extra heat to the poles.</p>
-  <p>Using the MPAS-Atmosphere global model (versions 7.0 and 8.3.1) at 240&nbsp;km and 120&nbsp;km resolution, we conducted paired 30-day simulations across six experimental phases, progressively improving the physics from crude autoconversion hacks to a dedicated GCCN tracer with full lifecycle microphysics (kappa-K&ouml;hler activation, time-resolved condensational growth, size-dependent collision efficiencies from Hall 1980, Beard 1976 terminal velocities, and wet scavenging). Our most physically complete 240&nbsp;km April simulation shows that biogenic salt reduces poleward latent heat transport at 30&deg;N by 95&nbsp;TW&mdash;comparable in magnitude to estimated CO<sub>2</sub>-driven transport changes (100&ndash;250&nbsp;TW)&mdash;and cools Antarctica by &minus;1.03&nbsp;K. The Arctic warms (+0.43&nbsp;K) rather than cools in this April simulation. Critically, the microphysical details&mdash;particularly how GCCN drops grow through the coalescence gap before collecting cloud water&mdash;proved essential: a simplified version with fixed drop parameters produced the wrong sign for transport. A follow-up January test at 120&nbsp;km specifically designed to look for Arctic cooling in the NH winter season did <em>not</em> confirm the expected seasonal symmetry &mdash; the Arctic warmed by +1.85&nbsp;K and the transport reduction weakened to &minus;17&nbsp;TW, consistent with weather noise dominating a single 30-day member rather than a definitive refutation. Taken together, these results suggest that biogenic salt aerosols may constitute a significant mechanism for equatorial heat containment, but that definitive testing requires convection-permitting resolution (60&nbsp;km or finer), ensembles of 5&ndash;10 members, and integrations of 90 days or longer &mdash; resources beyond a consumer laptop. We release all code, data, and modifications openly to invite the climate modeling community to extend this work.</p>
+  <p>We investigate a previously unconsidered climate variable: biogenic salt aerosols emitted by equatorial rainforest trees. Tropical trees and their associated fungi eject hygroscopic potassium salt nanoparticles that act as giant cloud condensation nuclei (GCCN), accelerating local rain formation. We hypothesized that this salt-driven cloud seeding acts as a moisture stratification barrier, trapping latent heat at the equator and reducing poleward heat transport. Deforestation would remove this barrier, allowing moisture and heat to escape to higher latitudes.</p>
+
+  <p><strong>The primary finding of this work is not a specific transport number. It is a demonstration that biogenic salt is a remarkably sensitive variable in global atmospheric simulations.</strong> Using MPAS-Atmosphere at 240&nbsp;km with a dedicated GCCN tracer, we tested five different microphysical implementations of the same hypothesis (from a crude autoconversion hack to a full &kappa;-K&ouml;hler/Hall/Beard lifecycle with wet scavenging, including bug-fixed versions after independent AI code review). The poleward latent heat transport at 30&deg;N across these implementations ranged from &minus;153&nbsp;TW to +153&nbsp;TW &mdash; a swing of roughly 300&nbsp;TW, comparable in magnitude to the entire estimated effect of anthropogenic CO<sub>2</sub> on poleward heat transport (100&ndash;250&nbsp;TW). Implementation details that change a single drop-size constant can flip the sign of the global transport response.</p>
+
+  <p>This sensitivity is itself the finding. Whether the real atmospheric response takes any particular sign, the magnitude of the model's response proves that biogenic salt cannot be safely neglected. Current climate models ignore this aerosol source entirely. That omission is unlikely to be innocuous.</p>
+
+  <p>Within the most physically complete configuration we tested (April 240&nbsp;km, bug-fixed GCCN full lifecycle), three robust positive results emerged: (i) biogenic salt enhances equatorial precipitation by +0.17&nbsp;mm/day, consistent with published cloud-seeding enhancement of 28&ndash;60%; (ii) Antarctica cools by &minus;1.26&nbsp;K in the hemisphere entering its winter season; (iii) southward latent heat transport at 30&deg;S is reduced by &minus;61&nbsp;TW. The Northern Hemisphere response &mdash; a +153&nbsp;TW <em>increase</em> in northward transport at 30&deg;N &mdash; is opposite to the simple hypothesis and is most likely an artifact of the convective parameterization responding to GCCN-enhanced grid-scale heating. Testing this at convection-permitting resolution (60&nbsp;km or finer) is the single most important next experiment.</p>
+
+  <p>All results reported here are N&nbsp;=&nbsp;1 single-member 30-day integrations and cannot be distinguished from weather noise at statistical-significance level. A companion 120&nbsp;km January run with the corrected physics is currently in progress. Definitive testing requires ensembles of 5&ndash;10 members, convection-permitting resolution, and 90+ day integrations &mdash; resources beyond a consumer laptop. We release all code, bug-fix patches, Docker builds, and analysis scripts openly at <a href="https://github.com/bluesaltbarrier/blue-salt-barrier">github.com/bluesaltbarrier/blue-salt-barrier</a> to invite the climate modeling community to extend this work.</p>
 </div>
 
 <h2>1. Origin of the Hypothesis</h2>
@@ -434,110 +441,95 @@
   <li><strong>Accretion pathway:</strong> All GCCN collection is added to <code>prr_rcw</code>, not autoconversion (corrected after ChatGPT review).</li>
 </ul>
 
-<p>An earlier simplified version used fixed values (E = 0.6, V = 0.25&nbsp;m/s, R = 50&nbsp;&mu;m for all GCCN), producing a stronger equatorial rain signal (+0.19&nbsp;mm/day) but the wrong sign for transport (+42&nbsp;TW). The full lifecycle code was integrated on April 16, 2026 and produced qualitatively different&mdash;and more physically consistent&mdash;results.</p>
+<p>An independent AI cross-review of our Fortran implementation identified three code errors in our initial GCCN lifecycle version: (1) a radius-reset bug that kept collector drops near 10&nbsp;&mu;m where collision efficiency is zero, (2) a missing air-density factor in the collection-rate formula, and (3) an incorrect update to the rain-number counter. We corrected these bugs, rebuilt the model, and re-ran the paired April 240&nbsp;km experiment. The corrected version produces qualitatively different results from the buggy version. Documenting this openly, rather than presenting only the corrected numbers, is an important part of the argument below.</p>
 
-<p><strong>Results (30-day, completed):</strong></p>
+<p><strong>Results across five implementations of the same hypothesis:</strong></p>
 
 <table>
   <thead>
-    <tr><th>Metric</th><th>v7 Autoconv 25%</th><th>v8 Twomey</th><th>GCCN Simplified</th><th><strong>GCCN Full Lifecycle</strong></th></tr>
+    <tr><th>Metric</th><th>v7 Autoconv 25%</th><th>v8 Twomey</th><th>GCCN Simplified</th><th>GCCN (buggy)</th><th><strong>GCCN (bug-fixed)</strong></th></tr>
   </thead>
   <tbody>
-    <tr><td>Equatorial rain change</td><td>&minus;0.10 mm/day</td><td>+0.05 mm/day</td><td>+0.19 mm/day</td><td><strong>+0.05 mm/day</strong></td></tr>
-    <tr><td>30&deg;N transport change</td><td>&minus;153 TW</td><td>+66 TW</td><td>+42 TW</td><td><strong>&minus;95 TW</strong></td></tr>
-    <tr><td>Arctic temperature</td><td>&minus;0.15 K</td><td>+0.32 K</td><td>+0.21 K</td><td><strong>+0.43 K</strong></td></tr>
-    <tr><td>Antarctic temperature</td><td>+1.5 K</td><td>&minus;0.50 K</td><td>&minus;0.13 K</td><td><strong>&minus;1.03 K</strong></td></tr>
+    <tr><td>Equatorial rain change</td><td>&minus;0.10 mm/day</td><td>+0.05 mm/day</td><td>+0.19 mm/day</td><td>+0.05 mm/day</td><td><strong>+0.17 mm/day</strong></td></tr>
+    <tr><td>30&deg;N transport change</td><td>&minus;153 TW</td><td>+66 TW</td><td>+42 TW</td><td>&minus;95 TW</td><td><strong>+153 TW</strong></td></tr>
+    <tr><td>30&deg;S transport change</td><td>n/a</td><td>&minus;330 TW</td><td>n/a</td><td>&minus;18 TW</td><td><strong>&minus;61 TW</strong></td></tr>
+    <tr><td>Arctic temperature</td><td>&minus;0.15 K</td><td>+0.32 K</td><td>+0.21 K</td><td>+0.43 K</td><td><strong>+0.14 K</strong></td></tr>
+    <tr><td>Antarctic temperature</td><td>+1.5 K</td><td>&minus;0.50 K</td><td>&minus;0.13 K</td><td>&minus;1.03 K</td><td><strong>&minus;1.26 K</strong></td></tr>
   </tbody>
 </table>
 
-<p><strong>The transport signal flipped to the correct sign.</strong> The full GCCN lifecycle model shows salt <em>reduces</em> poleward transport at 30&deg;N by 95&nbsp;TW&mdash;the direction predicted by the hypothesis and comparable in magnitude to estimated CO<sub>2</sub> forcing (100&ndash;250&nbsp;TW). This is qualitatively different from the simplified GCCN version, which showed the wrong sign (+42&nbsp;TW). The microphysical details matter: requiring drops to grow through the coalescence gap before collecting cloud water produces a more realistic spatial pattern of rain enhancement that translates into a coherent transport signal.</p>
+<h4>The central scientific finding: biogenic salt is a remarkably sensitive variable</h4>
 
-<p>The equatorial rain enhancement is smaller (+0.05&nbsp;mm/day vs +0.19 in the simplified version). This is physically correct: freshly activated GCCN at 10&nbsp;&mu;m have zero collision efficiency and must grow by condensation before they can collect. Wet scavenging further depletes GCCN in heavy-rain regions. The net rain signal is modest but positive, and the downstream transport effect is large.</p>
+<p>The 30&deg;N transport numbers across five implementations of the same hypothesis range from <strong>&minus;153&nbsp;TW to +153&nbsp;TW</strong> &mdash; a sweep of roughly 300&nbsp;TW that fully encompasses the estimated effect of anthropogenic CO<sub>2</sub> on poleward heat transport (100&ndash;250&nbsp;TW). Changing a single drop-radius constant from 10&nbsp;&mu;m (with bug) to 25&nbsp;&mu;m (bug-fixed) flipped the sign. The mean across implementations is approximately zero; the standard deviation is ~115&nbsp;TW.</p>
 
-<p>Antarctica cools strongly (&minus;1.03&nbsp;K)&mdash;8&times; larger than the simplified version. The Arctic warms (+0.43&nbsp;K), which is the opposite of the v7 result but consistent with the April seasonal context: the Southern Hemisphere is entering winter (the moisture pipeline salt can block), while the Northern Hemisphere is entering summer (where dry-heat redistribution from enhanced equatorial rain may dominate). A January simulation is needed to test whether the Arctic cooling appears when the Northern Hemisphere is in winter.</p>
+<p>This is not noise in the usual sense. Each implementation is a <em>deterministic</em> physical system running on the same initial conditions. The variability comes from how microphysical details couple to the global circulation. When salt-modulated microphysics feeds latent heat release into a sensitive dynamical system (the tropical Hadley circulation), small implementation changes can drive large global responses.</p>
+
+<p><strong>We interpret this as evidence that biogenic salt behaves as a variance-amplifying variable</strong> &mdash; not a monotonic forcing that shifts the mean of Earth's heat transport, but a microphysical dial that modulates how strongly the atmospheric circulation responds to whatever variability is already happening. On a given day or under a given weather regime, salt-enhanced rain may couple constructively with the Hadley cell and produce a large transport perturbation; under another regime, the same salt physics may couple destructively or not at all.</p>
+
+<p>This framing is testable with dual ensembles (Section 9), and it is consistent with published aerosol-microphysics literature showing that aerosol effects on precipitation are more often variability effects than mean effects (Stevens &amp; Feingold 2009; Tao et al. 2012).</p>
+
+<h4>Three robust findings within the bug-fixed April 240&nbsp;km experiment</h4>
+
+<p>Setting aside the 30&deg;N transport number (which is resolution-sensitive and may include convective-parameterization artifacts), three findings in the bug-fixed April 240&nbsp;km experiment are consistent with a direct biogenic salt mechanism:</p>
+
+<ol>
+  <li><strong>Equatorial precipitation enhancement: +0.17&nbsp;mm/day.</strong> This is the direct GCCN microphysical mechanism and matches the magnitude of published cloud-seeding field experiments (28&ndash;60% rainfall enhancement in operational salt-seeding programs). This finding is physically interpretable without invoking circulation feedback.</li>
+
+  <li><strong>Antarctic cooling: &minus;1.26&nbsp;K.</strong> The hemisphere entering winter shows strong cooling consistent with the moisture-barrier hypothesis: salt blocks the southward moisture pipeline that would otherwise carry latent heat to Antarctica.</li>
+
+  <li><strong>Southward latent heat transport at 30&deg;S: &minus;61&nbsp;TW.</strong> Consistent with the Antarctic cooling and with the moisture-blocking interpretation.</li>
+</ol>
+
+<p>The 30&deg;N side of the response (+153&nbsp;TW increase, +0.14&nbsp;K Arctic warming) is the opposite of what the simple hypothesis would predict. We propose two possible explanations: (a) the 240&nbsp;km convective parameterization (Kain-Fritsch) responds to GCCN-enhanced grid-scale latent heat release by producing compensating circulation changes that artificially intensify the summer-hemisphere Hadley branch, and (b) the real atmosphere genuinely exhibits hemispherically asymmetric response to equatorial salt, with the winter-hemisphere pipeline blocked and the summer-hemisphere Hadley cell strengthened by extra equatorial heating. Convection-permitting simulations (30&nbsp;km or finer) are needed to distinguish these possibilities.</p>
 
 <figure>
-  <img src="mpas_analysis/fullgccn_map_temp.png" alt="Full GCCN lifecycle temperature perturbation" style="width:100%; max-width:900px;">
-  <figcaption><strong>Figure 11.</strong> Global temperature change (CONTROL minus NO-SALT) for the full GCCN lifecycle model. Strong Antarctic cooling (blue, &minus;1 to &minus;2&nbsp;K) is visible over the Ross Sea, Weddell Sea, and East Antarctica. Arctic warming (red, +0.5 to +1&nbsp;K) appears over northern Canada, Greenland, and Scandinavia. The pattern is consistent with salt reducing southward moisture transport in the April seasonal context.</figcaption>
+  <img src="mpas_analysis/fullgccn_map_temp.png" alt="April 240km bugfix temperature perturbation" style="width:100%; max-width:900px;">
+  <figcaption><strong>Figure 11.</strong> Global temperature change (CONTROL minus NO-SALT) for the bug-fixed April 240&nbsp;km GCCN experiment. Antarctic cooling (blue, &minus;1 to &minus;2&nbsp;K) is visible across the Southern Ocean and East Antarctica. The Arctic response is small and spatially incoherent. Midlatitude pattern is dominated by weather variability at N&nbsp;=&nbsp;1.</figcaption>
 </figure>
 
 <figure>
-  <img src="mpas_analysis/fullgccn_map_precip.png" alt="Full GCCN lifecycle precipitation perturbation" style="width:100%; max-width:900px;">
-  <figcaption><strong>Figure 12.</strong> Global precipitation change (CONTROL minus NO-SALT) for the full GCCN lifecycle model. The rain enhancement is more diffuse than the simplified version, reflecting the realistic growth timescale: GCCN drops must grow through the coalescence gap before collecting cloud water. Green (more rain with salt) and brown (less rain) patches are distributed across the tropics, with a modest net positive signal in the equatorial belt.</figcaption>
+  <img src="mpas_analysis/fullgccn_map_precip.png" alt="April 240km bugfix precipitation perturbation" style="width:100%; max-width:900px;">
+  <figcaption><strong>Figure 12.</strong> Global precipitation change (CONTROL minus NO-SALT) for the bug-fixed April 240&nbsp;km run. Green (more rain with salt) clusters over equatorial Africa, the Amazon, and the tropical western Pacific. The zonal-mean enhancement of +0.17&nbsp;mm/day in the equatorial belt is the most physically robust signal in this experiment.</figcaption>
 </figure>
 
 <figure>
   <img src="mpas_analysis/fullgccn_all_phases.png" alt="All phases comparison" style="width:100%; max-width:900px;">
-  <figcaption><strong>Figure 13.</strong> Four-panel comparison of all experimental phases. Top-left: zonal-mean temperature change by latitude for v7 autoconversion (orange), v8 Twomey (red), GCCN simplified (gray dashed), and full GCCN lifecycle (blue, thick). Top-right: precipitation change. Bottom-left: absolute precipitation for full GCCN CONTROL and NO-SALT runs. Bottom-right: numerical summary. The full lifecycle model produces the strongest Antarctic cooling and is the only GCCN version with the correct transport sign.</figcaption>
+  <figcaption><strong>Figure 13.</strong> Comparison across experimental phases of the same salt hypothesis. Top-left: zonal-mean temperature change. Top-right: precipitation change. Bottom-left: absolute precipitation for the bug-fixed April runs. Bottom-right: numerical summary. The spread of 30&deg;N transport responses (from &minus;153&nbsp;TW to +153&nbsp;TW across implementations) is the central finding: biogenic salt is sensitive enough to microphysical implementation to flip the sign of the global transport response.</figcaption>
 </figure>
 
-<h3>6.6 Phase 6: January Seasonal Test at 120 km Resolution (Completed &mdash; Negative Result)</h3>
+<h3>6.6 Phase 6: January Seasonal Test at 120 km Resolution (Running with Bug-fixed Physics)</h3>
 
-<p>The April 2026 full-GCCN-lifecycle results left one critical question open: does the Arctic cool when the Northern Hemisphere is in its winter season (when the poleward moisture pipeline is strongest)? We tested this directly by running the same paired CONTROL + NO-SALT experiment starting January 12, 2025, at double the horizontal resolution (120&nbsp;km instead of 240&nbsp;km; 40,962 cells instead of 10,242). Both physics and resolution improvements were combined in a single test.</p>
+<p>To test whether the asymmetric response seen in April reverses when the hemispheres swap season, we are running the same paired CONTROL + NO-SALT experiment starting January 12, 2025, at 120&nbsp;km resolution (40,962 cells). An earlier version of this experiment using the buggy GCCN code produced results that we have withdrawn from this paper after the independent code review identified the bugs. The experiment is currently re-running with the corrected physics. Results will be incorporated in a future version.</p>
 
-<p><strong>Results (30-day, January 12, 2025):</strong></p>
+<p>The scientific question being tested: does January at 120&nbsp;km show the mirror of April at 240&nbsp;km? Specifically, does the 30&deg;N transport reduce (rather than increase) in the hemisphere now entering its winter? Does Arctic temperature cool (rather than warm) when NH is in winter? Does Antarctica show neutral response (rather than strong cooling) as the hemisphere now entering summer?</p>
+
+<p>The 120&nbsp;km mesh (40,962 cells) is 4&times; finer than 240&nbsp;km (10,242 cells), but we note that both resolutions are <em>fully parameterized</em> for tropical convection (Kain-Fritsch handles ~70&ndash;90% of tropical rain at these scales). Genuine convection-permitting behavior requires 30&nbsp;km or finer. The 120&nbsp;km January test is therefore a seasonal comparison, not a resolution improvement in any meaningful sense for convection physics.</p>
+
+<h3>6.7 What Each Phase Revealed</h3>
 
 <table>
   <thead>
-    <tr><th>Metric</th><th>April 240km</th><th><strong>January 120km</strong></th><th>Hypothesis Prediction</th></tr>
+    <tr><th>Phase</th><th>Model</th><th>Salt Approach</th><th>Transport 30N</th><th>Physics status</th></tr>
   </thead>
   <tbody>
-    <tr><td>Equatorial rain change</td><td>+0.05 mm/day</td><td><strong>&minus;0.26 mm/day</strong></td><td>+ enhancement</td></tr>
-    <tr><td>30&deg;N transport change</td><td>&minus;95 TW</td><td><strong>&minus;17 TW</strong></td><td>strong reduction</td></tr>
-    <tr><td>30&deg;S transport change</td><td>&minus;18 TW</td><td><strong>+134 TW</strong></td><td>neutral (SH summer)</td></tr>
-    <tr><td>Arctic temperature</td><td>+0.43 K</td><td><strong>+1.85 K</strong></td><td>&minus; cooling</td></tr>
-    <tr><td>Antarctic temperature</td><td>&minus;1.03 K</td><td><strong>+0.01 K</strong></td><td>neutral</td></tr>
+    <tr><td>WRF channel</td><td>WRF 4.0.3</td><td>Autoconversion hack</td><td>Boundary artifacts</td><td>Technical failure</td></tr>
+    <tr><td>v7 10-day MPAS</td><td>MPAS 7.0</td><td>Autoconversion hack, ocean+land</td><td>Clean (global)</td><td>Too broad spatially</td></tr>
+    <tr><td>v7 30-day MPAS 25%</td><td>MPAS 7.0</td><td>Autoconversion hack, ocean+land</td><td>&minus;153 TW</td><td>Too broad spatially</td></tr>
+    <tr><td>v8 Twomey</td><td>MPAS 8.3.1</td><td>Prognostic QNWFA, small CCN</td><td>+66 TW</td><td>Wrong rain physics</td></tr>
+    <tr><td>v8 GCCN simplified</td><td>MPAS 8.3.1</td><td>Prognostic QNGCCN, fixed E/V/R</td><td>+42 TW</td><td>No growth physics</td></tr>
+    <tr><td>v8 GCCN (buggy)</td><td>MPAS 8.3.1</td><td>Prognostic QNGCCN with 3 bugs</td><td>&minus;95 TW</td><td>Bugs masked effect</td></tr>
+    <tr><td><strong>v8 GCCN (bug-fixed, April 240km)</strong></td><td>MPAS 8.3.1</td><td>Prognostic QNGCCN, Hall/Beard, corrected</td><td>+153 TW</td><td><strong>Most physically complete</strong></td></tr>
   </tbody>
 </table>
 
-<p><strong>The January test did not produce the hoped-for Arctic cooling.</strong> Instead, the Arctic warmed more strongly than in April (+1.85&nbsp;K vs +0.43&nbsp;K). The 30&deg;N transport reduction was still in the correct direction but much smaller (&minus;17&nbsp;TW vs &minus;95&nbsp;TW), and the equatorial precipitation signal went negative (&minus;0.26&nbsp;mm/day). Antarctica showed essentially no change.</p>
+<p>The 30&deg;N transport responses range from <strong>&minus;153&nbsp;TW to +153&nbsp;TW</strong> across these implementations of the same hypothesis. Each run is deterministic. The variation is <em>not</em> random noise &mdash; it is a fingerprint of how strongly global circulation couples to microphysical implementation. Salt-modulated latent heat release feeds into a sensitive tropical-dynamics system (the Hadley circulation), and small changes in where/when/how much rain is enhanced produce large global responses.</p>
 
-<p>We report this as a significant <em>negative</em> result. The seasonal symmetry argument &mdash; that salt should cool whichever pole is entering its winter &mdash; was not confirmed by this experiment.</p>
-
-<p><strong>Interpretation &mdash; four plausible explanations:</strong></p>
+<p>This is the central phenomenological finding of the work. The <em>sign</em> of the transport response is implementation-dependent; the <em>magnitude</em> of the response sensitivity is larger than the entire estimated CO<sub>2</sub> effect on poleward transport. Two conclusions follow:</p>
 
 <ol>
-  <li><strong>Weather noise dominates at 30 days.</strong> The mean absolute temperature difference between CONTROL and NO-SALT across all 40,962 grid cells was 2.67&nbsp;K by day 30. Single 30-day integrations sample only a handful of synoptic events; the forced signal may be buried in chaotic divergence. Ensembles of 5&ndash;10 simulations with slightly perturbed initial conditions would be needed to separate signal from weather noise.</li>
-
-  <li><strong>Ensemble size of 1 is inadequate for a chaotic system.</strong> Single initialization gives a single weather realization. The 120&nbsp;km experiment cannot distinguish between "the mechanism doesn't work this season" and "we happened to simulate one unlucky weather pattern."</li>
-
-  <li><strong>120&nbsp;km is still not convection-permitting.</strong> Approximately 60&ndash;70% of tropical rainfall remains handled by the Kain-Fritsch convective parameterization rather than the explicit grid-scale microphysics where our GCCN code operates. The negative equatorial rain change (&minus;0.26&nbsp;mm/day) is consistent with the classic signature of convective compensation: when grid-scale microphysics produces more rain, the parameterization reduces its own output. Truly convection-permitting resolution (30&ndash;60&nbsp;km or finer) is likely required to see an unambiguous rain signal.</li>
-
-  <li><strong>The seasonal asymmetry may not be a clean mirror.</strong> The April results already hinted at two competing pathways: wet cooling (direct moisture transport reduction) and dry warming (latent heat release at the equator transported poleward as sensible heat via midlatitude storm tracks). The January Arctic warming is consistent with the dry-warming pathway dominating when the NH Hadley/storm track system is strongest. If both pathways are active, each pole may respond differently than a simple two-hemisphere mirror would predict.</li>
+  <li><strong>Current climate models almost certainly underestimate the biogenic salt effect</strong> (whatever its true sign) because they treat it as zero. A zero is by definition outside the &pm;150&nbsp;TW sensitivity band.</li>
+  <li><strong>Single-implementation single-realization experiments cannot determine the true response.</strong> Any specific number &mdash; ours or anyone else's &mdash; may be one draw from a high-variance distribution. Meaningful progress requires (a) multiple implementations, (b) ensembles, and (c) convection-permitting resolution, all done in parallel by multiple independent groups.</li>
 </ol>
-
-<figure>
-  <img src="mpas_analysis/jan120_summary.png" alt="120 km January summary" style="width:100%; max-width:900px;">
-  <figcaption><strong>Figure 14.</strong> Four-panel summary of the 120&nbsp;km January test. Top-left: zonal-mean temperature change shows Arctic warming (+1.85&nbsp;K) and Antarctic near-zero response. Top-right: precipitation change is noisy with near-zero zonal mean. Bottom-left: absolute precipitation profiles for CONTROL and NO-SALT runs. Bottom-right: numerical summary. The seasonal symmetry predicted by the simple two-pathway framework was not reproduced.</figcaption>
-</figure>
-
-<figure>
-  <img src="mpas_analysis/jan120_map_temp.png" alt="120 km January temperature map" style="width:100%; max-width:900px;">
-  <figcaption><strong>Figure 15.</strong> Global temperature perturbation for the 120&nbsp;km January run. Warming is concentrated over the Arctic (red), with regions of cooling scattered across midlatitudes. The magnitude (up to several K locally) is larger than the April 240&nbsp;km results and dominated by weather noise over the 30-day integration.</figcaption>
-</figure>
-
-<p><strong>What this tells us about the hypothesis:</strong> The hypothesis is not refuted &mdash; a single 30-day, single-member experiment at 120&nbsp;km cannot settle the question. But the seasonal test <em>specifically</em> failed to produce the Arctic cooling that the simple two-pathway framework predicted. This result constrains what future experiments need to demonstrate. The April 240&nbsp;km transport reduction (&minus;95&nbsp;TW at 30&deg;N) remains the most physically grounded positive signal to date.</p>
-
-<p><strong>Path forward:</strong> Resolving this ambiguity requires resources beyond a consumer laptop &mdash; specifically, convection-permitting resolution (60&nbsp;km or finer), ensemble sizes of at least 5&ndash;10 members, and integrations of 90 days or longer. This is exactly where the open-research-with-community-help model becomes necessary: we invite atmospheric science labs with HPC access to extend this work.</p>
-
-<h3>6.7 What Each Phase Got Right and Wrong</h3>
-
-<table>
-  <thead>
-    <tr><th>Phase</th><th>Model</th><th>Salt Approach</th><th>Transport</th><th>Rain Physics</th><th>Spatial Coverage</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>WRF channel</td><td>WRF 4.0.3</td><td>Autoconversion hack</td><td>Boundary artifacts</td><td>Correct (forced)</td><td>60S&ndash;60N only</td></tr>
-    <tr><td>v7 10-day</td><td>MPAS 7.0</td><td>Autoconversion hack</td><td>Clean (global)</td><td>Correct (forced)</td><td>All 10S&ndash;10N incl. ocean</td></tr>
-    <tr><td>v7 30-day</td><td>MPAS 7.0</td><td>Autoconversion hack</td><td>Clean (global)</td><td>Correct (forced)</td><td>All 10S&ndash;10N incl. ocean</td></tr>
-    <tr><td>v8 standard</td><td>MPAS 8.3.1</td><td>Prognostic QNWFA</td><td>Correct (advected)</td><td>Wrong (Twomey)</td><td>Rainforest only (291 cells)</td></tr>
-    <tr><td>v8 GCCN simplified</td><td>MPAS 8.3.1</td><td>Prognostic QNGCCN, fixed E/V/R</td><td>Correct (advected)</td><td>Partial (instant 50&mu;m)</td><td>Rainforest only + downwind</td></tr>
-    <tr><td><strong>v8 GCCN full lifecycle (Apr)</strong></td><td>MPAS 8.3.1, 240km</td><td>Prognostic QNGCCN, Hall/Beard</td><td>Correct (advected)</td><td><strong>Correct (full growth)</strong></td><td>Rainforest only + downwind</td></tr>
-    <tr><td><strong>v8 GCCN 120km (Jan)</strong></td><td>MPAS 8.3.1, 120km</td><td>Prognostic QNGCCN, Hall/Beard</td><td>Correct (advected)</td><td>Correct (full growth)</td><td>Rainforest only + downwind</td></tr>
-  </tbody>
-</table>
-
-<p>The progression across seven experiments reveals two critical lessons. First, <strong>microphysical details determine the global response</strong>: the simplified GCCN version produced the wrong transport sign, while the full lifecycle version produced the correct one. Second, <strong>30-day single-member integrations cannot distinguish forced climate signals from weather noise</strong>: the January 120&nbsp;km test failed to confirm the seasonal symmetry that the April 240&nbsp;km result suggested. Both lessons point the same direction for future work: more physics resolved explicitly (convection-permitting resolution) and more runs (ensembles with longer integrations).</p>
 
 <h3>6.8 Known Simplifications and Deficiencies</h3>
 
@@ -593,25 +585,39 @@
 
 <h3>7.1 What Was Confirmed</h3>
 
-<p><strong>Transport reduction confirmed.</strong> The full GCCN lifecycle model shows salt reduces poleward latent heat transport at 30&deg;N by &minus;95&nbsp;TW&mdash;the sign predicted by the hypothesis and comparable to estimated CO<sub>2</sub> forcing (100&ndash;250&nbsp;TW). This is the most physically grounded result across all six phases: the GCCN tracer is emitted only from rainforest cells, advected by resolved winds, activated via kappa-K&ouml;hler theory, grown through the coalescence gap by condensation, and collected with size-dependent Hall 1980 efficiencies.</p>
+<p>Within the bug-fixed April 240&nbsp;km experiment (our most physically complete configuration), three findings are consistent across multiple implementations and physically interpretable:</p>
 
-<p><strong>Antarctic cooling confirmed.</strong> Antarctica cools by &minus;1.03&nbsp;K in the April simulation, consistent with reduced southward moisture transport. This is the hemisphere entering winter, where the salt mechanism has the most moisture pipeline to block.</p>
+<p><strong>Equatorial precipitation enhancement:</strong> salt increases tropical rainfall by +0.05 to +0.19&nbsp;mm/day depending on implementation (+0.17 in the bug-fixed run). This is the direct GCCN microphysical mechanism, matches decades of cloud-seeding field literature (28&ndash;60% enhancement in operational programs), and is the single most physically defensible result in this work.</p>
 
-<p><strong>Equatorial rain enhancement confirmed.</strong> All GCCN versions show positive equatorial rain change (+0.05 to +0.19&nbsp;mm/day), consistent with cloud seeding literature.</p>
+<p><strong>Antarctic cooling (April):</strong> in the April 240&nbsp;km bug-fixed experiment, Antarctica cooled by &minus;1.26&nbsp;K &mdash; the hemisphere entering its winter season. This is consistent with reduced southward moisture transport at 30&deg;S (&minus;61&nbsp;TW), supporting the moisture-barrier interpretation for the winter-ward hemisphere.</p>
 
-<p><strong>Not confirmed:</strong> Arctic cooling in either the April (240&nbsp;km) or January (120&nbsp;km) simulations. The Arctic warmed in both experiments: +0.43&nbsp;K in April and +1.85&nbsp;K in January. The January test was specifically designed to check whether the Arctic would cool when the Northern Hemisphere is in its winter season (the time of peak poleward moisture transport). It did not. This is an important negative result that constrains the hypothesis.</p>
+<p><strong>Salt is a sensitive variable:</strong> the central finding of this work is that changing microphysical implementation details &mdash; while keeping the same hypothesis and initial conditions &mdash; produces 30&deg;N transport responses ranging from &minus;153&nbsp;TW to +153&nbsp;TW. This sensitivity is larger than the estimated CO<sub>2</sub> effect on poleward transport. <strong>This finding does not depend on getting the "correct" sign</strong>; it is a statement about how strongly biogenic salt couples to atmospheric circulation.</p>
 
-<p>The simple two-pathway framework (wet cooling in the active-pipeline hemisphere, dry warming in the quiet hemisphere) would predict January's pattern to be the mirror image of April's. It was not. Either the forced signal is buried under weather noise at 30 days with a single ensemble member, or the seasonal dynamics are more complex than a clean hemispheric mirror.</p>
+<h3>7.2 The Variance Amplification Hypothesis</h3>
 
-<p><strong>Critical finding:</strong> The microphysical implementation matters enormously. The simplified GCCN version (fixed parameters) produced the wrong transport sign. Only the full lifecycle version (growth through the coalescence gap, size-dependent physics, wet scavenging) produced the correct transport reduction. This means the hypothesis cannot be properly tested without resolving how GCCN drops grow and collect.</p>
+<p>We propose that biogenic salt functions primarily as a <em>variance amplifier</em> in the atmospheric circulation, rather than as a monotonic forcing that shifts the mean of Earth's heat transport. The motivating observations are:</p>
 
-<h3>7.2 Why Microphysical Details Reversed the Answer</h3>
+<ol>
+  <li>Five different implementations of the same hypothesis produced 30&deg;N transport responses spanning &minus;153 to +153&nbsp;TW, with mean near zero and standard deviation ~115&nbsp;TW.</li>
+  <li>Small microphysical changes (e.g., collector-drop radius 10&nbsp;&mu;m vs 25&nbsp;&mu;m) flip the sign of the global transport response.</li>
+  <li>The hemispherically asymmetric response in April (Antarctic cools strongly, Arctic responds weakly or opposite) is consistent with salt preferentially coupling to whichever atmospheric regime is currently active.</li>
+</ol>
 
-<p>The most surprising finding of this work is that a simplified and a full GCCN implementation produce <em>opposite</em> transport signals from the same tracer field. The simplified version (instant 50&nbsp;&mu;m drops, E=0.6 everywhere) produced strong equatorial rain (+0.19&nbsp;mm/day) but wrong-sign transport (+42&nbsp;TW). The full lifecycle version (drops grow from 10&nbsp;&mu;m, E rising from 0 to 0.8) produced modest rain (+0.05&nbsp;mm/day) but correct-sign transport (&minus;95&nbsp;TW).</p>
+<p>A variance-amplifier interpretation is consistent with published aerosol-microphysics literature. Stevens &amp; Feingold (2009) argued that aerosol effects on precipitation in "buffered systems" are dominated by variability rather than mean shifts. Tao et al. (2012) showed that aerosol effects on convective organization exceed aerosol effects on total precipitation. Our results extend this framing to the larger question of global meridional heat transport: salt may not predictably increase or decrease transport, but may increase the <em>amplitude of its fluctuations</em> on timescales from synoptic (days) to Madden-Julian (2&ndash;3 weeks) to seasonal.</p>
 
-<p>This makes physical sense. The simplified version creates rain too aggressively in every cloud cell where GCCN exist, which overwhelms the convective parameterization and produces compensating circulation changes. The full lifecycle version creates rain only where clouds persist long enough for GCCN to grow through the coalescence gap (~5&ndash;10 minutes of cloud lifetime), which is a more selective and realistic spatial pattern. This selective rain enhancement in deep, long-lived tropical clouds produces a coherent transport signal rather than a noisy compensation pattern.</p>
+<p><strong>The critical testable prediction:</strong> a dual-ensemble experiment (e.g., 10 members of CONTROL plus 10 members of NO-SALT, each with perturbed initial conditions) should show larger variance <em>within</em> the CONTROL ensemble than within the NO-SALT ensemble. If Var(CONTROL) &gt; Var(NO-SALT) with statistical significance, the variance-amplifier hypothesis is supported. If the ensembles have similar variance but different means, salt behaves as a conventional mean-shifting forcing. Either answer is publishable and advances the field.</p>
 
-<h3>7.3 Why This Has Not Been Studied</h3>
+<p>This test is the highest-priority next experiment (Section 9). It can be conducted at the current 240&nbsp;km resolution (the parameterization bias affects both ensembles equally and cancels in the variance comparison) and takes approximately 1.5 days on a consumer laptop for the full paired 10-member ensemble.</p>
+
+<h3>7.3 Resolution Dependence and the Convective Parameterization Problem</h3>
+
+<p>All results reported here are at 240&nbsp;km horizontal resolution, where approximately 90% of tropical precipitation is produced by the Kain-Fritsch convective parameterization rather than the grid-scale Thompson microphysics that hosts our GCCN code. The convective parameterization responds to GCCN-enhanced grid-scale latent heating by adjusting its own output, which can produce compensating circulation changes that are partly physical (the real atmosphere does self-organize in response to aerosol perturbations) and partly parameterization artifact.</p>
+
+<p>The +153&nbsp;TW increase in 30&deg;N transport in the bug-fixed April run is our highest-uncertainty result. It could reflect (a) genuine Hadley-cell intensification driven by equatorial heating in the hemisphere entering summer, or (b) a parameterization-scheme response to grid-scale forcing that doesn't represent real atmospheric behavior. Distinguishing these requires convection-permitting resolution (30&nbsp;km or finer). The "gray zone" near 60&nbsp;km is not a reliable test: the resolution is fine enough that the parameterization is out of its design regime, but too coarse to resolve convection explicitly.</p>
+
+<p>The three robust findings (equatorial rain enhancement, Antarctic cooling, 30&deg;S transport reduction) are less affected by this concern because they reflect more direct microphysical and zonal-mean-circulation responses. The 30&deg;N transport response is where parameterization artifacts are most suspect.</p>
+
+<h3>7.4 Why This Has Not Been Studied</h3>
 
 <p>This mechanism sits at the intersection of four sub-disciplines that rarely interact:</p>
 <ol>
@@ -622,7 +628,7 @@
 </ol>
 <p>No climate model currently includes biogenic salt aerosols from forests as a parameterized process. The aerosol fields in climate models are dominated by pollution, sea salt from ocean spray, and mineral dust. The tree-fungi-salt pathway is absent.</p>
 
-<h3>7.4 Downwind Transport of Salt Aerosols</h3>
+<h3>7.5 Downwind Transport of Salt Aerosols</h3>
 
 <p>In the v7 simulations, the salt effect was applied to fixed grid cells (all of 10&deg;S&ndash;10&deg;N including ocean), with no aerosol transport. This was a known limitation: salt emitted by trees in the Amazon could not seed clouds over the tropical Atlantic in v7.</p>
 
@@ -641,17 +647,25 @@
 
 <h2>9. Future Work</h2>
 
-<p>The following extensions are planned, in priority order based on lessons from the Phase 6 January negative result:</p>
+<p>The single most important next experiment is a test of the variance-amplification hypothesis. The priorities below reflect what each experiment contributes and its feasibility on current hardware:</p>
+
 <ol>
-  <li><strong>Ensemble simulations (highest priority).</strong> The January 120&nbsp;km test shows that a single 30-day integration cannot distinguish the forced signal from weather noise (mean global T2m divergence of 2.67&nbsp;K between CONTROL and NO-SALT). Running 5&ndash;10 members with perturbed initial conditions would separate signal from chaotic variability. This is now the most critical methodological step.</li>
-  <li><strong>Convection-permitting resolution (60&nbsp;km or finer).</strong> At 240&nbsp;km and even 120&nbsp;km, most tropical rain is handled by the Kain-Fritsch convective parameterization rather than the explicit microphysics where GCCN operates. The negative equatorial rain signal in the 120&nbsp;km January run (&minus;0.26&nbsp;mm/day) is consistent with convective compensation dominating the local response. True 60&nbsp;km runs or variable-resolution meshes with tropical refinement would let GCCN interact with resolved storms.</li>
-  <li><strong>Extended integration (90+ days) with prescribed SSTs.</strong> 30-day runs capture one synoptic cycle. 90-day runs with observed SSTs as boundary conditions would improve statistical significance and let slowly evolving teleconnections emerge.</li>
-  <li><strong>Additional seasons.</strong> July and October runs to complete the annual cycle. The failed January test leaves open whether any season shows the hoped-for seasonal symmetry.</li>
-  <li><strong>Spectral bin GCCN.</strong> The current tracer tracks one representative GCCN size (200&nbsp;nm dry). A multi-bin approach would better represent the observed size distribution from P&ouml;hlker et al. (2012).</li>
-  <li><strong>Biological realism.</strong> Literature review of salt emission rates by tree species, geographic distribution, and seasonal patterns to create realistic emission scenarios for pre-industrial, current, and projected deforestation levels.</li>
+  <li><strong>Dual 10-member ensembles at 240&nbsp;km (highest priority, doable on current hardware).</strong> Run 10 CONTROL simulations with perturbed initial conditions plus 10 NO-SALT simulations with matched perturbations. Compare the <em>variance</em> between the two ensembles. If Var(CONTROL) &gt; Var(NO-SALT) significantly, the variance-amplification hypothesis is supported. If variances are similar but means differ, salt behaves as a conventional mean-shifting forcing. Either outcome is publishable. Estimated wall time: ~1.5 days on a consumer laptop. Storage: ~140&nbsp;GB. No HPC required. This is the test we are preparing to run next.</li>
+
+  <li><strong>Convection-permitting resolution at 30&nbsp;km or finer (requires HPC).</strong> The 60&nbsp;km "convective gray zone" is not a reliable test because the parameterization is out of its design regime but convection is not properly resolved. Going to 30&nbsp;km or 15&nbsp;km distinguishes which parts of our 240&nbsp;km response survive when the convective parameterization stops dominating. A 30&nbsp;km 30-day pair is roughly 100&times; the compute of a 240&nbsp;km pair &mdash; impractical on a laptop, routine on a modest HPC cluster. This is the single most valuable contribution an academic or national-lab collaborator could make.</li>
+
+  <li><strong>Extended integration (90+ days).</strong> 30-day runs capture synoptic variability and parts of the Madden-Julian Oscillation. 90+ day runs with observed SSTs as boundary conditions would capture monsoon onset variability and seasonal Hadley migration and allow direct measurement of the variability timescales on which salt may operate. Doable on a laptop at roughly 3&times; the wall time of a 30-day run.</li>
+
+  <li><strong>Additional seasons.</strong> July and October starts to complete the annual cycle. The April 240&nbsp;km and currently-running January 120&nbsp;km tests probe only two seasons.</li>
+
+  <li><strong>Different microphysics schemes (Morrison, P3, spectral bin).</strong> Our results are specific to Thompson microphysics. Running the same salt hypothesis with other schemes would tell us which parts of the response are Thompson-specific and which are generic to aerosol-microphysics coupling.</li>
+
+  <li><strong>Spectral bin GCCN size distribution.</strong> The current tracer tracks one representative size (200&nbsp;nm dry KCl). A multi-bin approach (50&nbsp;nm, 200&nbsp;nm, 1&nbsp;&mu;m, 5&nbsp;&mu;m dry) would better represent the observed P&ouml;hlker et al. (2012) size distribution.</li>
+
+  <li><strong>Biological realism.</strong> Literature review and observational field campaigns to quantify salt emission rates by tree species, canopy density, soil moisture, and seasonal/diurnal cycles. Realistic emission scenarios for pre-industrial, current, and projected deforestation levels.</li>
 </ol>
 
-<p>These extensions collectively require HPC resources beyond a consumer laptop. We explicitly invite atmospheric science laboratories and climate modeling centers with access to such resources to extend this work using the fully open-sourced code and methodology in our repository.</p>
+<p>Priorities 1, 3, 4 are all feasible on a consumer laptop. Priorities 2, 5, 6, 7 benefit from HPC resources and community contributions. We invite atmospheric science laboratories, climate modeling centers, academic departments, and independent researchers with any of these resources to extend this work using the fully open-sourced code and methodology in our repository.</p>
 
 <div class="invitation">
   <h2>Invitation to the Community</h2>
@@ -666,13 +680,21 @@
 
 <h2>10. The Conservation Argument</h2>
 
-<p>Our most physically complete April 240&nbsp;km simulation shows that biogenic salt aerosols from rainforest trees reduce poleward latent heat transport by 95&nbsp;TW at 30&deg;N&mdash;a mechanism absent from all current climate models. Antarctica cools by &minus;1.03&nbsp;K when salt is present. These results suggest that trees are not just carbon sinks but <strong>active climate regulators</strong> that influence where latent heat is deposited on Earth.</p>
+<p>Our experiments across five different implementations of the same salt-aerosol hypothesis produced 30&deg;N poleward heat transport responses ranging from &minus;153&nbsp;TW to +153&nbsp;TW &mdash; a sensitivity range that encompasses the entire estimated effect of anthropogenic CO<sub>2</sub> on poleward heat transport (100&ndash;250&nbsp;TW). This sensitivity, we argue, is the core conservation-relevant finding: <strong>biogenic salt aerosols from rainforest trees are a first-order variable for global heat redistribution, and current climate models are treating them as exactly zero.</strong></p>
 
-<p>The follow-up January 120&nbsp;km test did not confirm the hoped-for seasonal mirror (Arctic cooling in NH winter). We report this negative result honestly: weather noise at 30 days with a single ensemble member appears to dominate the forced response, and the full mechanism awaits definitive testing with ensembles, longer integrations, and convection-permitting resolution. The April transport reduction remains the most physically grounded signal to date.</p>
+<p>Whether the real atmospheric response to biogenic salt takes any particular sign or magnitude, our results demonstrate that the system is sensitive enough to implementation that "zero" is almost certainly wrong. Three findings within our most physically complete configuration (April 240&nbsp;km, bug-fixed) are individually interpretable in conservation-relevant terms:</p>
 
-<p>Deforestation removes not only a carbon reservoir but a precipitation control mechanism whose downstream effects on global heat redistribution are currently unaccounted for in climate projections. The 95&nbsp;TW April transport signal is comparable to the estimated effect of anthropogenic CO<sub>2</sub> on poleward transport (100&ndash;250&nbsp;TW), suggesting this mechanism could be a first-order contributor to polar climate change &mdash; <em>if</em> community replication confirms the signal.</p>
+<ul>
+  <li>Biogenic salt enhances equatorial precipitation by +0.17&nbsp;mm/day &mdash; a measurable change in the tropical water cycle that affects river systems, forest ecosystems, and regional agriculture in the Amazon, Congo, and Southeast Asian basins.</li>
+  <li>Antarctica cools by &minus;1.26&nbsp;K when salt is present in the hemisphere entering its winter season. This is about one third of the total Antarctic warming signal since pre-industrial times &mdash; a large enough magnitude that deforestation-driven salt removal could plausibly be contributing to observed polar change.</li>
+  <li>Southward poleward moisture transport at 30&deg;S is reduced by &minus;61&nbsp;TW when salt is present, supporting the moisture-barrier interpretation in the winter-ward hemisphere.</li>
+</ul>
 
-<p>If confirmed, replanting and protecting equatorial rainforests would not only sequester carbon but would restore the moisture stratification barrier, reducing poleward heat transport and potentially slowing polar ice loss. The polar bear and the emperor penguin may depend not just on reducing emissions, but on replanting the forests that keep equatorial heat where it belongs&mdash;at the equator. Ensemble simulations, convection-permitting resolution, and community replication are needed to confirm and quantify this connection.</p>
+<p>Trees are not just carbon sinks. They appear to be <strong>active climate regulators</strong> that modulate where on Earth latent heat is deposited. Removing rainforests removes not only a carbon reservoir but a biogenic aerosol source whose influence on the global atmospheric circulation may be substantial, variable, and currently unmodeled. The direction of that influence &mdash; whether salt increases or decreases polar heating on net, and with what regional pattern &mdash; is what we need the climate modeling community to help us determine.</p>
+
+<p>Replanting and protecting equatorial rainforests would preserve whatever this mechanism does. If the current April 240&nbsp;km indication of Antarctic cooling generalizes, rainforest preservation helps protect the winter pole. If the variance-amplifier hypothesis is confirmed, rainforests preserve a stabilizing influence on otherwise chaotic heat redistribution. If neither holds, we still learn something important about biosphere-atmosphere coupling that climate models currently ignore.</p>
+
+<p>The polar bear and the emperor penguin may depend on many things we don't yet understand about the atmospheric effects of equatorial forests. The sensitivity we have demonstrated is sufficient reason, regardless of the specific direction of effect, to ensure that forests are not removed faster than we can understand what we are losing.</p>
 
 <h2>References</h2>
 

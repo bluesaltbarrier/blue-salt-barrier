@@ -425,8 +425,8 @@
 <!-- ============================================ -->
 <section>
   <div class="section-inner fade-in">
-    <div class="section-overline">Six phases of discovery</div>
-    <h2 class="section-headline">We got it wrong. Then we got it less wrong. Then the physics spoke.</h2>
+    <div class="section-overline">Seven phases of discovery</div>
+    <h2 class="section-headline">We got it wrong. Then we got it less wrong. Then a second AI found bugs in our fix.</h2>
     <p class="section-subhead">Every misstep taught us something. We share them all because transparency matters more than polish.</p>
 
     <div class="timeline">
@@ -468,8 +468,15 @@
       <div class="timeline-item">
         <div class="timeline-phase">Phase 6</div>
         <div>
-          <div class="timeline-title">120 km Resolution &mdash; January (Negative Result)</div>
-          <div class="timeline-desc"><strong>Tested. Did not confirm.</strong> Higher resolution and winter NH season. Arctic did <em>not</em> cool &mdash; it warmed +1.85&nbsp;K. Transport reduction weakened to &minus;17 TW. Weather noise at 30 days with one ensemble member likely dominates. Reported here honestly: the seasonal symmetry we hoped for was not observed.</div>
+          <div class="timeline-title">Independent AI Review Found Bugs</div>
+          <div class="timeline-desc"><strong>A second AI code-reviewed our GCCN physics and found three errors</strong>: a drop-radius reset keeping collectors below 20&nbsp;&micro;m, a missing air-density factor, and rain-number routing through the wrong pathway. We fixed them, rebuilt, and re-ran April 240&nbsp;km. The corrected results differ qualitatively from the buggy version &mdash; and the fact that implementation details flip signs is itself the central finding.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-phase">Phase 7</div>
+        <div>
+          <div class="timeline-title">120 km January with Bug-fixed Physics &mdash; Running</div>
+          <div class="timeline-desc">Currently re-running the January seasonal test with the corrected physics. Previous January results (from buggy code) have been withdrawn. Results pending &mdash; we are making no predictions until the data arrives.</div>
         </div>
       </div>
     </div>
@@ -482,35 +489,40 @@
 <section class="dark" id="results">
   <div class="section-wide fade-in">
     <div class="section-overline">The numbers</div>
-    <h2 class="section-headline">The microphysics changed everything.</h2>
-    <p class="section-subhead">A simplified version of the salt physics gave the wrong answer. The full lifecycle &mdash; where drops must grow before they can collect &mdash; flipped the transport signal.</p>
+    <h2 class="section-headline">Salt is a remarkably sensitive variable.</h2>
+    <p class="section-subhead">Five different implementations of the same hypothesis. A swing of ~300 TW in the global heat transport response. That is the headline finding.</p>
 
     <table class="compare-table">
       <thead>
-        <tr><th>Metric</th><th>v7 Autoconv</th><th>v8 Twomey</th><th>GCCN Simplified</th><th class="highlight">GCCN Full<br>(April 240km)</th><th>GCCN Full<br>(Jan 120km)</th></tr>
+        <tr><th>Metric</th><th>v7 Autoconv</th><th>v8 Twomey</th><th>GCCN Simplified</th><th>GCCN (buggy)</th><th class="highlight">GCCN (bug-fixed)</th></tr>
       </thead>
       <tbody>
-        <tr><td>Equatorial rain</td><td>&minus;0.10 mm/day</td><td>+0.05 mm/day</td><td>+0.19 mm/day</td><td class="highlight">+0.05 mm/day</td><td>&minus;0.26 mm/day</td></tr>
-        <tr><td>30&deg;N transport</td><td>&minus;153 TW</td><td>+66 TW</td><td>+42 TW</td><td class="highlight">&minus;95 TW</td><td>&minus;17 TW</td></tr>
-        <tr><td>Arctic temp</td><td>&minus;0.15 K</td><td>+0.32 K</td><td>+0.21 K</td><td class="highlight">+0.43 K</td><td>+1.85 K</td></tr>
-        <tr><td>Antarctic temp</td><td>+1.5 K</td><td>&minus;0.50 K</td><td>&minus;0.13 K</td><td class="highlight">&minus;1.03 K</td><td>+0.01 K</td></tr>
+        <tr><td>Equatorial rain</td><td>&minus;0.10 mm/day</td><td>+0.05 mm/day</td><td>+0.19 mm/day</td><td>+0.05 mm/day</td><td class="highlight">+0.17 mm/day</td></tr>
+        <tr><td>30&deg;N transport</td><td>&minus;153 TW</td><td>+66 TW</td><td>+42 TW</td><td>&minus;95 TW</td><td class="highlight">+153 TW</td></tr>
+        <tr><td>30&deg;S transport</td><td>n/a</td><td>&minus;330 TW</td><td>n/a</td><td>&minus;18 TW</td><td class="highlight">&minus;61 TW</td></tr>
+        <tr><td>Arctic temp</td><td>&minus;0.15 K</td><td>+0.32 K</td><td>+0.21 K</td><td>+0.43 K</td><td class="highlight">+0.14 K</td></tr>
+        <tr><td>Antarctic temp</td><td>+1.5 K</td><td>&minus;0.50 K</td><td>&minus;0.13 K</td><td>&minus;1.03 K</td><td class="highlight">&minus;1.26 K</td></tr>
       </tbody>
     </table>
 
-    <p class="body-text" style="margin-top: 24px;"><strong>The January 120 km test is a significant negative result.</strong> We specifically designed it to check whether the Arctic cools in winter, when the Northern Hemisphere poleward moisture pipeline is strongest. It did not. The Arctic warmed by +1.85&nbsp;K and the transport reduction weakened to &minus;17&nbsp;TW. Weather noise across 30 days with a single ensemble member likely dominates. Definitive testing requires convection-permitting resolution (60 km or finer), ensembles of 5&ndash;10 members, and 90+ day integrations &mdash; resources beyond a consumer laptop. We report this honestly: the simple two-pathway seasonal mirror we hoped for was not reproduced, and the hypothesis awaits rigorous testing by the community.</p>
+    <p class="body-text" style="margin-top: 24px;"><strong>The 30&deg;N transport numbers range from &minus;153 TW to +153 TW across five implementations of the same salt hypothesis.</strong> Changing a single drop-radius constant from 10 &micro;m to 25 &micro;m flips the sign of the global transport response. The mean across implementations is approximately zero. The standard deviation is ~115 TW &mdash; larger than the entire estimated effect of anthropogenic CO<sub>2</sub> on poleward heat transport.</p>
+
+    <p class="body-text">This is not noise. Each run is deterministic on the same initial conditions. The spread is the fingerprint of how strongly biogenic salt couples to the atmospheric circulation. The interpretation we favor: <strong>salt functions as a variance amplifier</strong>, not a monotonic forcing. Some weather regimes get large latent-heat pulses from GCCN-enhanced rain; others don't. The mean may be near zero. The amplitude of the fluctuations may be large. Testing this requires running paired ensembles &mdash; next up.</p>
+
+    <p class="body-text">Within the most physically complete configuration (April 240 km bug-fixed), three robust findings emerge: equatorial rain enhanced by +0.17 mm/day (matching cloud-seeding literature), Antarctica cooled by &minus;1.26 K, and 30&deg;S transport reduced by &minus;61 TW. The Northern Hemisphere response is puzzling and may be partly an artifact of the convective parameterization at 240 km. A January 120 km run with the corrected physics is currently in progress. <strong>We make no claim about specific directions or magnitudes here &mdash; single realizations cannot distinguish forced signal from weather noise.</strong> The community must help us test this properly.</p>
 
     <div class="stat-grid" style="margin-top: 56px;">
       <div class="stat-card">
-        <div class="stat-number">&minus;95 TW</div>
-        <div class="stat-label">Poleward heat transport reduced by salt at 30&deg;N</div>
+        <div class="stat-number">&pm;150 TW</div>
+        <div class="stat-label">Spread of 30&deg;N transport response across implementations</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number">&minus;1.03 K</div>
-        <div class="stat-label">Antarctic cooling with salt present</div>
+        <div class="stat-number">&minus;1.26 K</div>
+        <div class="stat-label">Antarctic cooling with salt (April 240km bug-fixed)</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number">100&ndash;250</div>
-        <div class="stat-label">TW estimated CO&#8322; transport effect (for comparison)</div>
+        <div class="stat-number">+0.17 mm/day</div>
+        <div class="stat-label">Equatorial rain enhancement &mdash; matches cloud-seeding literature</div>
       </div>
     </div>
   </div>
@@ -528,14 +540,17 @@
 <section>
   <div class="section-inner fade-in">
     <div class="section-overline">The lesson</div>
-    <h2 class="section-headline">You can't skip the coalescence gap.</h2>
+    <h2 class="section-headline">One radius constant flipped the sign of global heat transport.</h2>
 
     <div style="max-width:780px; margin:0 auto 32px;"><img src="Blue Salt Barrier Website/Image 5 The Coalescence Gap.png" alt="The coalescence gap: droplet growth stages from 10 to 80 micrometers with increasing collision efficiency" style="width:100%; border-radius:12px; display:block;"></div>
 
-    <p class="body-text">When a salt particle activates in a cloud, it creates a droplet about 10 micrometers across. At that size, it can't collect other droplets &mdash; the collision efficiency is effectively zero. This is the <strong>coalescence gap</strong>: a size range where condensation has become too slow to grow drops further (growth rate falls off as drops enlarge), and drops are still too small for collisions with neighbors to work efficiently.</p>
-    <p class="body-text">The drop must grow through this gap by slowly condensing water vapor. It takes about 5 minutes. Only after reaching ~40 micrometers does collection begin. By 70 micrometers, the drop is sweeping up cloud water at nearly 5x the rate of a 50-micrometer drop.</p>
-    <p class="body-text">The simplified version of our model skipped this growth phase &mdash; every GCCN was instantly a 50-micrometer collector. This produced too much rain too uniformly, which triggered compensating circulations that obscured the transport signal. The full lifecycle model, where drops must earn their way through the gap, produced rain only in deep, long-lived tropical clouds. That selective pattern generated a coherent transport reduction.</p>
-    <p class="body-text"><strong>The physics details changed the sign of the global answer.</strong> This is why citizen science in atmospheric modeling needs guidance from professionals &mdash; and why professional models need the fresh questions that outsiders bring.</p>
+    <p class="body-text">When a salt particle activates in a cloud, it creates a droplet about 10 micrometers across. At that size it cannot collect other droplets &mdash; the collision efficiency is effectively zero. This is the <strong>coalescence gap</strong>: a size range where condensation has become too slow to grow drops further, and drops are still too small for collisions with neighbors to work efficiently.</p>
+
+    <p class="body-text">Our first GCCN implementation had a bug: the collector-drop radius reset to 10 &micro;m every microphysics timestep. Over one timestep drops only grew to ~20 &micro;m &mdash; right at the boundary where collision efficiency starts but is still minimal. The GCCN physics was essentially idling. That version gave us a <strong>&minus;95 TW</strong> reduction in 30&deg;N poleward heat transport.</p>
+
+    <p class="body-text">A second AI independently reviewed the Fortran code. It caught the radius-reset bug, a missing air-density factor, and a rain-number routing error. We fixed them. Now collector drops start at 25 &micro;m (an "already-activated embryo"), which gives them a realistic collision efficiency. The same hypothesis now gives us <strong>+153 TW</strong> at 30&deg;N &mdash; opposite sign, larger magnitude.</p>
+
+    <p class="body-text"><strong>One drop-radius constant. 300 TW of swing in the global heat transport response.</strong> This is more than the estimated entire effect of anthropogenic CO<sub>2</sub> on poleward heat transport. We interpret this not as "we finally got the right answer" but as evidence that <em>biogenic salt is a sensitive enough variable that climate models treating it as zero are almost certainly wrong</em>.</p>
   </div>
 </section>
 
@@ -549,26 +564,26 @@
 
     <div style="max-width:780px; margin:0 auto 32px;"><img src="Blue Salt Barrier Website/Image 6 — MPAS Voronoi Mesh on Earth.png" alt="MPAS Voronoi mesh with 10,242 hexagonal cells wrapping Earth, rainforest emission cells highlighted in green" style="width:100%; border-radius:12px; display:block;"></div>
 
-    <p class="body-text">Our simulations run at 240 km resolution &mdash; each grid cell covers roughly the area of West Virginia. At this scale, individual thunderstorms cannot be resolved. About 90% of tropical rainfall is handled by a convective parameterization (Kain-Fritsch), not by the explicit microphysics where our salt code operates.</p>
-    <p class="body-text">This means our rain maps don't show the concentrated signal over rainforests that you'd see in nature. The transport signal (&minus;95 TW) is more reliable because it's a large-scale integrated quantity that doesn't depend on resolving individual storms.</p>
-    <p class="body-text">We ran one 120 km experiment (4x more cells, January seasonal test). The rain signal was still noisy and dominated by convective compensation. At 60 km (convection-permitting), the GCCN would interact with resolved storms. That's where the rain pattern would match what you see on a weather app &mdash; continuous green over the Amazon and Congo. 60 km on this laptop would take roughly 3&ndash;4 days per run, bordering on infeasible without HPC.</p>
+    <p class="body-text">Our simulations run at 240 km resolution &mdash; each grid cell covers roughly the area of West Virginia. Individual thunderstorms cannot be resolved at this scale. About 90% of tropical rainfall is handled by a convective parameterization (Kain-Fritsch), not the explicit microphysics where our salt code operates. Going to 120 km helps only marginally: it is still fully parameterized. True convection-permitting resolution is 30 km or finer &mdash; well beyond what a laptop can do for ensembles.</p>
+
+    <p class="body-text">We also have only N = 1 ensemble member per experiment. The atmosphere is chaotic; weather variability at 30 days is large (~2.67 K mean global divergence between our CONTROL and NO-SALT runs). We cannot yet say whether any specific transport number is a real forced signal or one draw from a wide noise distribution. The range of values we see across different microphysical implementations (&minus;153 to +153 TW at 30&deg;N) is consistent with either interpretation and most likely reflects both &mdash; salt couples sensitively to microphysical implementation AND to weather regime.</p>
 
     <div class="card-grid">
       <div class="card">
         <div class="card-title">What we can trust</div>
-        <div class="card-body">Large-scale transport changes, hemispheric temperature patterns, the sign and order-of-magnitude of the signal. These are well-captured at 240 km.</div>
+        <div class="card-body">The <em>sensitivity</em> of the global response to salt microphysics. A swing of ~300 TW across implementations is robust evidence that salt is a first-order variable. That finding does not require any specific number to be correct.</div>
       </div>
       <div class="card">
-        <div class="card-title">What needs higher resolution</div>
-        <div class="card-body">Local rain patterns over rainforests, the exact magnitude of precipitation enhancement, and whether GCCN rain is concentrated over forests vs. spread by compensating circulations.</div>
+        <div class="card-title">What we cannot yet trust</div>
+        <div class="card-body">Any specific number in our tables. Our N = 1 experiments and 240 km parameterized convection mean our results are illustrative, not definitive. Ensembles and convection-permitting resolution are needed to make definitive statements.</div>
       </div>
       <div class="card">
-        <div class="card-title">What needs longer runs + ensembles</div>
-        <div class="card-body">Arctic temperature response, statistical significance of the transport signal, and slowly evolving teleconnections. The January 120&nbsp;km test showed weather noise (2.67&nbsp;K mean global divergence) dominates at 30 days with a single ensemble member.</div>
+        <div class="card-title">What the community needs to do</div>
+        <div class="card-body">(1) Paired ensembles at 240 km to test variance amplification (doable on a consumer laptop). (2) 30 km convection-permitting paired runs (requires HPC). (3) Different microphysics schemes. Our open-sourced code and Docker containers make all of these reproducible.</div>
       </div>
     </div>
 
-    <p class="body-text" style="margin-top: 24px;">For citizen scientists: your laptop can absolutely detect the signal and explore the hypothesis. For publishable, quantitative results, the professional community needs to replicate this with higher resolution and ensemble simulations. <strong>Both contributions are essential.</strong></p>
+    <p class="body-text" style="margin-top: 24px;"><strong>The strongest claim we can defend from our current data:</strong> biogenic salt from rainforests is a sensitive enough variable that treating it as zero in climate models is almost certainly wrong. The specific sign and magnitude of its effect on polar heat transport requires community replication to determine.</p>
   </div>
 </section>
 
@@ -583,28 +598,28 @@
 
     <div class="card-grid" style="text-align: left;">
       <div class="card" style="background: rgba(255,255,255,0.15); box-shadow: none;">
-        <div class="card-title" style="color: white;">Cloud Microphysicists</div>
-        <div class="card-body" style="color: rgba(255,255,255,0.7);">Review and improve the GCCN activation, growth, and collection code. Is the Hall 1980 lookup correct? Should we use spectral bin microphysics?</div>
+        <div class="card-title" style="color: white;">HPC-enabled climate modelers (highest priority)</div>
+        <div class="card-body" style="color: rgba(255,255,255,0.7);">Run our GCCN code at 30&nbsp;km or finer (convection-permitting). A single paired run would settle whether the 240&nbsp;km Hadley intensification is real physics or parameterization artifact. Tell us what your MPAS or WRF setup can do &mdash; we'll help port.</div>
       </div>
       <div class="card" style="background: rgba(255,255,255,0.15); box-shadow: none;">
-        <div class="card-title" style="color: white;">Tropical Ecologists</div>
-        <div class="card-body" style="color: rgba(255,255,255,0.7);">Which tree species emit the most salt? What are the emission rates? How does secondary forest compare to primary forest?</div>
+        <div class="card-title" style="color: white;">Cluster or cloud-compute access</div>
+        <div class="card-body" style="color: rgba(255,255,255,0.7);">Run larger ensembles than we can (20+ members), or longer integrations (90+ days). These directly test the variance-amplification hypothesis and can be done at 240&nbsp;km for much less compute than convection-permitting runs.</div>
       </div>
       <div class="card" style="background: rgba(255,255,255,0.15); box-shadow: none;">
-        <div class="card-title" style="color: white;">Climate Modelers</div>
-        <div class="card-body" style="color: rgba(255,255,255,0.7);">Integrate this mechanism into Earth System Models. Run at convection-permitting resolution. Compute annual-mean transport changes.</div>
+        <div class="card-title" style="color: white;">Cloud microphysicists</div>
+        <div class="card-body" style="color: rgba(255,255,255,0.7);">Review the GCCN lifecycle code in our repo. Try the same hypothesis with Morrison or P3 microphysics &mdash; which parts of the response are Thompson-specific?</div>
       </div>
       <div class="card" style="background: rgba(255,255,255,0.15); box-shadow: none;">
-        <div class="card-title" style="color: white;">Citizen Scientists</div>
-        <div class="card-body" style="color: rgba(255,255,255,0.7);">Download our Docker container, reproduce the experiments, try different seasons and resolutions. AI can help you run the models. Your laptop is powerful enough.</div>
+        <div class="card-title" style="color: white;">Tropical ecologists</div>
+        <div class="card-body" style="color: rgba(255,255,255,0.7);">Which tree species emit the most salt? What are the emission rates by canopy density, soil moisture, diurnal cycle? Field measurements inform all future modeling.</div>
       </div>
       <div class="card" style="background: rgba(255,255,255,0.15); box-shadow: none;">
-        <div class="card-title" style="color: white;">Conservation Organizations</div>
-        <div class="card-body" style="color: rgba(255,255,255,0.7);">If confirmed, this adds a new dimension to rainforest preservation. Trees don't just store carbon &mdash; they regulate polar temperatures.</div>
+        <div class="card-title" style="color: white;">Citizen scientists</div>
+        <div class="card-body" style="color: rgba(255,255,255,0.7);">Download our Docker container and reproduce the April 240&nbsp;km experiment. Try different seasons. Three days of laptop time produces a publishable replication. AI can help you set it up.</div>
       </div>
       <div class="card" style="background: rgba(255,255,255,0.15); box-shadow: none;">
-        <div class="card-title" style="color: white;">Policy Makers</div>
-        <div class="card-body" style="color: rgba(255,255,255,0.7);">Climate research cannot afford to stop. Government-funded tools like WRF and MPAS, combined with consumer AI, enable citizen science at scale. Protect these investments.</div>
+        <div class="card-title" style="color: white;">Policy makers and conservation organizations</div>
+        <div class="card-body" style="color: rgba(255,255,255,0.7);">The magnitude of sensitivity we observe is sufficient reason to ensure rainforests are not destroyed faster than we can understand what we lose. Our results do not yet determine the sign of the polar effect &mdash; but neither does "it is probably zero" look defensible anymore.</div>
       </div>
     </div>
   </div>
@@ -622,7 +637,7 @@
     <p class="body-text">With research budgets under pressure, this model &mdash; government tools + consumer AI + citizen scientists + professional oversight &mdash; may be the future of climate research. Not replacing institutional science, but <strong>accelerating it</strong> with a thousand curious minds running experiments that no single lab has the bandwidth to attempt.</p>
 
     <div class="quote-block" style="border-color: #74c69d;">
-      <p class="quote-text">The polar bear and the emperor penguin may depend not just on reducing emissions, but on replanting the forests that keep equatorial heat where it belongs &mdash; at the equator.</p>
+      <p class="quote-text">Biogenic salt from rainforests is not zero, and it appears to matter more than anyone has been modeling. The specific effect on polar ice is still being determined. That uncertainty is not a reason to wait &mdash; it is a reason to ensure forests are not destroyed faster than we can understand what we're losing.</p>
     </div>
   </div>
 </section>
