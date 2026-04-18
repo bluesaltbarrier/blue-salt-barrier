@@ -404,7 +404,7 @@
       <div class="card">
         <div class="card-icon">&#x1f4bb;</div>
         <div class="card-title">A Consumer Laptop</div>
-        <div class="card-body">Intel i7-12700H, 64 GB RAM. Each 30-day global simulation runs in about 1.5 hours. Total cost of hardware: ~$1,500. No supercomputer required.</div>
+        <div class="card-body">Intel i7-12700H, 64 GB RAM. Each 30-day global simulation runs in 1.5 hours at 240&nbsp;km or ~9 hours at 120&nbsp;km. Total cost of hardware: ~$1,500. No supercomputer required.</div>
       </div>
     </div>
 
@@ -519,7 +519,7 @@
 <!-- SUGGESTED IMAGE: The fullgccn_all_phases.png 4-panel plot, or the fullgccn_map_temp.png global temperature map -->
 <div class="figure" style="padding: 0 24px; background: var(--dark-gray);">
   <img src="mpas_analysis/fullgccn_all_phases.png" alt="All phases comparison" style="max-width: 980px; margin: 0 auto; display: block; border-radius: 12px;">
-  <p class="figure-caption" style="color: #a1a1a6; padding: 16px 0 40px;">Temperature and precipitation response across all six experimental phases. The blue line (full GCCN lifecycle) shows Antarctic cooling and the correct transport sign &mdash; the only version where the microphysics are fully resolved.</p>
+  <p class="figure-caption" style="color: #a1a1a6; padding: 16px 0 40px;">Temperature and precipitation response across all six experimental phases. The solid blue line (full GCCN lifecycle, April 240&nbsp;km) is the primary positive result &mdash; Antarctic cooling and correct transport sign. The dotted green line (January 120&nbsp;km) is the negative result &mdash; Arctic warmed rather than cooled, and the signal is dominated by weather noise at 30 days with a single ensemble member.</p>
 </div>
 
 <!-- ============================================ -->
@@ -551,7 +551,7 @@
 
     <p class="body-text">Our simulations run at 240 km resolution &mdash; each grid cell covers roughly the area of West Virginia. At this scale, individual thunderstorms cannot be resolved. About 90% of tropical rainfall is handled by a convective parameterization (Kain-Fritsch), not by the explicit microphysics where our salt code operates.</p>
     <p class="body-text">This means our rain maps don't show the concentrated signal over rainforests that you'd see in nature. The transport signal (&minus;95 TW) is more reliable because it's a large-scale integrated quantity that doesn't depend on resolving individual storms.</p>
-    <p class="body-text">At 120 km (4x more cells, running now) and especially at 60 km (convection-permitting), the GCCN would interact with resolved storms. That's where the rain pattern would match what you see on a weather app &mdash; continuous green over the Amazon and Congo.</p>
+    <p class="body-text">We ran one 120 km experiment (4x more cells, January seasonal test). The rain signal was still noisy and dominated by convective compensation. At 60 km (convection-permitting), the GCCN would interact with resolved storms. That's where the rain pattern would match what you see on a weather app &mdash; continuous green over the Amazon and Congo. 60 km on this laptop would take roughly 3&ndash;4 days per run, bordering on infeasible without HPC.</p>
 
     <div class="card-grid">
       <div class="card">
@@ -563,8 +563,8 @@
         <div class="card-body">Local rain patterns over rainforests, the exact magnitude of precipitation enhancement, and whether GCCN rain is concentrated over forests vs. spread by compensating circulations.</div>
       </div>
       <div class="card">
-        <div class="card-title">What needs longer runs</div>
-        <div class="card-body">Arctic temperature response (may need seasonal coverage), statistical significance of the transport signal, and slowly evolving teleconnections.</div>
+        <div class="card-title">What needs longer runs + ensembles</div>
+        <div class="card-body">Arctic temperature response, statistical significance of the transport signal, and slowly evolving teleconnections. The January 120&nbsp;km test showed weather noise (2.67&nbsp;K mean global divergence) dominates at 30 days with a single ensemble member.</div>
       </div>
     </div>
 
@@ -579,7 +579,7 @@
   <div class="section-inner fade-in" style="text-align: center;">
     <div class="section-overline">An invitation</div>
     <h2 class="section-headline">This hypothesis belongs to everyone.</h2>
-    <p class="section-subhead" style="margin-left: auto; margin-right: auto;">We are sharing everything &mdash; code, data, configuration files, analysis scripts, Docker containers, and this entire paper. We believe this question is too important to sit behind a paywall or wait for a grant cycle.</p>
+    <p class="section-subhead" style="margin-left: auto; margin-right: auto;">We are sharing the code, configuration files, analysis scripts, Docker build recipes, and this entire paper. Raw simulation output (~200&nbsp;GB of NetCDF) is available on request and planned for a public data archive. We believe this question is too important to sit behind a paywall or wait for a grant cycle.</p>
 
     <div class="card-grid" style="text-align: left;">
       <div class="card" style="background: rgba(255,255,255,0.15); box-shadow: none;">
@@ -646,8 +646,8 @@
       </div>
       <div class="card">
         <div class="card-icon">2</div>
-        <div class="card-title">Pull our container</div>
-        <div class="card-body">MPAS v8.3.1 with the full GCCN tracer modification, pre-compiled and ready. GFS initial conditions included. One command to start.</div>
+        <div class="card-title">Build the container</div>
+        <div class="card-body">Our repo has the Dockerfile for MPAS v8.3.1 with the full GCCN tracer modification. <code>docker build</code> sets it up. Full step-by-step in <code>reproducibility/REPRODUCE.md</code>.</div>
       </div>
       <div class="card">
         <div class="card-icon">3</div>
@@ -661,14 +661,14 @@
       </div>
     </div>
 
-    <p class="body-text" style="margin-top: 32px; text-align: center;"><strong>Minimum hardware:</strong> Any computer with 16+ GB RAM, 4+ cores, and 50 GB free disk space. Runs on consumer hardware &mdash; no GPU required.</p>
+    <p class="body-text" style="margin-top: 32px; text-align: center;"><strong>Minimum hardware:</strong> Any computer with 16+ GB RAM, 4+ cores, and 100 GB free disk space. Runs on consumer hardware &mdash; no GPU required.</p>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
   <p style="margin-bottom: 8px;">The Blue Salt Barrier &mdash; An Open Research Project</p>
-  <p>All code, data, and methods are open source. <a href="publication_draft.html">Read the full paper.</a></p>
+  <p>All code and methods are open source under CC BY 4.0. <a href="publication_draft.html">Read the full paper.</a></p>
   <p style="margin-top: 16px;">Built with MPAS-Atmosphere (NCAR/LANL), Claude (Anthropic), ChatGPT (OpenAI), and Python.</p>
   <p style="margin-top: 4px;">Funded by curiosity. Powered by taxpayer-built science tools. Accelerated by AI.</p>
 </footer>
