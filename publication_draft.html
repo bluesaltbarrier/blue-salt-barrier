@@ -133,7 +133,7 @@
 
   <p><strong>The primary finding of this work is not a specific transport number. It is a demonstration that biogenic salt is a remarkably sensitive variable in global atmospheric simulations.</strong> Using MPAS-Atmosphere at 240&nbsp;km with a dedicated GCCN tracer, we tested five different microphysical implementations of the same hypothesis (from a crude autoconversion hack to a full &kappa;-K&ouml;hler/Hall/Beard lifecycle with wet scavenging, including bug-fixed versions after independent AI code review). The poleward latent heat transport at 30&deg;N across these implementations ranged from &minus;153&nbsp;TW to +153&nbsp;TW &mdash; a swing of roughly 300&nbsp;TW, comparable in magnitude to the entire estimated effect of anthropogenic CO<sub>2</sub> on poleward heat transport (100&ndash;250&nbsp;TW). Implementation details that change a single drop-size constant can flip the sign of the global transport response.</p>
 
-  <p>This sensitivity is itself the finding. Whether the real atmospheric response takes any particular sign, the magnitude of the model's response proves that biogenic salt cannot be safely neglected. Current climate models ignore this aerosol source entirely. That omission is unlikely to be innocuous.</p>
+  <p>This sensitivity is itself the finding. Whether the real atmospheric response takes any particular sign, the magnitude of the model's response proves that biogenic salt cannot be safely neglected. Current mainstream climate models do not appear to explicitly represent this rainforest biogenic-salt source as a dedicated warm-rain mechanism tied to vegetation type, even though P&ouml;hlker-era hygroscopicity and CCN observations have entered aerosol-climate modeling in other forms. This omission is unlikely to be innocuous.</p>
 
   <p>Within the most physically complete configuration we tested (April 240&nbsp;km, bug-fixed GCCN full lifecycle), three robust positive results emerged: (i) biogenic salt <em>redistributes</em> equatorial precipitation southward toward the winter hemisphere, increasing zonal-mean rainfall at 5&deg;S by +0.62&nbsp;mm/day and decreasing it at 5&deg;N by &minus;0.31&nbsp;mm/day (band-average +0.17&nbsp;mm/day across &minus;10 to +10 degrees); (ii) Antarctica cools by &minus;1.26&nbsp;K in the hemisphere entering its winter season; (iii) southward latent heat transport at 30&deg;S is reduced by &minus;61&nbsp;TW. The Northern Hemisphere response &mdash; a +153&nbsp;TW <em>increase</em> in northward transport at 30&deg;N &mdash; is opposite to the simple hypothesis and is most likely an artifact of the convective parameterization responding to GCCN-enhanced grid-scale heating. Testing this at convection-permitting resolution (30&nbsp;km or finer) is the single most important next experiment.</p>
 
@@ -180,7 +180,7 @@
 
 <p>We propose one such factor: the loss of biogenic salt aerosol emissions from deforested equatorial rainforests. P&ouml;hlker et al. (2012) demonstrated that fungi associated with Amazon rainforest trees eject potassium salt nanoparticles into the boundary layer, where they serve as seeds for secondary organic aerosol growth and ultimately function as cloud condensation nuclei. We hypothesize that this biological salt emission acts as a <strong>moisture stratification barrier</strong>&mdash;a mechanism that traps the atmospheric hydrological cycle at low latitudes, preventing the poleward transport of latent heat.</p>
 
-<p>When this barrier is removed through deforestation, moisture that would have precipitated locally near the equator instead travels poleward, condensing at higher latitudes and releasing approximately 2,500&nbsp;J/g of latent heat into the mid-latitude and polar atmosphere. This represents a direct, non-radiative pathway for heating the poles that no current climate model accounts for.</p>
+<p>When this barrier is removed through deforestation, moisture that would have precipitated locally near the equator instead travels poleward, condensing at higher latitudes and releasing approximately 2,500&nbsp;J/g of latent heat into the mid-latitude and polar atmosphere. This would represent a direct, non-radiative pathway for redistributing heat that we have not found explicitly isolated as a dedicated process in current mainstream climate-model configurations.</p>
 
 <h2>3. The Physical Mechanism</h2>
 
@@ -190,7 +190,7 @@
 
 <h3>3.2 Salt as a Moisture Trap</h3>
 
-<p>Intact rainforest trees and their associated fungi continuously eject potassium and sodium salt crystals (1&ndash;10&nbsp;&mu;m) into the boundary layer. These particles are highly hygroscopic: at typical tropical humidity (&gt;80%), they absorb water vapor and swell into large solution droplets that sweep up surrounding cloud droplets through collision-coalescence. This is the same physical mechanism exploited in operational cloud seeding programs worldwide.</p>
+<p>Intact rainforest ecosystems emit highly hygroscopic biogenic salt particles and salt-containing aerosol cores, including the ~200&nbsp;nm KCl cores documented by P&ouml;hlker et al. (2012). Under the high humidity of the tropical boundary layer (&gt;80% RH), these hygroscopic particles can swell substantially and, once in cloud, may grow by condensation into efficient warm-rain embryos. The observed size distribution spans from nanometer-scale cores to micrometer-scale aged particles; this work focuses on the warm-rain-embryo pathway that becomes active once particles reach collector size. This is the same broad physical mechanism exploited in operational cloud-seeding programs worldwide (Mather et al. 1997, CAIPEEX 2023).</p>
 
 <p>The net effect is that rain forms faster and falls locally, close to the forest that produced the salt. The moisture&mdash;and its 2,500&nbsp;J/g of latent heat&mdash;is deposited in the equatorial atmosphere rather than being transported poleward by the Hadley circulation.</p>
 
@@ -203,7 +203,7 @@
     <tr><th>Property</th><th>Small CCN (pollution)</th><th>Hygroscopic Salt (GCCN)</th></tr>
   </thead>
   <tbody>
-    <tr><td>Particle size</td><td>0.05&ndash;0.2 &mu;m</td><td>1&ndash;10 &mu;m</td></tr>
+    <tr><td>Dry particle size</td><td>0.05&ndash;0.2 &mu;m</td><td>~200&nbsp;nm cores (P&ouml;hlker 2012); grown to collector size in cloud</td></tr>
     <tr><td>Effect on rain</td><td>Suppressed / delayed</td><td>Enhanced / accelerated</td></tr>
     <tr><td>Moisture fate</td><td>Stays in cloud longer</td><td>Rains out locally</td></tr>
     <tr><td>Net transport effect</td><td>May increase poleward</td><td>Reduces poleward</td></tr>
@@ -627,7 +627,7 @@
   <li><strong>Global atmospheric dynamics</strong>&mdash;meridional energy transport and the Hadley circulation</li>
   <li><strong>Deforestation studies</strong>&mdash;which have focused on albedo and carbon, not aerosol transport effects</li>
 </ol>
-<p>No climate model currently includes biogenic salt aerosols from forests as a parameterized process. The aerosol fields in climate models are dominated by pollution, sea salt from ocean spray, and mineral dust. The tree-fungi-salt pathway is absent.</p>
+<p>Aerosol fields in most current climate models are dominated by pollution, sea salt from ocean spray, and mineral dust. Hygroscopicity and CCN parameterizations derived from P&ouml;hlker-era work have entered aerosol-climate modeling in various forms. What we have not identified is a mainstream global climate model that explicitly represents the rainforest tree-fungi biogenic-salt emission pathway as a dedicated warm-rain parameterization tied to vegetation type. Whether this is because the specific pathway has been investigated and found unimportant, or because it has not been systematically tested, remains unclear to us.</p>
 
 <h3>7.5 Downwind Transport of Salt Aerosols</h3>
 
@@ -681,9 +681,9 @@
 
 <h2>10. The Conservation Argument</h2>
 
-<p>Our experiments across five different implementations of the same salt-aerosol hypothesis produced 30&deg;N poleward heat transport responses ranging from &minus;153&nbsp;TW to +153&nbsp;TW &mdash; a sensitivity range that encompasses the entire estimated effect of anthropogenic CO<sub>2</sub> on poleward heat transport (100&ndash;250&nbsp;TW). This sensitivity, we argue, is the core conservation-relevant finding: <strong>biogenic salt aerosols from rainforest trees are a first-order variable for global heat redistribution, and current climate models are treating them as exactly zero.</strong></p>
+<p>Our experiments across five different implementations of the same salt-aerosol hypothesis produced 30&deg;N poleward heat transport responses ranging from &minus;153&nbsp;TW to +153&nbsp;TW &mdash; a sensitivity range that encompasses the entire estimated effect of anthropogenic CO<sub>2</sub> on poleward heat transport (100&ndash;250&nbsp;TW). This sensitivity, we argue, is the core conservation-relevant finding: <strong>biogenic salt aerosols from rainforest trees are potentially a first-order variable for global heat redistribution, and we have not identified a mainstream climate model that explicitly represents this specific rainforest-emission warm-rain pathway as a dedicated process.</strong></p>
 
-<p>Whether the real atmospheric response to biogenic salt takes any particular sign or magnitude, our results demonstrate that the system is sensitive enough to implementation that "zero" is almost certainly wrong. Three findings within our most physically complete configuration (April 240&nbsp;km, bug-fixed) are individually interpretable in conservation-relevant terms:</p>
+<p>Whether the real atmospheric response to biogenic salt takes any particular sign or magnitude, our results demonstrate that the system is sensitive enough to microphysical implementation details that modeling this rainforest-specific warm-rain pathway as effectively absent is probably a meaningful omission. Three findings within our most physically complete configuration (April 240&nbsp;km, bug-fixed) are individually interpretable in conservation-relevant terms:</p>
 
 <ul>
   <li>Biogenic salt redistributes equatorial precipitation toward the winter-ward hemisphere &mdash; rain rises by +0.62&nbsp;mm/day at 5&deg;S and falls by &minus;0.31&nbsp;mm/day at 5&deg;N in the April simulation &mdash; a measurable change in the tropical water cycle that affects river systems, forest ecosystems, and regional agriculture in the Amazon, Congo, and Southeast Asian basins.</li>
