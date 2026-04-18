@@ -1,0 +1,39 @@
+<!--
+  GCCN TRACER REGISTRY ADDITION FOR MPAS v8.3.1
+
+  Add these lines to Registry.xml in the scalars section
+  alongside the existing nwfa and nifa entries.
+
+  This gives MPAS automatic 3D advection, I/O, and restart
+  for the GCCN concentration field.
+-->
+
+<!-- Add to the scalars group where nwfa and nifa are defined -->
+<var name="ngccn"
+     type="real"
+     dimensions="nVertLevels nCells Time"
+     units="kg-1"
+     description="Giant CCN (salt aerosol) number concentration per kg of air"
+     packages="mp_thompson_aerosols"
+     persistence="persistent"
+     streams="io"/>
+
+<!-- Add 2D surface emission field -->
+<var name="ngccn2d"
+     type="real"
+     dimensions="nCells Time"
+     units="kg-1 s-1"
+     description="GCCN surface emission rate"
+     packages="mp_thompson_aerosols"
+     persistence="persistent"
+     streams="io"/>
+
+<!-- Add diagnostic: GCCN-induced rain production rate -->
+<var name="gccn_rainprod"
+     type="real"
+     dimensions="nCells Time"
+     units="mm hr-1"
+     description="Precipitation rate from GCCN coalescence pathway"
+     packages="mp_thompson_aerosols"
+     persistence="persistent"
+     streams="io"/>

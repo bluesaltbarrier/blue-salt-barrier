@@ -1,0 +1,40 @@
+# Local working files and old artifacts (kept locally, excluded from repo)
+GITIGNORE/
+WRF_Dockerfiles/
+
+# Simulation output (too large for git)
+results_*/
+mpas30_*/
+*.nc
+*.grib2
+
+# Docker data
+Docker2/
+*.tar.gz
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+
+# Temporary
+*.log
+*.tmp
+gfs_data/
+jan_init/
+jan_120km/
+run_120km/
+
+# Allow the final plot images
+!mpas_analysis/*.png
