@@ -1,82 +1,94 @@
 # The Blue Salt Barrier
 
-**An open research project: how rainforest salt keeps the poles cold.**
+**An open research project on biogenic salt aerosols as a sensitive, unmodeled variable in Earth's heat transport.**
 
-A citizen scientist, two AIs, a laptop, and one question that could change how we understand polar ice loss.
+A citizen scientist, two AIs, a laptop, and one question — shared openly so anyone can build on it.
 
-Website: [bluesaltbarrier.github.io](https://bluesaltbarrier.github.io) *(update after deployment)*
+- **Website:** https://bluesaltbarrier.github.io/blue-salt-barrier/
+- **Paper draft:** [publication_draft.html](publication_draft.html)
+- **Docker container:** `ghcr.io/bluesaltbarrier/mpas8-gccn:slim` (2.2 GB, free, pullable without authentication)
+- **License:** CC BY 4.0 for text/figures, MPAS-derived code follows the original MPAS license
 
 ## The Hypothesis
 
-Equatorial rainforest trees emit hygroscopic salt aerosols that act as giant cloud condensation nuclei (GCCN), triggering local precipitation. This "salt barrier" traps latent heat at the equator. Deforestation removes the salt source, allowing moisture and its heat to travel poleward — a mechanism absent from current climate models.
+Equatorial rainforest trees and their associated fungi emit hygroscopic KCl salt nanoparticles. These particles act as giant cloud condensation nuclei (GCCN), accelerating local rain formation. Our working hypothesis is that this salt-driven cloud seeding modulates tropical precipitation patterns and, via latent heat release, the meridional redistribution of heat on a global scale. Deforestation removes this biogenic aerosol source — a mechanism absent from all current climate models.
 
-## Key Results
+## Key Findings (preliminary, single-laptop 240 km simulations)
 
-**The central finding is that biogenic salt is a remarkably sensitive variable.** Across five different microphysical implementations of the same hypothesis, the 30°N poleward heat transport response ranged from −153 TW to +153 TW — a swing larger than the entire estimated effect of anthropogenic CO₂ on poleward transport. This sensitivity, more than any specific transport number, is what this work demonstrates.
+**Central finding: biogenic salt is a remarkably sensitive variable.** Across five different microphysical implementations of the same hypothesis, the 30°N poleward heat transport response ranged from −153 TW to +153 TW — a swing larger than the entire estimated effect of anthropogenic CO₂ on poleward transport (100–250 TW). This sensitivity itself is the main scientific claim, regardless of which sign is "correct" for the real atmosphere.
 
 Within our most physically complete configuration (April 240 km bug-fixed after independent AI code review):
 
-- **Equatorial rain enhancement:** +0.17 mm/day, matching published cloud-seeding literature (28–60% in field programs)
-- **Antarctic cooling:** −1.26 K in the hemisphere entering its winter season
-- **30°S transport reduction:** −61 TW (supporting the hypothesis in the winter-ward hemisphere)
-- **30°N transport:** +153 TW (increase — may be convective-parameterization artifact at 240 km)
+- **Salt shifts equatorial rain southward** — zonal-mean rainfall rises by +0.62 mm/day at 5°S and falls by −0.31 mm/day at 5°N, toward the winter-ward hemisphere (band average +0.17 mm/day across −10° to +10°).
+- **Antarctic cooling:** −1.26 K in the hemisphere entering its winter season.
+- **30°S transport reduction:** −61 TW, consistent with a moisture-barrier effect in the winter-ward hemisphere.
+- **30°N transport:** +153 TW (increase) — likely an artifact of the 240 km convective parameterization. Testing at convection-permitting resolution (30 km or finer) is the single most important next experiment.
 
-A January 120 km run with the corrected physics is currently in progress.
+All results are N = 1 single-member 30-day integrations. Weather noise (mean 2.67 K global divergence between CONTROL and NO-SALT) means specific numbers should not yet be treated as statistically significant. A January 120 km paired run with the corrected physics is currently running; a 10-member 240 km ensemble is queued next.
 
 ## Read More
 
-- **[index.html](index.html)** — The story, in Apple-style visual format
+- **[index.html](index.html)** — The full story in Apple-style visual format
 - **[publication_draft.html](publication_draft.html)** — Full paper with equations, methods, and results
-- **[Theory/](Theory/)** — Experiment plans, physics references, and design documents
+- **[reproducibility/REPRODUCE.md](reproducibility/REPRODUCE.md)** — Step-by-step guide to replicate the experiments
+- **[Theory/](Theory/)** — Physics references, experiment plan, modified Fortran, GCCN tracer design
 
 ## Tools Used
 
-- **MPAS-Atmosphere** (NCAR/LANL) — global atmospheric model
-- **Thompson microphysics** — modified with a dedicated GCCN tracer
-- **Claude Code** (Anthropic) — built Docker containers, wrote Fortran modifications, designed experiments
-- **ChatGPT** (OpenAI) — cross-verified equations, caught three errors
-- **Intel i7-12700H laptop, 64 GB RAM** — all simulations
+- **MPAS-Atmosphere v7.0 and v8.3.1** (NCAR/LANL) — global atmospheric model, Voronoi mesh
+- **Thompson microphysics** — modified with a dedicated GCCN tracer (κ-Köhler activation, Rogers & Yau condensational growth, Hall 1980 collision efficiency, Beard 1976 terminal velocity, wet scavenging)
+- **Claude Code** (Anthropic) — built Docker containers, wrote Fortran modifications, ran and analyzed experiments
+- **ChatGPT** (OpenAI) — cross-verified the microphysics equations and caught three errors in early drafts
+- A second independent AI (via NVIDIA RAG over our DoubleCheckFolder) — code-reviewed the bug-fixed Fortran and caught three additional implementation bugs, which we subsequently corrected
+- **Intel i7-12700H laptop, 64 GB RAM, Docker Desktop on Windows** — all simulations
 
 ## Reproduce This Research
 
-**Fastest path — pre-built Docker container:**
+**Fastest path — pull the pre-built Docker container (2.2 GB, free, public):**
 
 ```bash
 docker pull ghcr.io/bluesaltbarrier/mpas8-gccn:slim
-docker run -d --name mpas8 -v mpas_data:/mpas ghcr.io/bluesaltbarrier/mpas8-gccn:slim sleep infinity
+docker run -d --name mpas8 -v mpas_data:/mpas \
+  ghcr.io/bluesaltbarrier/mpas8-gccn:slim sleep infinity
 ```
 
-2.2 GB download. Contains MPAS-Atmosphere v8.3.1 compiled with all our bug-fixed GCCN modifications, Thompson microphysics patches, lookup tables, and namelist templates. Then follow [reproducibility/REPRODUCE.md](reproducibility/REPRODUCE.md) starting at Step 3 (mesh and GFS data download).
+The image contains MPAS v8.3.1 compiled with all our bug-fixed GCCN patches, Thompson microphysics modifications, lookup tables, and namelist templates. Then follow [reproducibility/REPRODUCE.md](reproducibility/REPRODUCE.md) starting at Step 3 (mesh and GFS data download) to run your own paired CONTROL + NO-SALT experiment.
 
-**Full reproducibility stack:** the `reproducibility/` folder has Dockerfiles, the GCCN physics patches, MPAS namelists, and analysis scripts. See [reproducibility/REPRODUCE.md](reproducibility/REPRODUCE.md) for the full from-source build path.
+**Full reproducibility stack:** the `reproducibility/` folder has the Dockerfile, both GCCN physics patches (initial + bug-fix), MPAS namelists, and analysis scripts for a from-source build.
 
-**What is included in this repo:** Dockerfiles, physics modifications, namelists, analysis Python scripts, full paper and website, plus the pre-built Docker image on GitHub Container Registry.
+**What's included in this repo:** Dockerfiles, physics modifications, namelists, analysis Python scripts, full paper and website, plus the link to the pre-built Docker image.
 
-**What is NOT included:** the ~200 GB of simulation output NetCDF files (available on request pending public data archival), and the WPS preprocessing toolchain (GFS→MPAS intermediate conversion — download from https://github.com/wrf-model/WPS).
+**What's NOT included here:** the ~200 GB of simulation output NetCDF files (available on request; planned Zenodo archive) and the WPS preprocessing toolchain (GFS → MPAS intermediate conversion — available at https://github.com/wrf-model/WPS).
 
-**Minimum hardware:** 16 GB RAM, 4 cores, 100 GB disk. Recommended: 64 GB RAM, 12 cores. No GPU required.
+**Minimum hardware:** 16 GB RAM, 4 cores, 100 GB free disk. Recommended: 64 GB RAM, 12 cores. No GPU required.
 
 ## How to Contribute
 
-This research belongs to everyone. We invite:
+This research belongs to everyone. We specifically invite:
 
-- **Cloud microphysicists** to review the GCCN code
-- **Tropical ecologists** to improve salt emission inventories
-- **Climate modelers** to integrate this into Earth System Models
-- **Citizen scientists** to run experiments at different seasons and resolutions
-- **Conservation organizations** to quantify the policy implications
+- **HPC-enabled climate modelers** — run our GCCN code at 30 km or finer (convection-permitting). A single paired run would determine whether the +153 TW at 30°N is real physics or parameterization artifact. This is the highest-value community contribution.
+- **Researchers with cluster or cloud compute** — run 10+ member ensembles, or 90+ day integrations, to directly test the variance-amplification hypothesis.
+- **Cloud microphysicists** — review the GCCN lifecycle code. Try the same hypothesis with Morrison or P3 microphysics.
+- **Tropical ecologists** — quantify salt emission rates by tree species, canopy density, soil moisture, and diurnal/seasonal cycles.
+- **Citizen scientists** — pull the Docker container, reproduce the April 240 km experiment, try a different season. Three days of laptop time produces a publishable replication.
+- **Conservation scientists and policy researchers** — help frame the implications for forest preservation given our sensitivity finding.
 
-Open an issue or pull request. Fork the repo. Run your own experiments.
+Open an issue or pull request on this repo. Fork it. Run your own experiments. Tell us what you find — including negative results.
+
+## Citation
+
+If this work informs your research, please cite:
+
+- This repository: `The Blue Salt Barrier project, bluesaltbarrier/blue-salt-barrier on GitHub, 2026`
+- The underlying MPAS: Skamarock, W. C., et al. (2012), *Monthly Weather Review*, 140, 3090–3105
+- The biogenic salt emission source: Pöhlker, C., et al. (2012), *Science*, 337(6098), 1075–1078
+- Relevant microphysics: Thompson & Eidhammer (2014), Hall (1980), Beard (1976), Petters & Kreidenweis (2007)
 
 ## License
 
 Text, figures, and analysis: [Creative Commons Attribution 4.0](LICENSE).
 Code modifications to MPAS/Thompson: retain original MPAS license terms.
 
-## Citation
-
-If this work informs your research, please cite the repository and the underlying MPAS publications (Skamarock et al. 2012).
-
 ---
 
-**Funded by curiosity. Powered by taxpayer-built science tools. Accelerated by AI.**
+**Funded by curiosity. Powered by taxpayer-built science tools. Accelerated by AI. Open for anyone to improve.**
