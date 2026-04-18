@@ -134,7 +134,7 @@
 
   <p>This sensitivity is itself the finding. Whether the real atmospheric response takes any particular sign, the magnitude of the model's response proves that biogenic salt cannot be safely neglected. Current climate models ignore this aerosol source entirely. That omission is unlikely to be innocuous.</p>
 
-  <p>Within the most physically complete configuration we tested (April 240&nbsp;km, bug-fixed GCCN full lifecycle), three robust positive results emerged: (i) biogenic salt enhances equatorial precipitation by +0.17&nbsp;mm/day, consistent with published cloud-seeding enhancement of 28&ndash;60%; (ii) Antarctica cools by &minus;1.26&nbsp;K in the hemisphere entering its winter season; (iii) southward latent heat transport at 30&deg;S is reduced by &minus;61&nbsp;TW. The Northern Hemisphere response &mdash; a +153&nbsp;TW <em>increase</em> in northward transport at 30&deg;N &mdash; is opposite to the simple hypothesis and is most likely an artifact of the convective parameterization responding to GCCN-enhanced grid-scale heating. Testing this at convection-permitting resolution (60&nbsp;km or finer) is the single most important next experiment.</p>
+  <p>Within the most physically complete configuration we tested (April 240&nbsp;km, bug-fixed GCCN full lifecycle), three robust positive results emerged: (i) biogenic salt <em>redistributes</em> equatorial precipitation southward toward the winter hemisphere, increasing zonal-mean rainfall at 5&deg;S by +0.62&nbsp;mm/day and decreasing it at 5&deg;N by &minus;0.31&nbsp;mm/day (band-average +0.17&nbsp;mm/day across &minus;10 to +10 degrees); (ii) Antarctica cools by &minus;1.26&nbsp;K in the hemisphere entering its winter season; (iii) southward latent heat transport at 30&deg;S is reduced by &minus;61&nbsp;TW. The Northern Hemisphere response &mdash; a +153&nbsp;TW <em>increase</em> in northward transport at 30&deg;N &mdash; is opposite to the simple hypothesis and is most likely an artifact of the convective parameterization responding to GCCN-enhanced grid-scale heating. Testing this at convection-permitting resolution (30&nbsp;km or finer) is the single most important next experiment.</p>
 
   <p>All results reported here are N&nbsp;=&nbsp;1 single-member 30-day integrations and cannot be distinguished from weather noise at statistical-significance level. A companion 120&nbsp;km January run with the corrected physics is currently in progress. Definitive testing requires ensembles of 5&ndash;10 members, convection-permitting resolution, and 90+ day integrations &mdash; resources beyond a consumer laptop. We release all code, bug-fix patches, Docker builds, and analysis scripts openly at <a href="https://github.com/bluesaltbarrier/blue-salt-barrier">github.com/bluesaltbarrier/blue-salt-barrier</a> to invite the climate modeling community to extend this work.</p>
 </div>
@@ -473,7 +473,7 @@
 <p>Setting aside the 30&deg;N transport number (which is resolution-sensitive and may include convective-parameterization artifacts), three findings in the bug-fixed April 240&nbsp;km experiment are consistent with a direct biogenic salt mechanism:</p>
 
 <ol>
-  <li><strong>Equatorial precipitation enhancement: +0.17&nbsp;mm/day.</strong> This is the direct GCCN microphysical mechanism and matches the magnitude of published cloud-seeding field experiments (28&ndash;60% rainfall enhancement in operational salt-seeding programs). This finding is physically interpretable without invoking circulation feedback.</li>
+  <li><strong>Equatorial precipitation redistribution, with hemispheric asymmetry.</strong> Zonal-mean rain increases by +0.62&nbsp;mm/day at 5&deg;S and decreases by &minus;0.31&nbsp;mm/day at 5&deg;N, giving a band-average enhancement of +0.17&nbsp;mm/day across &minus;10 to +10 degrees. The asymmetry is itself physically significant: salt appears to precipitate equatorial moisture into its source hemisphere (here the SH entering winter) before it can cross the equator northward. This matches the magnitude of published cloud-seeding field experiments (28&ndash;60% rainfall enhancement in seeded clouds) and is physically interpretable as a direct microphysical mechanism without invoking large-scale circulation feedback.</li>
 
   <li><strong>Antarctic cooling: &minus;1.26&nbsp;K.</strong> The hemisphere entering winter shows strong cooling consistent with the moisture-barrier hypothesis: salt blocks the southward moisture pipeline that would otherwise carry latent heat to Antarctica.</li>
 
@@ -489,7 +489,7 @@
 
 <figure>
   <img src="mpas_analysis/fullgccn_map_precip.png" alt="April 240km bugfix precipitation perturbation" style="width:100%; max-width:900px;">
-  <figcaption><strong>Figure 12.</strong> Global precipitation change (CONTROL minus NO-SALT) for the bug-fixed April 240&nbsp;km run. Green (more rain with salt) clusters over equatorial Africa, the Amazon, and the tropical western Pacific. The zonal-mean enhancement of +0.17&nbsp;mm/day in the equatorial belt is the most physically robust signal in this experiment.</figcaption>
+  <figcaption><strong>Figure 12.</strong> Global precipitation change (CONTROL minus NO-SALT) for the bug-fixed April 240&nbsp;km run. The spatial pattern shows increased rain over equatorial Africa, the Amazon, and the Indo-Pacific warm pool. Zonal-mean rain rises by +0.62&nbsp;mm/day at 5&deg;S and falls by &minus;0.31&nbsp;mm/day at 5&deg;N, reflecting a southward redistribution toward the winter-ward hemisphere. The band-average across &minus;10 to +10 degrees is +0.17&nbsp;mm/day, understating the spatial intensity of the redistribution.</figcaption>
 </figure>
 
 <figure>
@@ -587,7 +587,7 @@
 
 <p>Within the bug-fixed April 240&nbsp;km experiment (our most physically complete configuration), three findings are consistent across multiple implementations and physically interpretable:</p>
 
-<p><strong>Equatorial precipitation enhancement:</strong> salt increases tropical rainfall by +0.05 to +0.19&nbsp;mm/day depending on implementation (+0.17 in the bug-fixed run). This is the direct GCCN microphysical mechanism, matches decades of cloud-seeding field literature (28&ndash;60% enhancement in operational programs), and is the single most physically defensible result in this work.</p>
+<p><strong>Equatorial precipitation redistribution:</strong> across GCCN implementations, salt increases tropical rainfall on some side of the equator and decreases it on the other. In the bug-fixed April 240&nbsp;km run, rain rises by +0.62&nbsp;mm/day at 5&deg;S and falls by &minus;0.31&nbsp;mm/day at 5&deg;N &mdash; a southward redistribution toward the winter-ward hemisphere. The band-average across &minus;10 to +10 degrees is +0.17&nbsp;mm/day. This is the direct GCCN microphysical mechanism, matches decades of cloud-seeding field literature (28&ndash;60% enhancement in seeded clouds), and is physically defensible without invoking circulation feedback.</p>
 
 <p><strong>Antarctic cooling (April):</strong> in the April 240&nbsp;km bug-fixed experiment, Antarctica cooled by &minus;1.26&nbsp;K &mdash; the hemisphere entering its winter season. This is consistent with reduced southward moisture transport at 30&deg;S (&minus;61&nbsp;TW), supporting the moisture-barrier interpretation for the winter-ward hemisphere.</p>
 
@@ -685,7 +685,7 @@
 <p>Whether the real atmospheric response to biogenic salt takes any particular sign or magnitude, our results demonstrate that the system is sensitive enough to implementation that "zero" is almost certainly wrong. Three findings within our most physically complete configuration (April 240&nbsp;km, bug-fixed) are individually interpretable in conservation-relevant terms:</p>
 
 <ul>
-  <li>Biogenic salt enhances equatorial precipitation by +0.17&nbsp;mm/day &mdash; a measurable change in the tropical water cycle that affects river systems, forest ecosystems, and regional agriculture in the Amazon, Congo, and Southeast Asian basins.</li>
+  <li>Biogenic salt redistributes equatorial precipitation toward the winter-ward hemisphere &mdash; rain rises by +0.62&nbsp;mm/day at 5&deg;S and falls by &minus;0.31&nbsp;mm/day at 5&deg;N in the April simulation &mdash; a measurable change in the tropical water cycle that affects river systems, forest ecosystems, and regional agriculture in the Amazon, Congo, and Southeast Asian basins.</li>
   <li>Antarctica cools by &minus;1.26&nbsp;K when salt is present in the hemisphere entering its winter season. This is about one third of the total Antarctic warming signal since pre-industrial times &mdash; a large enough magnitude that deforestation-driven salt removal could plausibly be contributing to observed polar change.</li>
   <li>Southward poleward moisture transport at 30&deg;S is reduced by &minus;61&nbsp;TW when salt is present, supporting the moisture-barrier interpretation in the winter-ward hemisphere.</li>
 </ul>

@@ -32,20 +32,41 @@ git clone https://github.com/bluesaltbarrier/blue-salt-barrier.git
 cd blue-salt-barrier
 ```
 
-## Step 2. Build the MPAS container
+## Step 2. Get the MPAS container
 
-The `reproducibility/container/` folder has two Dockerfiles:
+**Fast path (recommended): pull our pre-built container from GitHub Container Registry.** This includes MPAS-Atmosphere v8.3.1 with all our bug-fixed GCCN modifications compiled in. About 2.2 GB download.
 
-- **`Dockerfile.mpas8_ubuntu`** — Ubuntu 22.04 with MPAS-Atmosphere v8.3.1. **This is the one used for the final results.**
-- `Dockerfile.mpas7_centos` — CentOS 7 with MPAS v7.0. Older, kept for reference.
+```bash
+docker pull ghcr.io/bluesaltbarrier/mpas8-gccn:slim
+docker run -d --name mpas8 -v mpas_data:/mpas ghcr.io/bluesaltbarrier/mpas8-gccn:slim sleep infinity
+```
 
-Build the Ubuntu container (takes ~30-60 minutes on first build):
+The `slim` tag contains:
+- MPAS-Atmosphere v8.3.1 compiled with our GCCN lifecycle patches (bug-fixed)
+- Thompson microphysics modifications (Hall 1980, Beard 1976, κ-Köhler)
+- All lookup tables (RRTMG radiation, Thompson aerosol tables, etc.)
+- Namelist and streams templates
+- Both the SALT-enabled and NO-SALT init files
+
+It does **not** contain mesh files or GFS initial conditions &mdash; those are downloaded in Steps 3 and 4 to keep the image small.
+
+**Alternative path: build from source (30–60 minutes compile time).** The `reproducibility/container/` folder has two Dockerfiles:
+
+- `Dockerfile.mpas8_ubuntu` — Ubuntu 22.04 with MPAS v8.3.1 (the one used for this paper's results)
+- `Dockerfile.mpas7_centos` — CentOS 7 with MPAS v7.0 (older, kept for reference)
 
 ```bash
 cd reproducibility/container
 docker build -t mpas8 -f Dockerfile.mpas8_ubuntu .
 docker run -d --name mpas8 -v mpas_data:/mpas mpas8 tail -f /dev/null
+# Then apply the GCCN patches:
+docker cp ../mpas_modifications/patch_gccn_full.sh mpas8:/opt/
+docker cp ../mpas_modifications/patch_gccn_bugfixes.sh mpas8:/opt/
+docker exec mpas8 bash -c "bash /opt/patch_gccn_full.sh && bash /opt/patch_gccn_bugfixes.sh"
+docker exec mpas8 bash -c "cd /opt/MPAS-Model && make -j12 gfortran CORE=atmosphere USE_PIO2=true PRECISION=single AUTOCLEAN=true"
 ```
+
+The pre-built image is faster to get started; the from-source path lets you see exactly what was done.
 
 ## Step 3. Download mesh and static files
 

@@ -12,9 +12,16 @@ Equatorial rainforest trees emit hygroscopic salt aerosols that act as giant clo
 
 ## Key Results
 
-- **Transport reduction:** −95 TW at 30°N when salt is present (comparable to estimated CO₂-driven transport changes of 100–250 TW)
-- **Antarctic cooling:** −1.03 K with salt present (April simulation)
-- **Microphysical details matter:** The simplified version gave the wrong transport sign. Only the full GCCN lifecycle (kappa-Köhler activation, condensational growth, Hall 1980 collision efficiencies, Beard 1976 terminal velocities, wet scavenging) produced the correct signal.
+**The central finding is that biogenic salt is a remarkably sensitive variable.** Across five different microphysical implementations of the same hypothesis, the 30°N poleward heat transport response ranged from −153 TW to +153 TW — a swing larger than the entire estimated effect of anthropogenic CO₂ on poleward transport. This sensitivity, more than any specific transport number, is what this work demonstrates.
+
+Within our most physically complete configuration (April 240 km bug-fixed after independent AI code review):
+
+- **Equatorial rain enhancement:** +0.17 mm/day, matching published cloud-seeding literature (28–60% in field programs)
+- **Antarctic cooling:** −1.26 K in the hemisphere entering its winter season
+- **30°S transport reduction:** −61 TW (supporting the hypothesis in the winter-ward hemisphere)
+- **30°N transport:** +153 TW (increase — may be convective-parameterization artifact at 240 km)
+
+A January 120 km run with the corrected physics is currently in progress.
 
 ## Read More
 
@@ -32,13 +39,20 @@ Equatorial rainforest trees emit hygroscopic salt aerosols that act as giant clo
 
 ## Reproduce This Research
 
-The `reproducibility/` folder contains the Dockerfiles, the GCCN physics patch, MPAS namelists, and analysis scripts needed to reproduce the experiments.
+**Fastest path — pre-built Docker container:**
 
-See [**reproducibility/REPRODUCE.md**](reproducibility/REPRODUCE.md) for the full step-by-step guide — from building the container to downloading initial conditions to running the analysis.
+```bash
+docker pull ghcr.io/bluesaltbarrier/mpas8-gccn:slim
+docker run -d --name mpas8 -v mpas_data:/mpas ghcr.io/bluesaltbarrier/mpas8-gccn:slim sleep infinity
+```
 
-**What is included:** Dockerfiles, physics modifications, namelists, analysis Python scripts, full paper and website.
+2.2 GB download. Contains MPAS-Atmosphere v8.3.1 compiled with all our bug-fixed GCCN modifications, Thompson microphysics patches, lookup tables, and namelist templates. Then follow [reproducibility/REPRODUCE.md](reproducibility/REPRODUCE.md) starting at Step 3 (mesh and GFS data download).
 
-**What is NOT included (due to size):** the ~200 GB of simulation output NetCDF files, and the WPS preprocessing toolchain (GFS→MPAS intermediate conversion). The REPRODUCE guide explains how to obtain or regenerate these.
+**Full reproducibility stack:** the `reproducibility/` folder has Dockerfiles, the GCCN physics patches, MPAS namelists, and analysis scripts. See [reproducibility/REPRODUCE.md](reproducibility/REPRODUCE.md) for the full from-source build path.
+
+**What is included in this repo:** Dockerfiles, physics modifications, namelists, analysis Python scripts, full paper and website, plus the pre-built Docker image on GitHub Container Registry.
+
+**What is NOT included:** the ~200 GB of simulation output NetCDF files (available on request pending public data archival), and the WPS preprocessing toolchain (GFS→MPAS intermediate conversion — download from https://github.com/wrf-model/WPS).
 
 **Minimum hardware:** 16 GB RAM, 4 cores, 100 GB disk. Recommended: 64 GB RAM, 12 cores. No GPU required.
 
