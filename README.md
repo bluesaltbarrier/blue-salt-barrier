@@ -31,7 +31,9 @@ All results are N = 1 single-member 30-day integrations. Weather noise (mean 2.6
 - **[index.html](index.html)** — The full story in Apple-style visual format
 - **[publication_draft.html](publication_draft.html)** — Full paper with equations, methods, and results
 - **[reproducibility/REPRODUCE.md](reproducibility/REPRODUCE.md)** — Step-by-step guide to replicate the experiments
-- **[Theory/](Theory/)** — Physics references, experiment plan, modified Fortran, GCCN tracer design
+- **[Theory/gccn_live_code.F](Theory/gccn_live_code.F)** — **Authoritative live-code excerpt.** The ground-truth Fortran for the GCCN physics as it actually runs, extracted from the live patched MPAS container. Start here if you want to inspect what produced our results.
+- **[Theory/gccn_physics_references.md](Theory/gccn_physics_references.md)** — Physics equations and citations
+- **[Theory/experiment_plan.md](Theory/experiment_plan.md)** — Experimental design document
 
 ## Tools Used
 
