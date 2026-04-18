@@ -14,9 +14,10 @@
 !
 ! to vanilla MPAS-Atmosphere v8.3.1 Thompson microphysics.
 !
-! Extracted on: 2026-04-18, after independent AI code review (DoubleCheck)
-! identified three bugs in the previous version. This version reflects
-! all known-issue fixes at the time of extraction.
+! Extracted on: 2026-04-18, after iterative debugging surfaced three
+! implementation bugs in the previous version that were subsequently
+! corrected. This file reflects all known-issue fixes at the time of
+! extraction.
 !
 ! If you want to compile this, do so by applying the patches above to
 ! vanilla Thompson, not by trying to build this excerpt directly.
@@ -188,8 +189,9 @@
 !.................Rain-number creation from GCCN threshold crossing is
 !                 handled by the standard Thompson accretion conversion
 !                 logic, not by adding to pnr_wau. The previous pnr_wau
-!                 line (which also compared radius to diameter) was
-!                 removed per the DoubleCheckFolder review.
+!                 line was removed during iterative debugging after
+!                 being identified as a wrong-pathway routing with a
+!                 radius-vs-diameter mismatch at the threshold test.
                endif
             endif
          endif

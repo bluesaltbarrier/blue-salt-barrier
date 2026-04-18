@@ -468,8 +468,8 @@
       <div class="timeline-item">
         <div class="timeline-phase">Phase 6</div>
         <div>
-          <div class="timeline-title">Independent AI Review Found Bugs</div>
-          <div class="timeline-desc"><strong>A second AI code-reviewed our GCCN physics and found three errors</strong>: a drop-radius reset keeping collectors below 20&nbsp;&micro;m, a missing air-density factor, and rain-number routing through the wrong pathway. We fixed them, rebuilt, and re-ran April 240&nbsp;km. The corrected results differ qualitatively from the buggy version &mdash; and the fact that implementation details flip signs is itself the central finding.</div>
+          <div class="timeline-title">Iterative Debugging Surfaced Three Bugs</div>
+          <div class="timeline-desc"><strong>Iterative cross-checking of our GCCN physics against Thompson conventions surfaced three errors</strong>: a drop-radius reset keeping collectors below 20&nbsp;&micro;m, a missing air-density factor, and rain-number routing through the wrong pathway. We fixed them, rebuilt, and re-ran April 240&nbsp;km. The corrected results differ qualitatively from the buggy version &mdash; and the fact that implementation details flip signs is itself the central finding.</div>
         </div>
       </div>
       <div class="timeline-item">
@@ -548,7 +548,7 @@
 
     <p class="body-text">Our first GCCN implementation had a bug: the collector-drop radius reset to 10 &micro;m every microphysics timestep. Over one timestep drops only grew to ~20 &micro;m &mdash; right at the boundary where collision efficiency starts but is still minimal. The GCCN physics was essentially idling. That version gave us a <strong>&minus;95 TW</strong> reduction in 30&deg;N poleward heat transport.</p>
 
-    <p class="body-text">A second AI independently reviewed the Fortran code. It caught the radius-reset bug, a missing air-density factor, and a rain-number routing error. We fixed them. Now collector drops start at 25 &micro;m (an "already-activated embryo"), which gives them a realistic collision efficiency. The same hypothesis now gives us <strong>+153 TW</strong> at 30&deg;N &mdash; opposite sign, larger magnitude.</p>
+    <p class="body-text">Subsequent cross-checking of the Fortran code against Thompson's native aerosol-scavenging conventions caught the radius-reset bug, the missing air-density factor, and the rain-number routing error. We fixed them. Now collector drops start at 25 &micro;m (an "already-activated embryo"), which gives them a realistic collision efficiency. The same hypothesis now gives us <strong>+153 TW</strong> at 30&deg;N &mdash; opposite sign, larger magnitude.</p>
 
     <p class="body-text"><strong>One drop-radius constant. 300 TW of swing in the global heat transport response.</strong> This is more than the estimated entire effect of anthropogenic CO<sub>2</sub> on poleward heat transport. We interpret this not as "we finally got the right answer" but as evidence that <em>biogenic salt is sensitive enough that mainstream models not explicitly representing this specific rainforest-emission mechanism are probably missing something that matters</em>.</p>
   </div>

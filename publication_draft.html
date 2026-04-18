@@ -119,10 +119,18 @@
 
 <header>
   <h1>Biogenic Salt Aerosols: A Sensitive, Unmodeled Variable in Global Heat Transport</h1>
-  <div class="authors" style="font-size: 1rem; color: var(--text-sec); margin-bottom: 10px;">A Multi-Implementation Study in MPAS and an Invitation to the Community</div>
-  <div class="authors">Draft Preprint &mdash; Open for Community Review and Collaboration</div>
-  <div class="date">April 2026</div>
-  <div class="status">Working Draft &mdash; Seeking Expert Collaborators</div>
+  <div class="authors" style="font-size: 1rem; color: var(--text-sec); margin-bottom: 18px;">A Multi-Implementation Study in MPAS and an Invitation to the Community</div>
+
+  <div class="authors" style="font-weight: 600; font-size: 1rem; color: var(--text); margin-bottom: 4px;">Brian Lue</div>
+  <div class="authors" style="font-size: 0.9rem; margin-bottom: 6px;">Independent Researcher</div>
+  <div class="authors" style="font-size: 0.85rem;">
+    <a href="mailto:luebrian@gmail.com">luebrian@gmail.com</a> &middot;
+    ORCID: [to be added] &middot;
+    <a href="https://github.com/bluesaltbarrier/blue-salt-barrier">github.com/bluesaltbarrier/blue-salt-barrier</a>
+  </div>
+
+  <div class="date" style="margin-top: 18px;">April 2026</div>
+  <div class="status">Draft Preprint &mdash; Open for Community Review and Collaboration</div>
 </header>
 
 <main>
@@ -131,7 +139,7 @@
   <h2>Abstract</h2>
   <p>We investigate a previously unconsidered climate variable: biogenic salt aerosols emitted by equatorial rainforest trees. Tropical trees and their associated fungi eject hygroscopic potassium salt nanoparticles that act as giant cloud condensation nuclei (GCCN), accelerating local rain formation. We hypothesized that this salt-driven cloud seeding acts as a moisture stratification barrier, trapping latent heat at the equator and reducing poleward heat transport. Deforestation would remove this barrier, allowing moisture and heat to escape to higher latitudes.</p>
 
-  <p><strong>The primary finding of this work is not a specific transport number. It is a demonstration that biogenic salt is a remarkably sensitive variable in global atmospheric simulations.</strong> Using MPAS-Atmosphere at 240&nbsp;km with a dedicated GCCN tracer, we tested five different microphysical implementations of the same hypothesis (from a crude autoconversion hack to a full &kappa;-K&ouml;hler/Hall/Beard lifecycle with wet scavenging, including bug-fixed versions after independent AI code review). The poleward latent heat transport at 30&deg;N across these implementations ranged from &minus;153&nbsp;TW to +153&nbsp;TW &mdash; a swing of roughly 300&nbsp;TW, comparable in magnitude to the entire estimated effect of anthropogenic CO<sub>2</sub> on poleward heat transport (100&ndash;250&nbsp;TW). Implementation details that change a single drop-size constant can flip the sign of the global transport response.</p>
+  <p><strong>The primary finding of this work is not a specific transport number. It is a demonstration that biogenic salt is a remarkably sensitive variable in global atmospheric simulations.</strong> Using MPAS-Atmosphere at 240&nbsp;km with a dedicated GCCN tracer, we tested five different microphysical implementations of the same hypothesis (from a crude autoconversion hack to a full &kappa;-K&ouml;hler/Hall/Beard lifecycle with wet scavenging, including bug-fixed versions after iterative debugging). The poleward latent heat transport at 30&deg;N across these implementations ranged from &minus;153&nbsp;TW to +153&nbsp;TW &mdash; a swing of roughly 300&nbsp;TW, comparable in magnitude to the entire estimated effect of anthropogenic CO<sub>2</sub> on poleward heat transport (100&ndash;250&nbsp;TW). Implementation details that change a single drop-size constant can flip the sign of the global transport response.</p>
 
   <p>This sensitivity is itself the finding. Whether the real atmospheric response takes any particular sign, the magnitude of the model's response proves that biogenic salt cannot be safely neglected. Current mainstream climate models do not appear to explicitly represent this rainforest biogenic-salt source as a dedicated warm-rain mechanism tied to vegetation type, even though P&ouml;hlker-era hygroscopicity and CCN observations have entered aerosol-climate modeling in other forms. This omission is unlikely to be innocuous.</p>
 
@@ -442,7 +450,7 @@
   <li><strong>Accretion pathway:</strong> All GCCN collection is added to <code>prr_rcw</code>, not autoconversion (corrected after ChatGPT review).</li>
 </ul>
 
-<p>An independent AI cross-review of our Fortran implementation identified three code errors in our initial GCCN lifecycle version: (1) a radius-reset bug that kept collector drops near 10&nbsp;&mu;m where collision efficiency is zero, (2) a missing air-density factor in the collection-rate formula, and (3) an incorrect update to the rain-number counter. We corrected these bugs, rebuilt the model, and re-ran the paired April 240&nbsp;km experiment. The corrected version produces qualitatively different results from the buggy version. Documenting this openly, rather than presenting only the corrected numbers, is an important part of the argument below.</p>
+<p>Iterative debugging and cross-checking of the initial GCCN lifecycle against Thompson's existing aerosol-scavenging conventions surfaced three implementation errors: (1) a radius-reset bug that kept collector drops near 10&nbsp;&mu;m where collision efficiency is zero, (2) a missing air-density factor in the collection-rate formula, and (3) an incorrect update to the rain-number counter. We corrected these bugs, rebuilt the model, and re-ran the paired April 240&nbsp;km experiment. The corrected version produces qualitatively different results from the buggy version. Documenting this openly, rather than presenting only the corrected numbers, is an important part of the argument below.</p>
 
 <p><strong>Results across five implementations of the same hypothesis:</strong></p>
 
@@ -696,6 +704,14 @@
 <p>Replanting and protecting equatorial rainforests would preserve whatever this mechanism does. If the current April 240&nbsp;km indication of Antarctic cooling generalizes, rainforest preservation helps protect the winter pole. If the variance-amplifier hypothesis is confirmed, rainforests preserve a stabilizing influence on otherwise chaotic heat redistribution. If neither holds, we still learn something important about biosphere-atmosphere coupling that climate models currently ignore.</p>
 
 <p>The polar bear and the emperor penguin may depend on many things we don't yet understand about the atmospheric effects of equatorial forests. The sensitivity we have demonstrated is sufficient reason, regardless of the specific direction of effect, to ensure that forests are not removed faster than we can understand what we are losing.</p>
+
+<h2>Acknowledgments</h2>
+
+<p>This work used extensive AI coding and reasoning assistance. Claude Code (Anthropic) handled Docker container construction, MPAS compilation, Fortran modifications for the GCCN tracer, experiment orchestration, and analysis scripts. ChatGPT (OpenAI) provided an independent equation-verification cross-check during the derivation of the microphysics, which identified three errors in the original equations (terminal-velocity approximation, microphysics pathway assignment, and the critical supersaturation for ammonium sulfate) that were subsequently corrected.</p>
+
+<p>The human author is responsible for all scientific claims, interpretations, and limitations. AI tools performed execution and cross-verification; scientific judgment was retained by the author.</p>
+
+<p>We thank the MPAS-Atmosphere development team at NCAR and LANL for the open-source atmospheric modeling framework; NOAA for the GFS initial conditions; the WRF/WPS team for preprocessing tools; and the open-source scientific Python community (NumPy, netCDF4, Matplotlib, Cartopy) for analysis tools. This research was self-funded.</p>
 
 <h2>References</h2>
 

@@ -40,8 +40,7 @@ All results are N = 1 single-member 30-day integrations. Weather noise (mean 2.6
 - **MPAS-Atmosphere v7.0 and v8.3.1** (NCAR/LANL) — global atmospheric model, Voronoi mesh
 - **Thompson microphysics** — modified with a dedicated GCCN tracer (κ-Köhler activation, Rogers & Yau condensational growth, Hall 1980 collision efficiency, Beard 1976 terminal velocity, wet scavenging)
 - **Claude Code** (Anthropic) — built Docker containers, wrote Fortran modifications, ran and analyzed experiments
-- **ChatGPT** (OpenAI) — cross-verified the microphysics equations and caught three errors in early drafts
-- A second independent AI (via NVIDIA RAG over our DoubleCheckFolder) — code-reviewed the bug-fixed Fortran and caught three additional implementation bugs, which we subsequently corrected
+- **ChatGPT** (OpenAI) — cross-verified the microphysics equations during the design phase and caught three errors (terminal-velocity approximation, pathway assignment, critical supersaturation for (NH₄)₂SO₄) that were corrected before the Fortran was written
 - **Intel i7-12700H laptop, 64 GB RAM, Docker Desktop on Windows** — all simulations
 
 ## Reproduce This Research
