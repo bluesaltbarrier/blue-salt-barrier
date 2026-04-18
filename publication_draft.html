@@ -129,7 +129,7 @@
 <div class="abstract">
   <h2>Abstract</h2>
   <p>We present a computational investigation of a previously unconsidered climate mechanism: the role of biogenic salt aerosols emitted by equatorial rainforest trees in modifying cloud microphysics and precipitation patterns. Tropical trees and their associated fungi eject hygroscopic potassium and sodium salt particles that act as giant cloud condensation nuclei (GCCN), accelerating local rain formation. We hypothesize that this salt-driven cloud seeding acts as a moisture stratification barrier, reducing the poleward transport of latent heat. Deforestation removes this barrier, allowing moisture to escape to higher latitudes where its condensation delivers extra heat to the poles.</p>
-  <p>Using the MPAS-Atmosphere global model (versions 7.0 and 8.3.1) at 240&nbsp;km resolution, we conducted paired 30-day simulations across six experimental phases, progressively improving the physics from crude autoconversion hacks to a dedicated GCCN tracer with full lifecycle microphysics (kappa-K&ouml;hler activation, time-resolved condensational growth, size-dependent collision efficiencies from Hall 1980, Beard 1976 terminal velocities, and wet scavenging). Our most physically complete model shows that biogenic salt reduces poleward latent heat transport at 30&deg;N by 95&nbsp;TW&mdash;comparable in magnitude to estimated CO<sub>2</sub>-driven transport changes (100&ndash;250&nbsp;TW)&mdash;and cools Antarctica by &minus;1.03&nbsp;K. The Arctic warms (+0.43&nbsp;K) rather than cools in this April simulation, consistent with a seasonal asymmetry that requires January runs to resolve. The equatorial rain enhancement is modest (+0.05&nbsp;mm/day) but positive, and critically, the microphysical details&mdash;particularly how GCCN drops grow through the coalescence gap before collecting cloud water&mdash;proved essential: a simplified version with fixed drop parameters produced the wrong sign for transport. These preliminary results suggest that biogenic salt aerosols may constitute a significant, unaccounted mechanism in the global energy budget, and that rainforest preservation is relevant not only for carbon sequestration but for direct regulation of poleward heat delivery.</p>
+  <p>Using the MPAS-Atmosphere global model (versions 7.0 and 8.3.1) at 240&nbsp;km and 120&nbsp;km resolution, we conducted paired 30-day simulations across seven experimental phases, progressively improving the physics from crude autoconversion hacks to a dedicated GCCN tracer with full lifecycle microphysics (kappa-K&ouml;hler activation, time-resolved condensational growth, size-dependent collision efficiencies from Hall 1980, Beard 1976 terminal velocities, and wet scavenging). Our most physically complete 240&nbsp;km April simulation shows that biogenic salt reduces poleward latent heat transport at 30&deg;N by 95&nbsp;TW&mdash;comparable in magnitude to estimated CO<sub>2</sub>-driven transport changes (100&ndash;250&nbsp;TW)&mdash;and cools Antarctica by &minus;1.03&nbsp;K. The Arctic warms (+0.43&nbsp;K) rather than cools in this April simulation. Critically, the microphysical details&mdash;particularly how GCCN drops grow through the coalescence gap before collecting cloud water&mdash;proved essential: a simplified version with fixed drop parameters produced the wrong sign for transport. A follow-up January test at 120&nbsp;km specifically designed to look for Arctic cooling in the NH winter season did <em>not</em> confirm the expected seasonal symmetry &mdash; the Arctic warmed by +1.85&nbsp;K and the transport reduction weakened to &minus;17&nbsp;TW, consistent with weather noise dominating a single 30-day member rather than a definitive refutation. Taken together, these results suggest that biogenic salt aerosols may constitute a significant mechanism for equatorial heat containment, but that definitive testing requires convection-permitting resolution (60&nbsp;km or finer), ensembles of 5&ndash;10 members, and integrations of 90 days or longer &mdash; resources beyond a consumer laptop. We release all code, data, and modifications openly to invite the climate modeling community to extend this work.</p>
 </div>
 
 <h2>1. Origin of the Hypothesis</h2>
@@ -469,7 +469,56 @@
   <figcaption><strong>Figure 13.</strong> Four-panel comparison of all experimental phases. Top-left: zonal-mean temperature change by latitude for v7 autoconversion (orange), v8 Twomey (red), GCCN simplified (gray dashed), and full GCCN lifecycle (blue, thick). Top-right: precipitation change. Bottom-left: absolute precipitation for full GCCN CONTROL and NO-SALT runs. Bottom-right: numerical summary. The full lifecycle model produces the strongest Antarctic cooling and is the only GCCN version with the correct transport sign.</figcaption>
 </figure>
 
-<h3>6.6 What Each Phase Got Right and Wrong</h3>
+<h3>6.6 Phase 6: January Seasonal Test at 120 km Resolution (Completed &mdash; Negative Result)</h3>
+
+<p>The April 2026 full-GCCN-lifecycle results left one critical question open: does the Arctic cool when the Northern Hemisphere is in its winter season (when the poleward moisture pipeline is strongest)? We tested this directly by running the same paired CONTROL + NO-SALT experiment starting January 12, 2025, at double the horizontal resolution (120&nbsp;km instead of 240&nbsp;km; 40,962 cells instead of 10,242). Both physics and resolution improvements were combined in a single test.</p>
+
+<p><strong>Results (30-day, January 12, 2025):</strong></p>
+
+<table>
+  <thead>
+    <tr><th>Metric</th><th>April 240km</th><th><strong>January 120km</strong></th><th>Hypothesis Prediction</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Equatorial rain change</td><td>+0.05 mm/day</td><td><strong>&minus;0.26 mm/day</strong></td><td>+ enhancement</td></tr>
+    <tr><td>30&deg;N transport change</td><td>&minus;95 TW</td><td><strong>&minus;17 TW</strong></td><td>strong reduction</td></tr>
+    <tr><td>30&deg;S transport change</td><td>&minus;18 TW</td><td><strong>+134 TW</strong></td><td>neutral (SH summer)</td></tr>
+    <tr><td>Arctic temperature</td><td>+0.43 K</td><td><strong>+1.85 K</strong></td><td>&minus; cooling</td></tr>
+    <tr><td>Antarctic temperature</td><td>&minus;1.03 K</td><td><strong>+0.01 K</strong></td><td>neutral</td></tr>
+  </tbody>
+</table>
+
+<p><strong>The January test did not produce the hoped-for Arctic cooling.</strong> Instead, the Arctic warmed more strongly than in April (+1.85&nbsp;K vs +0.43&nbsp;K). The 30&deg;N transport reduction was still in the correct direction but much smaller (&minus;17&nbsp;TW vs &minus;95&nbsp;TW), and the equatorial precipitation signal went negative (&minus;0.26&nbsp;mm/day). Antarctica showed essentially no change.</p>
+
+<p>We report this as a significant <em>negative</em> result. The seasonal symmetry argument &mdash; that salt should cool whichever pole is entering its winter &mdash; was not confirmed by this experiment.</p>
+
+<p><strong>Interpretation &mdash; four plausible explanations:</strong></p>
+
+<ol>
+  <li><strong>Weather noise dominates at 30 days.</strong> The mean absolute temperature difference between CONTROL and NO-SALT across all 40,962 grid cells was 2.67&nbsp;K by day 30. Single 30-day integrations sample only a handful of synoptic events; the forced signal may be buried in chaotic divergence. Ensembles of 5&ndash;10 simulations with slightly perturbed initial conditions would be needed to separate signal from weather noise.</li>
+
+  <li><strong>Ensemble size of 1 is inadequate for a chaotic system.</strong> Single initialization gives a single weather realization. The 120&nbsp;km experiment cannot distinguish between "the mechanism doesn't work this season" and "we happened to simulate one unlucky weather pattern."</li>
+
+  <li><strong>120&nbsp;km is still not convection-permitting.</strong> Approximately 60&ndash;70% of tropical rainfall remains handled by the Kain-Fritsch convective parameterization rather than the explicit grid-scale microphysics where our GCCN code operates. The negative equatorial rain change (&minus;0.26&nbsp;mm/day) is consistent with the classic signature of convective compensation: when grid-scale microphysics produces more rain, the parameterization reduces its own output. Truly convection-permitting resolution (30&ndash;60&nbsp;km or finer) is likely required to see an unambiguous rain signal.</li>
+
+  <li><strong>The seasonal asymmetry may not be a clean mirror.</strong> The April results already hinted at two competing pathways: wet cooling (direct moisture transport reduction) and dry warming (latent heat release at the equator transported poleward as sensible heat via midlatitude storm tracks). The January Arctic warming is consistent with the dry-warming pathway dominating when the NH Hadley/storm track system is strongest. If both pathways are active, each pole may respond differently than a simple two-hemisphere mirror would predict.</li>
+</ol>
+
+<figure>
+  <img src="mpas_analysis/jan120_summary.png" alt="120 km January summary" style="width:100%; max-width:900px;">
+  <figcaption><strong>Figure 14.</strong> Four-panel summary of the 120&nbsp;km January test. Top-left: zonal-mean temperature change shows Arctic warming (+1.85&nbsp;K) and Antarctic near-zero response. Top-right: precipitation change is noisy with near-zero zonal mean. Bottom-left: absolute precipitation profiles for CONTROL and NO-SALT runs. Bottom-right: numerical summary. The seasonal symmetry predicted by the simple two-pathway framework was not reproduced.</figcaption>
+</figure>
+
+<figure>
+  <img src="mpas_analysis/jan120_map_temp.png" alt="120 km January temperature map" style="width:100%; max-width:900px;">
+  <figcaption><strong>Figure 15.</strong> Global temperature perturbation for the 120&nbsp;km January run. Warming is concentrated over the Arctic (red), with regions of cooling scattered across midlatitudes. The magnitude (up to several K locally) is larger than the April 240&nbsp;km results and dominated by weather noise over the 30-day integration.</figcaption>
+</figure>
+
+<p><strong>What this tells us about the hypothesis:</strong> The hypothesis is not refuted &mdash; a single 30-day, single-member experiment at 120&nbsp;km cannot settle the question. But the seasonal test <em>specifically</em> failed to produce the Arctic cooling that the simple two-pathway framework predicted. This result constrains what future experiments need to demonstrate. The April 240&nbsp;km transport reduction (&minus;95&nbsp;TW at 30&deg;N) remains the most physically grounded positive signal to date.</p>
+
+<p><strong>Path forward:</strong> Resolving this ambiguity requires resources beyond a consumer laptop &mdash; specifically, convection-permitting resolution (60&nbsp;km or finer), ensemble sizes of at least 5&ndash;10 members, and integrations of 90 days or longer. This is exactly where the open-research-with-community-help model becomes necessary: we invite atmospheric science labs with HPC access to extend this work.</p>
+
+<h3>6.7 What Each Phase Got Right and Wrong</h3>
 
 <table>
   <thead>
@@ -481,13 +530,14 @@
     <tr><td>v7 30-day</td><td>MPAS 7.0</td><td>Autoconversion hack</td><td>Clean (global)</td><td>Correct (forced)</td><td>All 10S&ndash;10N incl. ocean</td></tr>
     <tr><td>v8 standard</td><td>MPAS 8.3.1</td><td>Prognostic QNWFA</td><td>Correct (advected)</td><td>Wrong (Twomey)</td><td>Rainforest only (291 cells)</td></tr>
     <tr><td>v8 GCCN simplified</td><td>MPAS 8.3.1</td><td>Prognostic QNGCCN, fixed E/V/R</td><td>Correct (advected)</td><td>Partial (instant 50&mu;m)</td><td>Rainforest only + downwind</td></tr>
-    <tr><td><strong>v8 GCCN full lifecycle</strong></td><td>MPAS 8.3.1</td><td>Prognostic QNGCCN, Hall/Beard</td><td>Correct (advected)</td><td><strong>Correct (full growth)</strong></td><td>Rainforest only + downwind</td></tr>
+    <tr><td><strong>v8 GCCN full lifecycle (Apr)</strong></td><td>MPAS 8.3.1, 240km</td><td>Prognostic QNGCCN, Hall/Beard</td><td>Correct (advected)</td><td><strong>Correct (full growth)</strong></td><td>Rainforest only + downwind</td></tr>
+    <tr><td><strong>v8 GCCN 120km (Jan)</strong></td><td>MPAS 8.3.1, 120km</td><td>Prognostic QNGCCN, Hall/Beard</td><td>Correct (advected)</td><td>Correct (full growth)</td><td>Rainforest only + downwind</td></tr>
   </tbody>
 </table>
 
-<p>The progression across six phases reveals a critical lesson: <strong>microphysical details determine the global response.</strong> The simplified GCCN version (fixed E=0.6, instant 50&nbsp;&mu;m drops) produced the wrong transport sign. The full lifecycle version (drops grow from 10&nbsp;&mu;m, size-dependent E and V, wet scavenging) flipped the transport to &minus;95&nbsp;TW&mdash;supporting the hypothesis. This sensitivity to drop growth physics is itself a finding: it means the hypothesis cannot be tested with crude parameterizations. The GCCN coalescence gap must be resolved.</p>
+<p>The progression across seven experiments reveals two critical lessons. First, <strong>microphysical details determine the global response</strong>: the simplified GCCN version produced the wrong transport sign, while the full lifecycle version produced the correct one. Second, <strong>30-day single-member integrations cannot distinguish forced climate signals from weather noise</strong>: the January 120&nbsp;km test failed to confirm the seasonal symmetry that the April 240&nbsp;km result suggested. Both lessons point the same direction for future work: more physics resolved explicitly (convection-permitting resolution) and more runs (ensembles with longer integrations).</p>
 
-<h3>6.7 Known Simplifications and Deficiencies</h3>
+<h3>6.8 Known Simplifications and Deficiencies</h3>
 
 <p>Each step in the chain is grounded in published literature:</p>
 
@@ -547,7 +597,9 @@
 
 <p><strong>Equatorial rain enhancement confirmed.</strong> All GCCN versions show positive equatorial rain change (+0.05 to +0.19&nbsp;mm/day), consistent with cloud seeding literature.</p>
 
-<p><strong>Not yet confirmed:</strong> Arctic cooling. The Arctic warms (+0.43&nbsp;K) in this April simulation. This may reflect the seasonal context (Northern Hemisphere entering summer, with the dry-heat pathway dominating) or may require longer integration. A January simulation&mdash;when the Northern Hemisphere is in winter and poleward moisture transport is strongest&mdash;is the critical next experiment.</p>
+<p><strong>Not confirmed:</strong> Arctic cooling in either the April (240&nbsp;km) or January (120&nbsp;km) simulations. The Arctic warmed in both experiments: +0.43&nbsp;K in April and +1.85&nbsp;K in January. The January test was specifically designed to check whether the Arctic would cool when the Northern Hemisphere is in its winter season (the time of peak poleward moisture transport). It did not. This is an important negative result that constrains the hypothesis.</p>
+
+<p>The simple two-pathway framework (wet cooling in the active-pipeline hemisphere, dry warming in the quiet hemisphere) would predict January's pattern to be the mirror image of April's. It was not. Either the forced signal is buried under weather noise at 30 days with a single ensemble member, or the seasonal dynamics are more complex than a clean hemispheric mirror.</p>
 
 <p><strong>Critical finding:</strong> The microphysical implementation matters enormously. The simplified GCCN version (fixed parameters) produced the wrong transport sign. Only the full lifecycle version (growth through the coalescence gap, size-dependent physics, wet scavenging) produced the correct transport reduction. This means the hypothesis cannot be properly tested without resolving how GCCN drops grow and collect.</p>
 

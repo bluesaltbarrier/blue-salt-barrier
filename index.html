@@ -468,8 +468,8 @@
       <div class="timeline-item">
         <div class="timeline-phase">Phase 6</div>
         <div>
-          <div class="timeline-title">120 km Resolution &mdash; January</div>
-          <div class="timeline-desc"><strong>Running now.</strong> Higher resolution to resolve tropical convection. January start to test if Arctic cools when it's the winter hemisphere. 4x more grid cells.</div>
+          <div class="timeline-title">120 km Resolution &mdash; January (Negative Result)</div>
+          <div class="timeline-desc"><strong>Tested. Did not confirm.</strong> Higher resolution and winter NH season. Arctic did <em>not</em> cool &mdash; it warmed +1.85&nbsp;K. Transport reduction weakened to &minus;17 TW. Weather noise at 30 days with one ensemble member likely dominates. Reported here honestly: the seasonal symmetry we hoped for was not observed.</div>
         </div>
       </div>
     </div>
@@ -487,15 +487,17 @@
 
     <table class="compare-table">
       <thead>
-        <tr><th>Metric</th><th>v7 Autoconv</th><th>v8 Twomey</th><th>GCCN Simplified</th><th class="highlight">GCCN Full Lifecycle</th></tr>
+        <tr><th>Metric</th><th>v7 Autoconv</th><th>v8 Twomey</th><th>GCCN Simplified</th><th class="highlight">GCCN Full<br>(April 240km)</th><th>GCCN Full<br>(Jan 120km)</th></tr>
       </thead>
       <tbody>
-        <tr><td>Equatorial rain</td><td>&minus;0.10 mm/day</td><td>+0.05 mm/day</td><td>+0.19 mm/day</td><td class="highlight">+0.05 mm/day</td></tr>
-        <tr><td>30&deg;N transport</td><td>&minus;153 TW</td><td>+66 TW</td><td>+42 TW</td><td class="highlight">&minus;95 TW</td></tr>
-        <tr><td>Arctic temp</td><td>&minus;0.15 K</td><td>+0.32 K</td><td>+0.21 K</td><td class="highlight">+0.43 K</td></tr>
-        <tr><td>Antarctic temp</td><td>+1.5 K</td><td>&minus;0.50 K</td><td>&minus;0.13 K</td><td class="highlight">&minus;1.03 K</td></tr>
+        <tr><td>Equatorial rain</td><td>&minus;0.10 mm/day</td><td>+0.05 mm/day</td><td>+0.19 mm/day</td><td class="highlight">+0.05 mm/day</td><td>&minus;0.26 mm/day</td></tr>
+        <tr><td>30&deg;N transport</td><td>&minus;153 TW</td><td>+66 TW</td><td>+42 TW</td><td class="highlight">&minus;95 TW</td><td>&minus;17 TW</td></tr>
+        <tr><td>Arctic temp</td><td>&minus;0.15 K</td><td>+0.32 K</td><td>+0.21 K</td><td class="highlight">+0.43 K</td><td>+1.85 K</td></tr>
+        <tr><td>Antarctic temp</td><td>+1.5 K</td><td>&minus;0.50 K</td><td>&minus;0.13 K</td><td class="highlight">&minus;1.03 K</td><td>+0.01 K</td></tr>
       </tbody>
     </table>
+
+    <p class="body-text" style="margin-top: 24px;"><strong>The January 120 km test is a significant negative result.</strong> We specifically designed it to check whether the Arctic cools in winter, when the Northern Hemisphere poleward moisture pipeline is strongest. It did not. The Arctic warmed by +1.85&nbsp;K and the transport reduction weakened to &minus;17&nbsp;TW. Weather noise across 30 days with a single ensemble member likely dominates. Definitive testing requires convection-permitting resolution (60 km or finer), ensembles of 5&ndash;10 members, and 90+ day integrations &mdash; resources beyond a consumer laptop. We report this honestly: the simple two-pathway seasonal mirror we hoped for was not reproduced, and the hypothesis awaits rigorous testing by the community.</p>
 
     <div class="stat-grid" style="margin-top: 56px;">
       <div class="stat-card">
