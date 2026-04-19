@@ -192,6 +192,11 @@
     This paper is a <strong>non-peer-reviewed preprint submitted to EarthArXiv</strong>. It has not been submitted to a journal for peer review at the time of this preprint release. The author welcomes community feedback, code review, and independent replication.
   </div>
 
+  <div class="cs-field">Version 2 &mdash; change notes</div>
+  <div class="cs-body">
+    Version 2 adds the bug-fixed January 120&nbsp;km paired experiment (Section 6.6) which was completed after v1 submission. Key additions: (i) seasonal mirror partially confirmed &mdash; rain redistribution, 30&deg;N transport, 30&deg;S transport, and Antarctic temperature flip sign between April and January exactly as the moisture-barrier hypothesis predicts; (ii) Arctic warming occurs in both seasons and does not mirror, discussed as either a dry-heat pathway, Arctic amplification feedback, or weather noise; (iii) revised Figure 13 (all-phases plot) including the January bug-fix line; (iv) Figures 14 and 15 added for the January 120&nbsp;km temperature and precipitation maps. Central thesis (biogenic salt is a sensitive variable with ~300&nbsp;TW of 30&deg;N transport swing across implementations) is strengthened by the seasonal-swing evidence. No changes to methodology, bug-fix history, or conclusions otherwise.
+  </div>
+
   <div class="cs-field">Open-research materials</div>
   <div class="cs-body">
     Code and data: <a href="https://github.com/bluesaltbarrier/blue-salt-barrier">github.com/bluesaltbarrier/blue-salt-barrier</a><br>
@@ -239,7 +244,7 @@
 
   <p>Within the most physically complete configuration we tested (April 240&nbsp;km, bug-fixed GCCN full lifecycle), three robust positive results emerged: (i) biogenic salt <em>redistributes</em> equatorial precipitation southward toward the winter hemisphere, increasing zonal-mean rainfall at 5&deg;S by +0.62&nbsp;mm/day and decreasing it at 5&deg;N by &minus;0.31&nbsp;mm/day (band-average +0.17&nbsp;mm/day across &minus;10 to +10 degrees); (ii) Antarctica cools by &minus;1.26&nbsp;K in the hemisphere entering its winter season; (iii) southward latent heat transport at 30&deg;S is reduced by &minus;61&nbsp;TW. The Northern Hemisphere response &mdash; a +153&nbsp;TW <em>increase</em> in northward transport at 30&deg;N &mdash; is opposite to the simple hypothesis and is most likely an artifact of the convective parameterization responding to GCCN-enhanced grid-scale heating. Testing this at convection-permitting resolution (30&nbsp;km or finer) is the single most important next experiment.</p>
 
-  <p>All results reported here are N&nbsp;=&nbsp;1 single-member 30-day integrations and cannot be distinguished from weather noise at statistical-significance level. A companion 120&nbsp;km January run with the corrected physics is currently in progress. Definitive testing requires ensembles of 5&ndash;10 members, convection-permitting resolution, and 90+ day integrations &mdash; resources beyond a consumer laptop. We release all code, bug-fix patches, Docker builds, and analysis scripts openly at <a href="https://github.com/bluesaltbarrier/blue-salt-barrier">github.com/bluesaltbarrier/blue-salt-barrier</a> to invite the climate modeling community to extend this work.</p>
+  <p>A companion January 120&nbsp;km run with the same bug-fixed physics partially confirms the seasonal-mirror framework: rain redistribution, 30&deg;N transport, 30&deg;S transport, and Antarctic temperature all flip sign with the season (salt pushes rain toward the winter-ward hemisphere regardless of which hemisphere that is). The Arctic temperature response does not mirror &mdash; it warms in both April (+0.14&nbsp;K) and January (+0.88&nbsp;K), possibly due to a dry-heat pathway, Arctic amplification feedbacks, or weather noise at N&nbsp;=&nbsp;1. All results reported here are single-member 30-day integrations and cannot be distinguished from weather noise at statistical-significance level. Definitive testing requires ensembles of 5&ndash;10 members, convection-permitting resolution, and 90+ day integrations &mdash; resources beyond a consumer laptop. We release all code, bug-fix patches, Docker builds, and analysis scripts openly at <a href="https://github.com/bluesaltbarrier/blue-salt-barrier">github.com/bluesaltbarrier/blue-salt-barrier</a> to invite the climate modeling community to extend this work.</p>
 </div>
 
 <h2>1. Origin of the Hypothesis</h2>
@@ -597,14 +602,50 @@
 
 <figure>
   <img src="mpas_analysis/fullgccn_all_phases.png" alt="All phases comparison" style="width:100%; max-width:900px;">
-  <figcaption><strong>Figure 13.</strong> Comparison across experimental phases of the same salt hypothesis. Top-left: zonal-mean temperature change. Top-right: precipitation change. Bottom-left: absolute precipitation for the bug-fixed April runs. Bottom-right: numerical summary. The spread of 30&deg;N transport responses (from &minus;153&nbsp;TW to +153&nbsp;TW across implementations) is the central finding: biogenic salt is sensitive enough to microphysical implementation to flip the sign of the global transport response.</figcaption>
+  <figcaption><strong>Figure 13.</strong> Comparison across experimental phases, including both the April 240&nbsp;km and January 120&nbsp;km bug-fixed runs. Top-left: zonal-mean temperature change. Top-right: precipitation change &mdash; the seasonal mirror is visible, with April shifting rain southward and January shifting it northward. Bottom-left: absolute precipitation profiles for both seasons. Bottom-right: numerical summary. The spread of 30&deg;N transport responses (&minus;211 to +153&nbsp;TW across implementations and seasons) is the central finding: biogenic salt is sensitive enough to microphysical implementation and seasonal context to flip the sign of the global transport response.</figcaption>
 </figure>
 
-<h3>6.6 Phase 6: January Seasonal Test at 120 km Resolution (Running with Bug-fixed Physics)</h3>
+<h3>6.6 Phase 6: January Seasonal Test at 120 km Resolution (Completed with Bug-fixed Physics)</h3>
 
-<p>To test whether the asymmetric response seen in April reverses when the hemispheres swap season, we are running the same paired CONTROL + NO-SALT experiment starting January 12, 2025, at 120&nbsp;km resolution (40,962 cells). An earlier version of this experiment using the buggy GCCN code produced results that we have withdrawn from this paper after the independent code review identified the bugs. The experiment is currently re-running with the corrected physics. Results will be incorporated in a future version.</p>
+<p>To test whether the asymmetric response seen in April reverses when the hemispheres swap season, we ran the same paired CONTROL + NO-SALT experiment starting January 12, 2025, at 120&nbsp;km resolution (40,962 cells). The same bug-fixed Fortran as the April 240&nbsp;km experiment was used. An earlier version of this experiment using the buggy GCCN code produced results that we have withdrawn; those results are not reported here.</p>
 
-<p>The scientific question being tested: does January at 120&nbsp;km show the mirror of April at 240&nbsp;km? Specifically, does the 30&deg;N transport reduce (rather than increase) in the hemisphere now entering its winter? Does Arctic temperature cool (rather than warm) when NH is in winter? Does Antarctica show neutral response (rather than strong cooling) as the hemisphere now entering summer?</p>
+<p><strong>Results of the January 120 km bug-fixed test (CONTROL minus NO-SALT):</strong></p>
+
+<table>
+  <thead>
+    <tr><th>Metric</th><th>April 240&nbsp;km bugfix</th><th>January 120&nbsp;km bugfix</th><th>Mirror predicted?</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Rain at 5&deg;S zonal</td><td>+0.62 mm/day</td><td>&minus;0.21 mm/day</td><td>✓ mirror confirmed</td></tr>
+    <tr><td>Rain at 5&deg;N zonal</td><td>&minus;0.31 mm/day</td><td>+0.18 mm/day</td><td>✓ mirror confirmed</td></tr>
+    <tr><td>30&deg;N transport</td><td>+153 TW</td><td>&minus;211 TW</td><td>✓ mirror confirmed (reduction in winter-ward hemisphere)</td></tr>
+    <tr><td>30&deg;S transport</td><td>&minus;61 TW</td><td>+71 TW</td><td>✓ mirror confirmed</td></tr>
+    <tr><td>Antarctic temperature</td><td>&minus;1.26 K (SH winter)</td><td>+0.04 K (SH summer)</td><td>✓ consistent with seasonal framework</td></tr>
+    <tr><td>Arctic temperature</td><td>+0.14 K (NH summer)</td><td>+0.88 K (NH winter)</td><td>✗ does not mirror &mdash; Arctic warms in both seasons</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Partial confirmation of the seasonal-mirror framework.</strong> Four of the five direction-testable metrics flip sign between April and January, exactly as the asymmetric-Hadley / moisture-barrier hypothesis predicts. Salt shifts equatorial rain toward whichever hemisphere is entering winter (southward in April, northward in January). Poleward moisture transport is reduced in the winter-ward hemisphere and increased in the summer-ward hemisphere. Antarctic temperature cools strongly in its winter-entering season (April) and is neutral in its summer-entering season (January).</p>
+
+<p><strong>The Arctic temperature response is the remaining puzzle.</strong> The Arctic warms by +0.88&nbsp;K in January despite a &minus;211&nbsp;TW reduction in northward moisture transport. Three candidate explanations:</p>
+
+<ol>
+  <li><strong>Dry-heat pathway.</strong> Enhanced equatorial latent heat release produces dry sensible heat that is advected poleward via midlatitude storm tracks. Reduced moisture transport does not prevent sensible heat delivery.</li>
+  <li><strong>Arctic amplification feedbacks.</strong> Ice-albedo and lapse-rate feedbacks amplify small forcings. A modest initial perturbation could produce a +0.88&nbsp;K signal through local feedback rather than direct transport.</li>
+  <li><strong>Weather noise.</strong> N&nbsp;=&nbsp;1 integration at 30 days; the mean global temperature divergence of 2.67&nbsp;K between CONTROL and NO-SALT shows single-realization noise alone can produce ~1&nbsp;K regional signals. The +0.88&nbsp;K Arctic number is not statistically distinguishable from this noise floor without ensembles.</li>
+</ol>
+
+<p>All three are plausible and not mutually exclusive. Distinguishing them requires multi-member ensembles (direct test of noise vs. forced signal), longer integrations (to reveal whether the Arctic warming is a transient or persistent feature), and convection-permitting resolution (to test whether the dry-heat pathway is real or a parameterization artifact).</p>
+
+<figure>
+  <img src="mpas_analysis/jan120_map_temp.png" alt="January 120km bugfix temperature map" style="width:100%; max-width:900px;">
+  <figcaption><strong>Figure 14.</strong> Global temperature change (CONTROL minus NO-SALT) for the bug-fixed January 120&nbsp;km run. Arctic warming is visible (red) over northern Eurasia and the Canadian Arctic. Antarctic response is near-neutral. Midlatitude pattern is dominated by weather variability at N&nbsp;=&nbsp;1.</figcaption>
+</figure>
+
+<figure>
+  <img src="mpas_analysis/jan120_map_precip.png" alt="January 120km bugfix precipitation map" style="width:100%; max-width:900px;">
+  <figcaption><strong>Figure 15.</strong> Global precipitation change (CONTROL minus NO-SALT) for the bug-fixed January 120&nbsp;km run. Rain increases in NH tropical belt (green), decreases in SH tropical belt (brown) &mdash; mirror of April's pattern. The equatorial rain redistribution toward the winter-ward hemisphere is the cleanest confirmation of the moisture-barrier mechanism in this work.</figcaption>
+</figure>
 
 <p>The 120&nbsp;km mesh (40,962 cells) is 4&times; finer than 240&nbsp;km (10,242 cells), but we note that both resolutions are <em>fully parameterized</em> for tropical convection (Kain-Fritsch handles ~70&ndash;90% of tropical rain at these scales). Genuine convection-permitting behavior requires 30&nbsp;km or finer. The 120&nbsp;km January test is therefore a seasonal comparison, not a resolution improvement in any meaningful sense for convection physics.</p>
 

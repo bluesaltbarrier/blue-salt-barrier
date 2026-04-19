@@ -475,8 +475,8 @@
       <div class="timeline-item">
         <div class="timeline-phase">Phase 7</div>
         <div>
-          <div class="timeline-title">120 km January with Bug-fixed Physics &mdash; Running</div>
-          <div class="timeline-desc">Currently re-running the January seasonal test with the corrected physics. Previous January results (from buggy code) have been withdrawn. Results pending &mdash; we are making no predictions until the data arrives.</div>
+          <div class="timeline-title">120 km January with Bug-fixed Physics &mdash; Completed</div>
+          <div class="timeline-desc"><strong>Seasonal mirror partially confirmed.</strong> Rain redistributes <em>northward</em> in January (+0.18 mm/day at 5&deg;N, &minus;0.21 at 5&deg;S) &mdash; the flip of April's southward shift. 30&deg;N transport reduced by &minus;211 TW (NH winter-ward hemisphere), 30&deg;S increased by +71 TW (SH summer-ward). Antarctic near-neutral at +0.04 K (consistent with SH summer). <strong>One puzzle:</strong> Arctic still warms (+0.88 K) despite reduced transport, pointing to either a dry-heat pathway or weather noise dominating a single realization.</div>
         </div>
       </div>
     </div>
@@ -494,22 +494,30 @@
 
     <table class="compare-table">
       <thead>
-        <tr><th>Metric</th><th>v7 Autoconv</th><th>v8 Twomey</th><th>GCCN Simplified</th><th>GCCN (buggy)</th><th class="highlight">GCCN (bug-fixed)</th></tr>
+        <tr><th>Metric</th><th>v7 Autoconv</th><th>v8 Twomey</th><th>GCCN Simp.</th><th>GCCN (buggy)</th><th class="highlight">Bug-fix April 240km</th><th class="highlight">Bug-fix Jan 120km</th></tr>
       </thead>
       <tbody>
-        <tr><td>Equatorial rain</td><td>&minus;0.10 mm/day</td><td>+0.05 mm/day</td><td>+0.19 mm/day</td><td>+0.05 mm/day</td><td class="highlight">+0.17 mm/day</td></tr>
-        <tr><td>30&deg;N transport</td><td>&minus;153 TW</td><td>+66 TW</td><td>+42 TW</td><td>&minus;95 TW</td><td class="highlight">+153 TW</td></tr>
-        <tr><td>30&deg;S transport</td><td>n/a</td><td>&minus;330 TW</td><td>n/a</td><td>&minus;18 TW</td><td class="highlight">&minus;61 TW</td></tr>
-        <tr><td>Arctic temp</td><td>&minus;0.15 K</td><td>+0.32 K</td><td>+0.21 K</td><td>+0.43 K</td><td class="highlight">+0.14 K</td></tr>
-        <tr><td>Antarctic temp</td><td>+1.5 K</td><td>&minus;0.50 K</td><td>&minus;0.13 K</td><td>&minus;1.03 K</td><td class="highlight">&minus;1.26 K</td></tr>
+        <tr><td>Equatorial rain (band avg)</td><td>&minus;0.10</td><td>+0.05</td><td>+0.19</td><td>+0.05</td><td class="highlight">+0.17 mm/day</td><td class="highlight">&minus;0.002 mm/day</td></tr>
+        <tr><td>Rain at 5&deg;S zonal</td><td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td><td class="highlight">+0.62</td><td class="highlight">&minus;0.21</td></tr>
+        <tr><td>Rain at 5&deg;N zonal</td><td>n/a</td><td>n/a</td><td>n/a</td><td>n/a</td><td class="highlight">&minus;0.31</td><td class="highlight">+0.18</td></tr>
+        <tr><td>30&deg;N transport</td><td>&minus;153</td><td>+66</td><td>+42</td><td>&minus;95</td><td class="highlight">+153 TW</td><td class="highlight">&minus;211 TW</td></tr>
+        <tr><td>30&deg;S transport</td><td>n/a</td><td>&minus;330</td><td>n/a</td><td>&minus;18</td><td class="highlight">&minus;61 TW</td><td class="highlight">+71 TW</td></tr>
+        <tr><td>Arctic temp</td><td>&minus;0.15</td><td>+0.32</td><td>+0.21</td><td>+0.43</td><td class="highlight">+0.14 K</td><td class="highlight">+0.88 K</td></tr>
+        <tr><td>Antarctic temp</td><td>+1.5</td><td>&minus;0.50</td><td>&minus;0.13</td><td>&minus;1.03</td><td class="highlight">&minus;1.26 K</td><td class="highlight">+0.04 K</td></tr>
       </tbody>
     </table>
+
+    <p class="body-text" style="margin-top: 20px; font-size: 0.95rem;"><strong>Reading the table:</strong> The last two columns show that rain direction, 30&deg;N transport, 30&deg;S transport, and Antarctic temperature all <em>flip sign with the season</em> &mdash; consistent with salt modulating whichever Hadley branch is currently active. Arctic temperature is the exception: it warms in both seasons.</p>
 
     <p class="body-text" style="margin-top: 24px;"><strong>The 30&deg;N transport numbers range from &minus;153 TW to +153 TW across five implementations of the same salt hypothesis.</strong> Changing a single drop-radius constant from 10 &micro;m to 25 &micro;m flips the sign of the global transport response. The mean across implementations is approximately zero. The standard deviation is ~115 TW &mdash; larger than the entire estimated effect of anthropogenic CO<sub>2</sub> on poleward heat transport.</p>
 
     <p class="body-text">This is not noise. Each run is deterministic on the same initial conditions. The spread is the fingerprint of how strongly biogenic salt couples to the atmospheric circulation. The interpretation we favor: <strong>salt functions as a variance amplifier</strong>, not a monotonic forcing. Some weather regimes get large latent-heat pulses from GCCN-enhanced rain; others don't. The mean may be near zero. The amplitude of the fluctuations may be large. Testing this requires running paired ensembles &mdash; next up.</p>
 
-    <p class="body-text">Within the most physically complete configuration (April 240 km bug-fixed), three robust findings emerge: (1) <strong>salt redistributes equatorial rain southward</strong> &mdash; zonal-mean rainfall rises by +0.62 mm/day at 5&deg;S and falls by &minus;0.31 mm/day at 5&deg;N (band average +0.17 mm/day), consistent with salt precipitating moisture on the winter-ward side of the equator before it can cross northward; (2) Antarctica cools by &minus;1.26 K in the hemisphere entering its winter season; (3) southward moisture transport at 30&deg;S is reduced by &minus;61 TW. The Northern Hemisphere transport response (+153 TW) is puzzling and likely reflects a convective-parameterization artifact at 240 km. A January 120 km run with the corrected physics is currently in progress. <strong>We make no claim about specific directions or magnitudes here &mdash; single realizations cannot distinguish forced signal from weather noise.</strong> The community must help us test this properly.</p>
+    <p class="body-text">Within the most physically complete April 240 km bug-fixed configuration, three robust findings emerge: (1) <strong>salt redistributes equatorial rain southward</strong> &mdash; zonal-mean rainfall rises by +0.62 mm/day at 5&deg;S and falls by &minus;0.31 mm/day at 5&deg;N, consistent with salt precipitating moisture on the winter-ward side of the equator before it can cross northward; (2) Antarctica cools by &minus;1.26 K in the hemisphere entering its winter season; (3) southward moisture transport at 30&deg;S is reduced by &minus;61 TW. The Northern Hemisphere 30&deg;N transport (+153 TW) is opposite in sign and is most likely an artifact of the convective parameterization at 240 km.</p>
+
+    <p class="body-text"><strong>The January 120 km bug-fixed run partially confirms the seasonal mirror.</strong> Rain redistributes <em>northward</em> (+0.18 mm/day at 5&deg;N, &minus;0.21 at 5&deg;S, opposite of April). 30&deg;N transport is reduced by &minus;211 TW (mirror of the April summer-hemisphere increase), 30&deg;S transport is increased by +71 TW. Antarctic temperature is near-neutral at +0.04 K (SH now in summer), consistent with the framework. The unresolved puzzle: the Arctic warms by +0.88 K in January despite reduced moisture transport, pointing to either a dry-heat pathway or weather noise dominating a single-realization experiment.</p>
+
+    <p class="body-text"><strong>We make no claim about specific directions or magnitudes here &mdash; single realizations cannot distinguish forced signal from weather noise.</strong> The community must help us test this properly with ensembles, convection-permitting resolution, and longer integrations.</p>
 
     <div class="stat-grid" style="margin-top: 56px;">
       <div class="stat-card">
@@ -531,7 +539,7 @@
 <!-- SUGGESTED IMAGE: The fullgccn_all_phases.png 4-panel plot, or the fullgccn_map_temp.png global temperature map -->
 <div class="figure" style="padding: 0 24px; background: var(--dark-gray);">
   <img src="mpas_analysis/fullgccn_all_phases.png" alt="All phases comparison" style="max-width: 980px; margin: 0 auto; display: block; border-radius: 12px;">
-  <p class="figure-caption" style="color: #a1a1a6; padding: 16px 0 40px;">Temperature and precipitation response across all six experimental phases. The solid blue line (full GCCN lifecycle, April 240&nbsp;km) is the primary positive result &mdash; Antarctic cooling and correct transport sign. The dotted green line (January 120&nbsp;km) is the negative result &mdash; Arctic warmed rather than cooled, and the signal is dominated by weather noise at 30 days with a single ensemble member.</p>
+  <p class="figure-caption" style="color: #a1a1a6; padding: 16px 0 40px;">Temperature and precipitation response across all experimental phases. The bug-fixed April 240&nbsp;km (solid blue) shows southward rain redistribution and Antarctic cooling. The bug-fixed January 120&nbsp;km (dotted teal) shows the mirror image in rain direction and 30&deg;N transport &mdash; consistent with salt modulating whichever Hadley branch is seasonally active. Arctic warms in both seasons, the unresolved finding.</p>
 </div>
 
 <!-- ============================================ -->
