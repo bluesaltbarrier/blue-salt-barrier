@@ -1,12 +1,25 @@
 # The Blue Salt Barrier
 
-**An open research project on biogenic salt aerosols as a sensitive, unmodeled variable in Earth's heat transport.**
+> ## ⚠ v1 WITHDRAWN — 2026-04-18
+>
+> A post-submission code audit revealed that the MPAS driver never passed the GCCN
+> tracer to the Thompson microphysics subroutine. The GCCN lifecycle code existed
+> but was never executed. All v1 numbers reflect a Twomey aerosol indirect effect
+> (5–10× boost to `nwfa` over rainforest), not giant-CCN warm-rain seeding as the
+> paper claims. **Please do not cite v1 results.** The coupling has been patched
+> and paired January + July 120 km runs with the GCCN pathway actually active are
+> running. A revised v2 will be posted when analysis is complete.
+>
+> - Withdrawn preprint: EarthArXiv submission pulled before DOI assignment
+> - v1 as submitted: preserved at git tag `v1-archived-2026-04-18`
+> - Current status: see [index.html](index.html) — full website replaced with withdrawal notice
+>
+> ---
 
-A citizen scientist, two AIs, a laptop, and one question — shared openly so anyone can build on it.
+**An open research project on biogenic salt aerosols in Earth's heat transport.**
 
-- **Website:** https://bluesaltbarrier.github.io/blue-salt-barrier/
-- **Paper draft:** [publication_draft.html](publication_draft.html)
-- **Docker container:** `ghcr.io/bluesaltbarrier/mpas8-gccn:slim` (2.2 GB, free, pullable without authentication)
+- **Website:** https://bluesaltbarrier.github.io/blue-salt-barrier/ (withdrawal notice)
+- **Docker container:** `ghcr.io/bluesaltbarrier/mpas8-gccn:slim` (2.2 GB) — contains the patched source; the `slim` image name will be updated once paired runs complete
 - **License:** CC BY 4.0 for text/figures, MPAS-derived code follows the original MPAS license
 
 ## The Hypothesis
