@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Blue Salt Barrier — Paper being revised</title>
+<style>
+  :root {
+    --sf: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+    --sf-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    --mono: "SF Mono", Consolas, monospace;
+    --bg: #fff8f0;
+    --ink: #1d1d1f;
+    --mute: #555;
+    --warn: #a7401a;
+    --info: #1b5a7a;
+    --rule: #e0d5c5;
+    --link: #0071e3;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 17px; -webkit-font-smoothing: antialiased; }
+  body { font-family: var(--sf-text); color: var(--ink); background: var(--bg); line-height: 1.55; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 60px 24px 80px; }
+  .banner {
+    color: #fff;
+    padding: 28px 28px; border-radius: 10px;
+    font-family: var(--sf);
+    margin-bottom: 24px;
+  }
+  .banner.info { background: var(--info); }
+  .banner.warn { background: var(--warn); }
+  .banner .label { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.85; margin-bottom: 8px; }
+  .banner h1 { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; }
+  .banner p { font-size: 1rem; color: rgba(255,255,255,0.92); margin-top: 12px; margin-bottom: 0; }
+  h2 { font-family: var(--sf); font-size: 1.2rem; font-weight: 600; margin: 32px 0 10px; letter-spacing: -0.01em; }
+  p { margin-bottom: 14px; color: var(--ink); }
+  p.mute { color: var(--mute); font-size: 0.95rem; }
+  code { font-family: var(--mono); font-size: 0.88em; background: #f0e8d8; padding: 1px 6px; border-radius: 3px; }
+  a { color: var(--link); text-decoration: none; border-bottom: 1px solid rgba(0,113,227,0.3); }
+  a:hover { border-bottom-color: var(--link); }
+  .rule { height: 1px; background: var(--rule); margin: 36px 0; }
+  ul { margin: 8px 0 18px 22px; color: var(--ink); }
+  ul li { margin-bottom: 6px; }
+  .foot { margin-top: 50px; color: var(--mute); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="banner info">
+    <div class="label">Paper currently being revised</div>
+    <h1>The full paper is being updated tonight to reflect Phase 7 findings and methodology corrections.</h1>
+    <p>In the meantime, please see the prior v1 withdrawal notice below for context on the project's status, and the <a href="index.html" style="color:#fff; text-decoration:underline;">main site</a> for the current summary of findings.</p>
+  </div>
+
+  <div class="banner warn">
+    <div class="label">Notice &mdash; 2026-04-18</div>
+    <h1>The Blue Salt Barrier v1 has been withdrawn.</h1>
+  </div>
+
+  <h2>What happened</h2>
+  <p>A post-submission code audit revealed that the MPAS atmospheric model driver never
+  passed the giant-CCN (GCCN) tracer array to the Thompson microphysics subroutine.
+  The GCCN lifecycle code compiled and was present in the source tree, but was
+  never executed at run time.</p>
+
+  <p>Every result reported in the v1 paper and website &mdash; transport changes, Antarctic
+  cooling, equatorial rainfall shifts &mdash; reflects a Twomey aerosol-cloud indirect
+  effect driven by a 5&ndash;10&times; boost to the standard water-friendly aerosol field
+  over rainforest cells, <em>not</em> the giant-CCN warm-rain seeding mechanism the
+  text described. The numerical outputs are real MPAS simulations, but the
+  <strong>mechanism attribution is wrong</strong>.</p>
+
+  <h2>What is being done</h2>
+  <ul>
+    <li>The EarthArXiv v1 preprint submission has been withdrawn before DOI assignment.</li>
+    <li>The coupling has been patched: <code>ngccn</code> and <code>ngccn2d</code> are now
+      plumbed through <code>mpas_atmphys_interface.F</code>, passed to
+      <code>mp_gt_driver</code>, and emitted as a per-timestep surface source in the
+      Thompson microphysics module.</li>
+    <li>Paired January and July 120 km runs with the GCCN pathway actually active are
+      running now.</li>
+    <li>A revised paper and site will be posted once those results are analyzed.</li>
+  </ul>
+
+  <h2>What readers should do</h2>
+  <p>Please do not cite v1 numbers. The mechanism described in that version is not the
+  mechanism the model executed. If you have already cited or built on v1 results,
+  please wait for the corrected version and contact the author.</p>
+
+  <h2>Archive</h2>
+  <p>The v1 text and figures, as submitted to EarthArXiv, are preserved at git tag
+  <code>v1-archived-2026-04-18</code> in the
+  <a href="https://github.com/bluesaltbarrier/blue-salt-barrier">project repository</a>
+  for the record of what was claimed and why it was withdrawn.</p>
+
+  <div class="rule"></div>
+
+  <p class="mute">This site exists because open research is supposed to be
+  self-correcting. Finding a bug of this magnitude before external
+  peer review &mdash; even at the cost of retracting one's own preprint &mdash; is what
+  the process is for.</p>
+
+  <p class="foot">Brian Lue &middot; bluesaltbarrier@gmail.com &middot;
+  <a href="https://github.com/bluesaltbarrier/blue-salt-barrier">github.com/bluesaltbarrier/blue-salt-barrier</a></p>
+
+</div>
+</body>
+</html>
