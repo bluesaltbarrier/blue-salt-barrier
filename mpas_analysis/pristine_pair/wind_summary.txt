@@ -1,0 +1,13 @@
+=== Wind analysis: results_120km_jan_pristine_salt minus results_120km_jan_pristine_nosalt ===
+
+Absolute 10m wind speed (m/s, time-avg):
+  Arctic (lat>=60):   A=5.84  B=5.99  Δ=-0.157
+  Arctic core (>=70): A=5.94  B=6.10  Δ=-0.162
+  Antarctic (<=-60):  A=5.78  B=5.66  Δ=+0.122
+  Antarctic (<=-70):  A=4.52  B=4.57  Δ=-0.049
+
+Surface meridional wind (m/s, time-avg; + = northward):
+  30N band:  A=-0.240  B=-0.319  Δ=+0.079
+  30S band:  A=+1.077  B=+1.057  Δ=+0.020
+  Arctic:    A=+0.030  B=+0.070  Δ=-0.040
+  Antarctic: A=+0.761  B=+0.839  Δ=-0.078

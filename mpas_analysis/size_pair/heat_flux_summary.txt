@@ -1,0 +1,6 @@
+=== Pohlker SALT − NOSALT (polluted baseline) ===
+Equatorial (|lat|<10) rain change: -0.032 mm/day
+Arctic (lat>60) T2m change:        +0.239 K
+Antarctic (lat<-60) T2m change:    +0.117 K
+30N latent-heat transport:         +136 TW  (W/m: +3.92e+06)
+30S latent-heat transport:         -249 TW  (W/m: -7.17e+06)

@@ -1,0 +1,16 @@
+SALT source: /host/GITIGNORE/simulation_outputs/results_120km_jan_pristine_nosalt/history.2025-02-11_00.00.00.nc
+NOSALT source: /host/GITIGNORE/simulation_outputs/results_120km_jan_pohlker_nosalt/history.2025-02-11_00.00.00.nc
+
+=== 30-day accumulated precipitation (mm) ===
+  Amazon (IGBP-2)               : SALT= 233.78  NOSALT= 255.48  ΔP=-21.696  (n=476)
+  Congo (IGBP-2)                : SALT= 141.81  NOSALT= 143.34  ΔP= -1.533  (n=340)
+  SE Asia                       : SALT= 395.86  NOSALT= 423.99  ΔP=-28.133  (n=139)
+  All tropical forest           : SALT= 224.63  NOSALT= 240.08  ΔP=-15.455  (n=955)
+  Tropics (|lat|<23.5)          : SALT= 131.69  NOSALT= 133.80  ΔP= -2.109  (n=16210)
+  Global                        : SALT=  95.22  NOSALT=  95.35  ΔP= -0.126  (n=40962)
+
+=== Surface nwfa (#/kg) ===
+  Amazon              : SALT=1.037e+10  NOSALT=4.675e+10  ratio=0.222
+  Congo               : SALT=6.070e+10  NOSALT=3.210e+10  ratio=1.891
+  SE Asia             : SALT=1.014e+10  NOSALT=1.286e+10  ratio=0.789
+  Global              : SALT=4.291e+10  NOSALT=8.659e+10  ratio=0.495

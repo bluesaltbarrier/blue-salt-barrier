@@ -38,3 +38,9 @@ run_120km/
 
 # Allow the final plot images
 !mpas_analysis/*.png
+
+# Preprint PDFs — kept local until submission to EarthArXiv
+blue-salt-barrier-preprint-*.pdf
+
+# Claude Code settings (local tooling, not public)
+.claude/
