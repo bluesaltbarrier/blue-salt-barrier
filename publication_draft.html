@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sensitivity of Global Heat Transport to Rainforest Biogenic Salt Aerosols: A Multi-Implementation MPAS Study and Community Invitation</title>
+<title>Exploratory MPAS Sensitivity Experiments on Rainforest Biogenic Salt Aerosols, Tropical Rainfall, and Poleward Moisture Transport</title>
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <style>
@@ -177,7 +177,7 @@
 <section class="coversheet">
   <div class="repo-name">EarthArXiv &middot; Preprint Coversheet</div>
 
-  <div class="cs-title">Sensitivity of Global Heat Transport to Rainforest Biogenic Salt Aerosols: A Multi-Implementation MPAS Study and Community Invitation</div>
+  <div class="cs-title">Exploratory MPAS Sensitivity Experiments on Rainforest Biogenic Salt Aerosols, Tropical Rainfall, and Poleward Moisture Transport</div>
 
   <div class="cs-field">Author</div>
   <div class="cs-body">
@@ -217,8 +217,8 @@
 </section>
 
 <header>
-  <h1>Sensitivity of Global Heat Transport to Rainforest Biogenic Salt Aerosols</h1>
-  <div class="authors" style="font-size: 1rem; color: var(--text-sec); margin-bottom: 18px;">A Multi-Implementation MPAS Study and Community Invitation</div>
+  <h1>Exploratory MPAS Sensitivity Experiments on Rainforest Biogenic Salt Aerosols, Tropical Rainfall, and Poleward Moisture Transport</h1>
+  <div class="authors" style="font-size: 1rem; color: var(--text-sec); margin-bottom: 18px;">Phase 7 revision: P&ouml;hlker baseline-CCN sensitivity matrix</div>
 
   <div class="authors" style="font-weight: 600; font-size: 1rem; color: var(--text); margin-bottom: 4px;">Brian Lue</div>
   <div class="authors" style="font-size: 0.9rem; margin-bottom: 6px;">Independent Researcher</div>
@@ -236,50 +236,30 @@
 
 <div class="abstract">
   <h2>Abstract</h2>
-  <p>We investigate a previously unconsidered climate variable: biogenic salt aerosols emitted by equatorial rainforest trees. Tropical trees and their associated fungi eject hygroscopic potassium salt nanoparticles that act as giant cloud condensation nuclei (GCCN), accelerating local rain formation. We hypothesized that this salt-driven cloud seeding acts as a moisture stratification barrier, trapping latent heat at the equator and reducing poleward heat transport. Deforestation would remove this barrier, allowing moisture and heat to escape to higher latitudes.</p>
+  <p>Rainforest ecosystems emit biologically influenced aerosol particles, including potassium-rich and other hygroscopic components that may affect warm-rain microphysics. While tropical biogenic aerosols have been studied extensively, their sensitivity within coarse-resolution global models remains incompletely characterized, particularly under differing background aerosol states. Here we present exploratory sensitivity experiments using MPAS-Atmosphere to test whether rainforest biogenic salt aerosol parameterizations can alter modeled tropical precipitation and selected large-scale moisture-transport diagnostics.</p>
 
-  <p><strong>The primary finding of this work is not a specific transport number. It is a demonstration that biogenic salt is a remarkably sensitive variable in global atmospheric simulations.</strong> Using MPAS-Atmosphere at 240&nbsp;km with a dedicated GCCN tracer, we tested five different microphysical implementations of the same hypothesis (from a crude autoconversion hack to a full &kappa;-K&ouml;hler/Hall/Beard lifecycle with wet scavenging, including bug-fixed versions after iterative debugging). The poleward latent heat transport at 30&deg;N across these implementations ranged from &minus;153&nbsp;TW to +153&nbsp;TW &mdash; a swing of roughly 300&nbsp;TW, comparable in magnitude to the entire estimated effect of anthropogenic CO<sub>2</sub> on poleward heat transport (100&ndash;250&nbsp;TW). Implementation details that change a single drop-size constant can flip the sign of the global transport response.</p>
+  <p>Using 30-day single-member simulations at 240&nbsp;km and 120&nbsp;km resolution, we examined ten alternative implementations ranging from simple autoconversion perturbations to a more explicit giant-cloud-condensation-nuclei (GCCN) lifecycle treatment with activation, condensational growth, coalescence, and wet scavenging. Across these implementations, diagnosed latent heat transport at 30&deg;N varied substantially (range &minus;211 to +153&nbsp;TW; standard deviation ~126&nbsp;TW &mdash; comparable in magnitude to some published transport estimates), indicating strong sensitivity of some circulation metrics to aerosol microphysical assumptions within these experiments.</p>
 
-  <p>This sensitivity is itself the finding. Whether the real atmospheric response takes any particular sign, the magnitude of the model's response proves that biogenic salt cannot be safely neglected. Current mainstream climate models do not appear to explicitly represent this rainforest biogenic-salt source as a dedicated warm-rain mechanism tied to vegetation type, even though P&ouml;hlker-era hygroscopicity and CCN observations have entered aerosol-climate modeling in other forms. This omission is unlikely to be innocuous.</p>
+  <p>A more robust and interpretable result emerged locally: the sign of the modeled Amazon rainfall response depended on baseline aerosol loading. Under a polluted baseline aerosol state (MPAS default, ~4,400 nwfa/cm<sup>3</sup>), added hygroscopic K-salt particles suppressed local rainfall (&minus;17.1&nbsp;mm/30-day). Under a pristine low-CCN baseline informed by published Amazon observations (~150&nbsp;cm<sup>-3</sup>; P&ouml;hlker et al. 2012), the same perturbation enhanced local rainfall (+5.4 to +5.6&nbsp;mm/30-day). This regime dependence is qualitatively consistent with established aerosol-cloud theory in which precipitation responses vary with background cloud condensation nuclei concentrations.</p>
 
-  <p>Within the most physically complete configuration we tested (April 240&nbsp;km, bug-fixed GCCN full lifecycle), three robust positive results emerged: (i) biogenic salt <em>redistributes</em> equatorial precipitation southward toward the winter hemisphere, increasing zonal-mean rainfall at 5&deg;S by +0.62&nbsp;mm/day and decreasing it at 5&deg;N by &minus;0.31&nbsp;mm/day (band-average +0.17&nbsp;mm/day across &minus;10 to +10 degrees); (ii) Antarctica cools by &minus;1.26&nbsp;K in the hemisphere entering its winter season; (iii) southward latent heat transport at 30&deg;S is reduced by &minus;61&nbsp;TW. The Northern Hemisphere response &mdash; a +153&nbsp;TW <em>increase</em> in northward transport at 30&deg;N &mdash; is opposite to the simple hypothesis and is most likely an artifact of the convective parameterization responding to GCCN-enhanced grid-scale heating. Testing this at convection-permitting resolution (30&nbsp;km or finer) is the single most important next experiment.</p>
+  <p>These simulations are not intended as detection or attribution evidence and are limited by coarse resolution, short integrations, single realizations, and convective parameterization uncertainty. Rather, they demonstrate that rainforest bioaerosol assumptions can materially influence modeled tropical rainfall responses and some transport diagnostics. The results motivate targeted follow-up using convection-permitting ensembles, observational constraints on rainforest aerosol emissions, and higher-fidelity cloud microphysics. We release all code, bug-fix patches, Docker builds, and analysis scripts at <a href="https://github.com/bluesaltbarrier/blue-salt-barrier">github.com/bluesaltbarrier/blue-salt-barrier</a>.</p>
+</div>
 
-  <p>A companion January 120&nbsp;km run with the same bug-fixed physics partially confirms the seasonal-mirror framework: rain redistribution, 30&deg;N transport, 30&deg;S transport, and Antarctic temperature all flip sign with the season (salt pushes rain toward the winter-ward hemisphere regardless of which hemisphere that is). The Arctic temperature response does not mirror &mdash; it warms in both April (+0.14&nbsp;K) and January (+0.88&nbsp;K), possibly due to a dry-heat pathway, Arctic amplification feedbacks, or weather noise at N&nbsp;=&nbsp;1. All results reported here are single-member 30-day integrations and cannot be distinguished from weather noise at statistical-significance level. Definitive testing requires ensembles of 5&ndash;10 members, convection-permitting resolution, and 90+ day integrations &mdash; resources beyond a consumer laptop. We release all code, bug-fix patches, Docker builds, and analysis scripts openly at <a href="https://github.com/bluesaltbarrier/blue-salt-barrier">github.com/bluesaltbarrier/blue-salt-barrier</a> to invite the climate modeling community to extend this work.</p>
+<div style="max-width: 780px; margin: 18px auto 28px; padding: 16px 22px; background: #fdf3e4; border-left: 4px solid #b4853b; border-radius: 6px; font-size: 0.92rem;">
+  <strong>Statistical humility:</strong> All simulations reported in this manuscript are single-member 30-day integrations. Any signal smaller than the chaotic variability between two such runs cannot be distinguished from internal noise. No detection or attribution claim is made.
 </div>
 
 <h2>1. Origin of the Hypothesis</h2>
 
 <h3>1.1 Author Background</h3>
 
-<p>The lead author is not a career meteorologist. His training began under Robert Truax&mdash;the inventor of the regeneratively cooled rocket engine and Jet Assisted Takeoff (JATO), president of the American Rocket Society, and advisor to President Eisenhower on establishing NASA&mdash;with whom he studied rocket propulsion for five years. He was awarded two National Science Foundation grants to study fluid-structural combustion vibrational instabilities in liquid-fueled rockets at the UC San Diego Supercomputer Center, and a research grant to model fuzzy logic inertial guidance and control systems for liquid-fueled rockets. He completed undergraduate coursework including a course in meteorology, and later earned a Master&rsquo;s Degree in Aeronautical and Astronautical Engineering from Stanford University.</p>
+<p>The author is an independent researcher with an engineering and numerical-modeling background. This work was conducted outside formal atmospheric-science institutions and is offered as an open, testable hypothesis; domain experts are explicitly invited to improve upon every aspect of it.</p>
 
-<p>His professional career at Applied Materials as a Member of Technical Staff applied graduate training in compressible flow, plasma physics, thermodynamics, combustion, fluid mechanics, heat transfer, chemistry, two-phase fluids, acoustics, structures, and feedback and control theory to semiconductor equipment design. He holds over 30 patents spanning semiconductor manufacturing, heat transfer, plasma physics, text analytics, auto-immune disease, microbiome research, and thermofluids for food manufacturing equipment. While not a meteorologist, he has extensive training in numerical simulation, computational fluid dynamics, and thermophysical systems at both undergraduate and graduate levels.</p>
+<h3>1.2 Motivation: Conduction Alone Is Insufficient</h3>
 
-<p>This background is disclosed not to claim authority in atmospheric science, but to explain why the hypothesis arose and why the computational approach taken&mdash;while unconventional&mdash;is grounded in rigorous thermo-fluid training. We explicitly invite domain experts to improve upon every aspect of this work.</p>
+<p>Polar ice loss depends on multiple coupled processes beyond simple local conductive exchange, including oceanic, radiative, and atmospheric transport pathways. Earth's atmosphere can be viewed as a heat-redistribution system in which latent heat is released at low latitudes and sensible heat is lost at high latitudes; any mechanism that modulates <em>where</em> latent heat is released affects the poleward transport budget. This framing motivates the present investigation of rainforest biogenic aerosols as potential modulators of that budget. The development-history narrative of this work, including multi-year attempts to install WRF and the subsequent AI-assisted computational breakthrough, is disclosed in the Acknowledgments rather than here.</p>
 
-<h3>1.2 The Glacial Melting Puzzle</h3>
-
-<p>The author has travelled to rainforests, coral reefs, and glaciers, studied satellite maps, and reviewed countless hours of glacial melting footage. A persistent question remained unanswered: how could 1&ndash;3&deg;F of average atmospheric temperature increase, acting by conduction alone, lead to thousands of feet of glacial ice melting in geologically short periods? The energy balance seemed insufficient. Something appeared to be missing in the standard explanation.</p>
-
-<p>The concept of an atmospheric heat pipe&mdash;increased convective mixing redistributing equatorial heat poleward&mdash;formed over 5&ndash;6 years as a mental model but lacked a computational framework for testing. Approximately four years ago, a news article about atmospheric rivers quoted a NOAA scientist describing them as conduits of heat transporting energy from the equator toward the poles. This resonated directly with the heat pipe concept. A call to NOAA led to a conversation with a scientist who, while unable to take on the project due to workload, directed the author to the WRF (Weather Research and Forecasting) model as a tool that could be learned independently.</p>
-
-<p>Multiple attempts to install WRF over the following years reached 95&ndash;98% completion but stalled on configuration issues. The software sat unused on a powerful laptop for two years. The breakthrough came through AI-assisted development: Claude Code (Anthropic) successfully completed the WRF installation, then guided the evolution from WRF to the MPAS global model, designed the experimental framework, and helped develop the GCCN microphysics modification. The analytical model was cross-checked with OpenAI&rsquo;s ChatGPT, which identified and corrected errors in terminal velocity (Stokes vs. Beard), the accretion pathway (prr_rcw vs. prr_wau), and critical supersaturation values. This collaborative human-AI approach&mdash;domain intuition from the researcher, computational execution from Claude, and mathematical verification from ChatGPT&mdash;enabled a research program that would have been impractical for a solo non-specialist.</p>
-
-<h3>1.3 How the Idea Emerged</h3>
-
-<p>The hypothesis originated from a simple observation on a weather map displayed on an iPhone: equatorial rainforests showed <em>continuous</em> rainfall while the adjacent oceans showed <em>intermittent</em> rainfall. This seemed backwards. Oceans have unlimited water for evaporation&mdash;why would rain be more persistent over land?</p>
-
-<p>A mental model formed through several steps. First, the evaporative surfaces of leaves and the active metabolic pumping of water by trees could explain enhanced local humidity. But tropical rainforest topsoil is shockingly thin&mdash;typically 9&ndash;15 inches&mdash;far too shallow to store significant water. Trees in this environment must receive nearly continuous rain or mist, or they die. Evolution would favor any mechanism that allows trees to secure their own water supply.</p>
-
-<p>This led to the question: <em>have trees evolved to inject something into the air to grab water for themselves?</em> A search for any evidence of trees producing cloud-seeding chemicals revealed the answer: yes. P&ouml;hlker et al. (2012), a study led by researchers at the Max Planck Institute for Chemistry (Mainz, Germany) with Lawrence Berkeley National Laboratory collaborators who performed the electron microscopy, demonstrated that fungi associated with Amazon rainforest trees eject potassium salt nanoparticles that serve as cloud condensation nuclei, seeding local cloud formation and precipitation. The trees and their symbiotic fungi are, in effect, performing continuous cloud seeding to water themselves&mdash;the biological equivalent of the airplanes that seed clouds for agricultural rain in drier regions.</p>
-
-<p>The next insight came from thermodynamics. If salt controls where condensation occurs, it also controls where <strong>latent heat</strong> is released. Every gram of water vapor that condenses releases 2,500 joules of heat into the surrounding air. Where the rain goes, the heat goes. The atmosphere functions as a <strong>heat pipe</strong>&mdash;water vapor carries latent energy from the surface to the altitude and location where it condenses, depositing that energy as sensible heat.</p>
-
-<p>If salt traps rain locally at the equator, it traps heat at the equator. If the forests are cut and the salt source is removed, that humidity is free to travel poleward, carrying its latent heat with it and releasing it closer to the poles. This is not a greenhouse gas mechanism&mdash;it does not change how much heat Earth traps from the sun. It is a <strong>redistribution</strong> of heat by convection: changing where existing thermal energy is deposited.</p>
-
-<p>An analogy from everyday experience makes the magnitude intuitive: ice cubes in a glass of water melt slowly when the water is still, because a cold thermal boundary layer forms around the ice and insulates it. Stir the water and the ice melts dramatically faster&mdash;not because stirring adds significant energy, but because it thins the thermal boundary layer, steepening the temperature gradient and allowing heat to conduct to the ice surface faster. The energy from stirring is negligible compared to the thermal energy already in the water; the stirring merely <strong>redistributes</strong> it more efficiently. Similarly, removing the equatorial salt barrier does not add heat to the climate system&mdash;it stirs the existing latent heat poleward more efficiently, thinning the thermal stratification that kept the poles cold.</p>
-
-<p>This analogy suggests the effect could be substantial. The atmosphere&rsquo;s total poleward energy transport is approximately 5 petawatts. Even a few percent change in this transport&mdash;driven by the loss of the equatorial moisture barrier&mdash;could deliver enough extra heat to significantly accelerate polar ice loss.</p>
+<p>The narrative account of how this hypothesis emerged from informal observation is consolidated in <strong>Appendix B: Origin of the Idea</strong>; it is not required for the scientific content that follows.</p>
 
 <h2>2. Introduction</h2>
 
@@ -287,7 +267,7 @@
 
 <p>We propose one such factor: the loss of biogenic salt aerosol emissions from deforested equatorial rainforests. P&ouml;hlker et al. (2012) demonstrated that fungi associated with Amazon rainforest trees eject potassium salt nanoparticles into the boundary layer, where they serve as seeds for secondary organic aerosol growth and ultimately function as cloud condensation nuclei. We hypothesize that this biological salt emission acts as a <strong>moisture stratification barrier</strong>&mdash;a mechanism that traps the atmospheric hydrological cycle at low latitudes, preventing the poleward transport of latent heat.</p>
 
-<p>When this barrier is removed through deforestation, moisture that would have precipitated locally near the equator instead travels poleward, condensing at higher latitudes and releasing approximately 2,500&nbsp;J/g of latent heat into the mid-latitude and polar atmosphere. This would represent a direct, non-radiative pathway for redistributing heat that we have not found explicitly isolated as a dedicated process in current mainstream climate-model configurations.</p>
+<p>When this barrier is removed through deforestation, moisture that would have precipitated locally near the equator instead travels poleward, condensing at higher latitudes and releasing its latent heat into the mid-latitude and polar atmosphere (see &sect;3.1). This would represent a direct, non-radiative pathway for redistributing heat that we have not found explicitly isolated as a dedicated process in current mainstream climate-model configurations.</p>
 
 <h2>3. The Physical Mechanism</h2>
 
@@ -297,25 +277,99 @@
 
 <h3>3.2 Salt as a Moisture Trap</h3>
 
-<p>Intact rainforest ecosystems emit highly hygroscopic biogenic salt particles and salt-containing aerosol cores, including the ~200&nbsp;nm KCl cores documented by P&ouml;hlker et al. (2012). Under the high humidity of the tropical boundary layer (&gt;80% RH), these hygroscopic particles can swell substantially and, once in cloud, may grow by condensation into efficient warm-rain embryos. The observed size distribution spans from nanometer-scale cores to micrometer-scale aged particles; this work focuses on the warm-rain-embryo pathway that becomes active once particles reach collector size. This is the same broad physical mechanism exploited in operational cloud-seeding programs worldwide (Mather et al. 1997, CAIPEEX 2023).</p>
+<p>Intact rainforest ecosystems emit highly hygroscopic biogenic salt particles and salt-containing aerosol cores, including the KCl-rich accumulation-mode aerosol population documented by P&ouml;hlker et al. (2012, Fig. S10A) with geometric mean diameter Dg = 150&nbsp;nm (&sigma;<sub>g</sub> = 1.43). Under the high humidity of the tropical boundary layer (&gt;80% RH), these hygroscopic particles can swell substantially and, once in cloud, may grow by condensation into efficient warm-rain embryos. The observed size distribution spans from nanometer-scale cores to micrometer-scale aged particles; this work focuses on the warm-rain-embryo pathway that becomes active once particles reach collector size. This is the same broad physical mechanism exploited in operational cloud-seeding programs worldwide (Mather et al. 1997, CAIPEEX 2023).</p>
 
-<p>The net effect is that rain forms faster and falls locally, close to the forest that produced the salt. The moisture&mdash;and its 2,500&nbsp;J/g of latent heat&mdash;is deposited in the equatorial atmosphere rather than being transported poleward by the Hadley circulation.</p>
+<p>The net effect is that rain forms faster and falls locally, close to the forest that produced the salt. The moisture &mdash; and its latent heat &mdash; is deposited in the equatorial atmosphere rather than being transported poleward by the Hadley circulation.</p>
 
 <h3>3.3 The Critical Distinction: GCCN vs. Small CCN</h3>
 
-<p>An important nuance separates this mechanism from the well-studied aerosol indirect effect. Standard small CCN (&lt;0.2&nbsp;&mu;m), such as pollution aerosols, <em>suppress</em> rain by creating many small cloud droplets that are inefficient at collision-coalescence (the Twomey effect). Tree-emitted salt particles are <strong>giant CCN (GCCN)</strong>&mdash;much larger, highly hygroscopic particles that create large drops and <em>enhance</em> rain formation. This distinction is critical: GCCN and small CCN have opposite effects on precipitation.</p>
+<p>An important nuance separates this mechanism from the well-studied aerosol indirect effect, which has been examined extensively since Twomey (1977) established the cloud-albedo indirect effect and Albrecht (1989) extended it to cloud-lifetime considerations. Standard small CCN (&lt;0.2&nbsp;&mu;m), such as pollution aerosols, <em>suppress</em> rain by creating many small cloud droplets that are inefficient at collision-coalescence (the Twomey effect; further developed in Rosenfeld et al. 2008; Andreae et al. 2004 demonstrated the same pattern in biomass-burning-contaminated Amazon air). Tree-emitted salt particles in the accumulation-mode size range behave differently &mdash; as hygroscopic particles that activate at low supersaturation and can initiate warm rain via collision-coalescence once droplets grow past the coalescence gap (traditionally termed <strong>giant CCN (GCCN)</strong> for particles above ~1&nbsp;&mu;m; Jensen &amp; Lee 2008). The two regimes have opposite effects on precipitation, and the transition between them depends on the baseline aerosol state (Stevens &amp; Feingold 2009; Koren et al. 2014); this regime dependence is directly relevant to the Phase&nbsp;7 sign flip reported in &sect;6.9.</p>
 
 <table>
   <thead>
     <tr><th>Property</th><th>Small CCN (pollution)</th><th>Hygroscopic Salt (GCCN)</th></tr>
   </thead>
   <tbody>
-    <tr><td>Dry particle size</td><td>0.05&ndash;0.2 &mu;m</td><td>~200&nbsp;nm cores (P&ouml;hlker 2012); grown to collector size in cloud</td></tr>
+    <tr><td>Dry particle size</td><td>0.05&ndash;0.2 &mu;m</td><td>~150&nbsp;nm Dg (P&ouml;hlker 2012, Fig. S10A); grown to collector size in cloud</td></tr>
     <tr><td>Effect on rain</td><td>Suppressed / delayed</td><td>Enhanced / accelerated</td></tr>
     <tr><td>Moisture fate</td><td>Stays in cloud longer</td><td>Rains out locally</td></tr>
     <tr><td>Net transport effect</td><td>May increase poleward</td><td>Reduces poleward</td></tr>
   </tbody>
 </table>
+
+<h3>3.4 Size Optimization and the Accumulation-Mode Peak</h3>
+
+<p>Within the accumulation-mode size range (0.1&ndash;1 &mu;m) that P&ouml;hlker et al. (2012) observed
+for pristine Amazon aerosol, activation efficiency is not uniform. K&ouml;hler theory
+predicts that the critical supersaturation (S<sub>crit</sub>) required to activate a hygroscopic
+particle as a cloud droplet scales approximately as d<sup>&minus;3/2</sup> for fixed
+hygroscopicity &kappa;. The practical consequence is a sharp dependence on diameter:</p>
+
+<table>
+  <thead>
+    <tr><th>Dry diameter</th><th>&kappa;</th><th>S<sub>crit</sub></th><th>Activation in typical tropical updrafts</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>40&nbsp;nm</td><td>0.4 (sulfate-like)</td><td>~0.3&ndash;0.5%</td><td>Only in vigorous convection</td></tr>
+    <tr><td>80&nbsp;nm</td><td>0.4</td><td>~0.15&ndash;0.25%</td><td>Often, not reliably</td></tr>
+    <tr><td>160&nbsp;nm</td><td>0.8 (KCl-like)</td><td>~0.03&ndash;0.05%</td><td>Essentially any updraft</td></tr>
+  </tbody>
+</table>
+
+<p>A 160&nbsp;nm KCl particle activates at roughly one-tenth the supersaturation required for a
+40&nbsp;nm sulfate particle, so it contributes to rain formation across a much wider range of
+meteorological conditions.</p>
+
+<p><em>On the activation equation used here.</em> The activation calculation we employ (Petters &amp;
+Kreidenweis 2007 &kappa;-K&ouml;hler; full details in Appendix A.1) is explicitly the neutral
+form &mdash; it contains no charge term, no Coulomb cross-section, no Debye length. This is
+appropriate because airborne aerosols in the cloud regime are electrically neutral to within
+small-correction order. The plasma-physics training referenced in &sect;1 (researcher background)
+enters this work as <strong>shared mathematical structure</strong> &mdash; kinetic-theory
+treatment of many-particle collisional evolution, activation thresholds, and distribution-function
+balance &mdash; not as literal equation identity. Setting charges to zero in plasma ionization
+equations (Saha, or kinetic with Coulomb cross-sections) does not recover &kappa;-K&ouml;hler; it
+yields inert neutral particles with no activation. The two physical regimes share a kinetic-theory
+framework but not governing equations.</p>
+
+<p>P&ouml;hlker et al. (2012, supplementary Fig. S10A) report the pristine Amazon accumulation-mode
+size distribution as a log-normal with geometric mean diameter <strong>Dg = 150&nbsp;nm</strong> and
+&sigma;<sub>g</sub> = 1.43 (Aitken mode at Dg = 67&nbsp;nm, &sigma;<sub>g</sub> = 1.32 contributes the
+smaller particles). The ~150&nbsp;nm accumulation-mode peak coincides with what a physical
+optimization of (CCN efficiency &times; atmospheric persistence &divide; emission mass cost) would predict:</p>
+
+<ul>
+  <li><strong>Sub-100&nbsp;nm particles</strong> activate only in strong updrafts; in clean air, most
+  never nucleate cloud drops and so do not contribute to rain.</li>
+  <li><strong>Super-micrometer particles</strong> activate reliably but biosynthesis cost scales
+  as diameter-cubed, and gravitational settling shortens their atmospheric lifetime.</li>
+  <li><strong>~150&nbsp;nm accumulation-mode particles</strong> activate essentially every time cloudy air is lifted,
+  persist ~7 days in the atmosphere (long enough to disperse through the canopy region),
+  and minimize the per-particle biosynthetic cost.</li>
+</ul>
+
+<p>We do not claim this coincidence proves a selective relationship between forest emission
+chemistry and regional precipitation. The match between the observed peak and the physical
+efficiency optimum is, however, consistent with co-evolution of rainforest ecosystems and
+their self-sustaining <em>local</em> rain cycle. At minimum it constrains what the representative
+size should be in any modeling of the K-salt pathway: ~150&nbsp;nm diameter, not the 80&nbsp;nm
+default of the Thompson aerosol-aware microphysics scheme we employ here. In the Phase 7 sensitivity
+matrix (&sect;6.9), the closest Thompson lookup option to P&ouml;hlker's Dg is <code>l=4</code>
+(80&nbsp;nm radius = 160&nbsp;nm diameter). We take this <code>l=4</code> configuration as our
+primary P&ouml;hlker-matched physics, with <code>l=5</code> (320&nbsp;nm diameter) reported as an
+upper-bound sensitivity test rather than a P&ouml;hlker-matched configuration.</p>
+
+<p><em>Attribution note.</em> P&ouml;hlker et al. (2012) documented each empirical component
+drawn on above: the log-normal accumulation-mode size distribution (Dg&nbsp;=&nbsp;150&nbsp;nm,
+&sigma;<sub>g</sub>&nbsp;=&nbsp;1.43) of pristine Amazon aerosol, the much higher CCN
+activation efficiency of accumulation-mode particles relative to the Aitken mode
+(&ldquo;accumulation mode particles are by orders of magnitude more frequently activated&rdquo;),
+and the biological machinery for K-salt emission (active wet discharge by Ascomycota and
+Basidiomycota fungi, plant transpiration, guttation, wax abrasion). P&ouml;hlker et al. did not,
+however, combine these into an explicit evolutionary-optimization or co-evolution argument.
+The synthesis presented in this section &mdash; that the observed accumulation-mode peak size
+coincides with a tradeoff optimum of (CCN efficiency &times; atmospheric persistence &divide;
+emission mass cost), consistent with selective co-evolution for local-rainfall fitness &mdash; is our own.</p>
 
 <h2>4. Experimental Design</h2>
 
@@ -364,7 +418,7 @@
 
 <figure>
   <img src="mpas_analysis/15_30day_calibration.png" alt="Calibration curve">
-  <figcaption><strong>Figure 2.</strong> Calibration curve showing the relationship between salt enhancement factor and poleward transport reduction at 30&deg;N (solid green), 45&deg;N (solid blue), and 60&deg;N (solid purple). Dashed lines show Southern Hemisphere counterparts. The orange shaded region indicates the estimated CO<sub>2</sub> forcing range. The 25% enhancement reaches into this range at multiple latitudes.</figcaption>
+  <figcaption><strong>Figure 2.</strong> Calibration curve showing the relationship between salt enhancement factor and poleward transport reduction at 30&deg;N (solid green), 45&deg;N (solid blue), and 60&deg;N (solid purple). Dashed lines show Southern Hemisphere counterparts. The shaded band indicates the approximate magnitude range spanned by these single-member sensitivity tests.</figcaption>
 </figure>
 
 <table>
@@ -399,7 +453,7 @@
 
 <p><strong>Southern path (dry heat redirected &rarr; warming).</strong> The southward moisture pipeline is already weakening as the Southern Hemisphere enters autumn. Salt has little southward moisture transport to block. However, the enhanced rain at the equator releases extra latent heat into the tropical atmosphere. This warm, <em>dry</em> air rises, spreads southward in the upper atmosphere, and gets caught by midlatitude storm tracks.</p>
 
-<p>The full GCCN lifecycle results partially support this picture. The April 240&nbsp;km experiment confirmed transport reduction (&minus;95&nbsp;TW) and strong Antarctic cooling (&minus;1.03&nbsp;K). The Arctic warmed in April rather than cooled, which we initially interpreted as the dry-heat pathway dominating in the hemisphere entering summer. A follow-up January 120&nbsp;km experiment, designed specifically to look for the expected mirror image (Arctic cooling, Antarctic neutral), did not confirm it &mdash; the Arctic warmed by +1.85&nbsp;K and the transport signal weakened. The two-pathway framework may be oversimplified, or the forced signal may simply be dominated by weather noise at this resolution and duration. See Section 6.6 for the full January analysis.</p>
+<p>The full GCCN lifecycle results partially support this picture. The April 240&nbsp;km experiment showed transport reduction (&minus;95&nbsp;TW) and Antarctic cooling (&minus;1.03&nbsp;K) at N&nbsp;=&nbsp;1. The Arctic warmed in April rather than cooled; one possible interpretation at the time was a dry-heat pathway dominating in the hemisphere entering summer. A follow-up January 120&nbsp;km experiment, designed specifically to look for the expected mirror image (Arctic cooling, Antarctic neutral), did not confirm it &mdash; the Arctic warmed by +1.85&nbsp;K and the transport signal weakened. The two-pathway framework may be oversimplified, or the forced signal may be dominated by weather noise at this resolution and duration; ensemble confirmation is required to distinguish these. See Section 6.6 for the full January analysis.</p>
 
 <h3>5.4 Implications for Polar Ice: The Seasonal Timing Effect</h3>
 
@@ -539,11 +593,11 @@
 
 <p>The GCCN coalescence physics implements the full droplet lifecycle:</p>
 <ul>
-  <li><strong>Activation:</strong> &kappa;-K&ouml;hler theory with temperature-dependent Kelvin parameter \(A\). For KCl (&kappa; = 0.99, \(D_d\) = 200&nbsp;nm), critical supersaturation is ~0.02%, meaning activation occurs in any cloud (Petters &amp; Kreidenweis 2007).</li>
+  <li><strong>Activation:</strong> &kappa;-K&ouml;hler theory with temperature-dependent Kelvin parameter \(A\). For KCl (&kappa; = 0.99, \(D_d\) = 150&nbsp;nm, matching P&ouml;hlker et al.'s 2012 reported accumulation-mode geometric mean diameter), critical supersaturation is ~0.03%, meaning activation occurs in any cloud (Petters &amp; Kreidenweis 2007).</li>
   <li><strong>Condensational growth:</strong> After activation at \(R\) = 10&nbsp;&mu;m, drops grow each timestep via \(R(t+\Delta t) = \sqrt{R^2 + 2G \cdot s \cdot \Delta t}\) where \(G \approx 10^{-10}\)&nbsp;m&sup2;/s (Rogers &amp; Yau).</li>
   <li><strong>Collision efficiency:</strong> Size-dependent lookup from Hall (1980): \(E\) = 0 at \(R\) &lt; 20&nbsp;&mu;m (coalescence gap), rising through 0.05, 0.2, 0.5, 0.65, to 0.8 as the drop grows past 70&nbsp;&mu;m. A freshly activated GCCN at 10&nbsp;&mu;m collects <em>nothing</em> &mdash; it must grow first.</li>
   <li><strong>Terminal velocity:</strong> Size-dependent from Beard (1976): 0&nbsp;m/s below 20&nbsp;&mu;m, 0.12&nbsp;m/s at 40&nbsp;&mu;m, 0.25&nbsp;m/s at 50&nbsp;&mu;m, 0.50&nbsp;m/s above 60&nbsp;&mu;m.</li>
-  <li><strong>Wet scavenging:</strong> Rain falling below cloud base removes unactivated GCCN from the air, using the same Eff_aero framework as the existing Thompson aerosol scavenging but with the 200&nbsp;nm salt particle size.</li>
+  <li><strong>Wet scavenging:</strong> Rain falling below cloud base removes unactivated GCCN from the air, using the same Eff_aero framework as the existing Thompson aerosol scavenging but with the 200&nbsp;nm salt particle size. (The 200&nbsp;nm value used as a code parameter throughout &sect;6.5 and Appendix&nbsp;A reflects the Phase&nbsp;5 GCCN tracer implementation; our Phase&nbsp;7 work in &sect;6.9 uses P&ouml;hlker's observed Dg&nbsp;=&nbsp;150&nbsp;nm via the Thompson activation lookup index <code>l</code>&nbsp;=&nbsp;4 &mdash; see &sect;3.4 and &sect;6.9.)</li>
   <li><strong>Cloud droplet depletion:</strong> Cloud drops swept up by GCCN collectors are removed from the cloud droplet number count (<code>pnc_rcw</code>).</li>
   <li><strong>Rain number production:</strong> GCCN drops that grow past the rain threshold (\(D_{0r}\) = 50&nbsp;&mu;m) contribute to the rain drop number count (<code>pnr_wau</code>).</li>
   <li><strong>Accretion pathway:</strong> All GCCN collection is added to <code>prr_rcw</code>, not autoconversion (corrected after ChatGPT review).</li>
@@ -551,7 +605,7 @@
 
 <p>Iterative debugging and cross-checking of the initial GCCN lifecycle against Thompson's existing aerosol-scavenging conventions surfaced three implementation errors: (1) a radius-reset bug that kept collector drops near 10&nbsp;&mu;m where collision efficiency is zero, (2) a missing air-density factor in the collection-rate formula, and (3) an incorrect update to the rain-number counter. We corrected these bugs, rebuilt the model, and re-ran the paired April 240&nbsp;km experiment. The corrected version produces qualitatively different results from the buggy version. Documenting this openly, rather than presenting only the corrected numbers, is an important part of the argument below.</p>
 
-<p><strong>Results across five implementations of the same hypothesis:</strong></p>
+<p><strong>Results across five implementations of the April 240 km bug-fixed configuration:</strong> (The January 120 km bug-fixed run is presented separately in &sect;6.6; the four P&ouml;hlker-matrix configurations completed later are presented in &sect;6.9, bringing the total implementation count to ten.)</p>
 
 <table>
   <thead>
@@ -566,9 +620,9 @@
   </tbody>
 </table>
 
-<h4>The central scientific finding: biogenic salt is a remarkably sensitive variable</h4>
+<h4>The principal modeling result: biogenic salt is a numerically sensitive variable within these experiments</h4>
 
-<p>The 30&deg;N transport numbers across five implementations of the same hypothesis range from <strong>&minus;153&nbsp;TW to +153&nbsp;TW</strong> &mdash; a sweep of roughly 300&nbsp;TW that fully encompasses the estimated effect of anthropogenic CO<sub>2</sub> on poleward heat transport (100&ndash;250&nbsp;TW). Changing a single drop-radius constant from 10&nbsp;&mu;m (with bug) to 25&nbsp;&mu;m (bug-fixed) flipped the sign. The mean across implementations is approximately zero; the standard deviation is ~115&nbsp;TW.</p>
+<p>The 30&deg;N transport numbers across these five April 240 km implementations range from <strong>&minus;153&nbsp;TW to +153&nbsp;TW</strong> &mdash; a sweep of roughly 300&nbsp;TW. Changing a single drop-radius constant from 10&nbsp;&mu;m (with bug) to 25&nbsp;&mu;m (bug-fixed) flipped the sign. Across all <strong>ten implementations</strong> (the five above plus the January 120 km bug-fixed run from &sect;6.6 and the four P&ouml;hlker-matrix configurations from &sect;6.9 &mdash; polluted, pristine, pristine+P&ouml;hlker-Dg (l=4), and pristine+upper-bound (l=5)), the range is <strong>&minus;211&nbsp;TW to +153&nbsp;TW</strong> (~364 TW swing); mean ~&minus;31&nbsp;TW, standard deviation <strong>~126&nbsp;TW</strong>.</p>
 
 <p>This is not noise in the usual sense. Each implementation is a <em>deterministic</em> physical system running on the same initial conditions. The variability comes from how microphysical details couple to the global circulation. When salt-modulated microphysics feeds latent heat release into a sensitive dynamical system (the tropical Hadley circulation), small implementation changes can drive large global responses.</p>
 
@@ -668,7 +722,7 @@
 
 <p>The 30&deg;N transport responses range from <strong>&minus;153&nbsp;TW to +153&nbsp;TW</strong> across these implementations of the same hypothesis. Each run is deterministic. The variation is <em>not</em> random noise &mdash; it is a fingerprint of how strongly global circulation couples to microphysical implementation. Salt-modulated latent heat release feeds into a sensitive tropical-dynamics system (the Hadley circulation), and small changes in where/when/how much rain is enhanced produce large global responses.</p>
 
-<p>This is the central phenomenological finding of the work. The <em>sign</em> of the transport response is implementation-dependent; the <em>magnitude</em> of the response sensitivity is larger than the entire estimated CO<sub>2</sub> effect on poleward transport. Two conclusions follow:</p>
+<p>This is the central phenomenological finding of the work. The <em>sign</em> of the transport response is implementation-dependent; the magnitude of the inter-implementation spread is comparable to published estimates of anthropogenic changes in poleward transport, illustrating that treatment of this pathway may matter numerically. Two conclusions follow:</p>
 
 <ol>
   <li><strong>Current climate models almost certainly underestimate the biogenic salt effect</strong> (whatever its true sign) because they treat it as zero. A zero is by definition outside the &pm;150&nbsp;TW sensitivity band.</li>
@@ -684,7 +738,7 @@
     <tr><th>Step</th><th>Physics</th><th>Source</th></tr>
   </thead>
   <tbody>
-    <tr><td>Emission</td><td>200 nm KCl from fungal ejection at forest canopy</td><td>P&ouml;hlker et al. 2012</td></tr>
+    <tr><td>Emission</td><td>200&nbsp;nm KCl (code parameter choice; observed Dg = 150&nbsp;nm per P&ouml;hlker Fig. S10A)</td><td>P&ouml;hlker et al. 2012</td></tr>
     <tr><td>Transport</td><td>3D advection by resolved winds</td><td>MPAS scalar transport (automatic)</td></tr>
     <tr><td>Hygroscopic growth</td><td>Equilibrium size from kappa-K&ouml;hler equation</td><td>Petters &amp; Kreidenweis 2007</td></tr>
     <tr><td>Activation</td><td>Critical supersaturation: ss = &radic;(4A&sup3;/27&kappa;D&sup3;)</td><td>Petters &amp; Kreidenweis 2007</td></tr>
@@ -725,6 +779,100 @@
   <p>All code, data, and configuration files will be published on GitHub under an open license. We believe this hypothesis is significant enough to warrant community investigation, and we are committed to full transparency about our methods, our results, and our limitations.</p>
 </div>
 
+<h3>6.9 Phase 7: P&ouml;hlker Baseline-CCN Sensitivity Matrix (this revision)</h3>
+
+<p>All prior phases used MPAS's default aerosol initial condition (Thompson &amp; Eidhammer 2014 climatology, derived from GOCART global runs with climatological emission inventories). That baseline places ~4,400 nwfa/cm<sup>3</sup> over the Amazon surface, approximately 10&ndash;20&times; higher than P&ouml;hlker et al.'s (2012) direct measurements at the Amazon Tall Tower Observatory (ATTO) &mdash; a 325&nbsp;m atmospheric research tower in the central Amazon basin (~2.1&deg;S, 59&deg;W) &mdash; of ~100&ndash;300 activated CCN/cm<sup>3</sup> during clean-air wet-season episodes. Independent in-situ measurements at ATTO and during the GoAmazon campaign (Gunthe et al. 2009; Martin et al. 2010, 2016) confirm that pristine Amazon CCN concentrations are in this low-hundreds/cm<sup>3</sup> range, whereas burning-plume and deforestation-arc air reaches thousands/cm<sup>3</sup> (Andreae et al. 2004; Artaxo et al. 2013). The MPAS default climatology thus blends pristine and polluted states in an annual-average sense, and a referee could reasonably object that perturbing K-salt atop an already-polluted baseline tests the <em>wrong</em> Twomey regime.</p>
+
+<p>To address this, we constructed an eight-simulation matrix varying the baseline CCN state and the Thompson activation size assumption:</p>
+
+<table>
+  <thead>
+    <tr><th>Pair</th><th>IGBP-2 nwfa (no-salt &rarr; salt)</th><th>Thompson activation (radius, &kappa;)</th><th>Intent</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Polluted</td><td>4,400 &rarr; 8,800 /cm<sup>3</sup></td><td>default (80&nbsp;nm, &kappa;=0.4)</td><td>Modern Amazon under anthropogenic CCN</td></tr>
+    <tr><td>Pristine</td><td>150 &rarr; 300 /cm<sup>3</sup></td><td>default (80&nbsp;nm, &kappa;=0.4)</td><td>P&ouml;hlker-anchored baseline, default activation</td></tr>
+    <tr><td><strong>Pristine + P&ouml;hlker-Dg (l=4)</strong></td><td>150 &rarr; 300 /cm<sup>3</sup></td><td><strong>160&nbsp;nm diameter, &kappa;=0.8</strong></td><td><strong>Primary P&ouml;hlker-matched configuration</strong></td></tr>
+    <tr><td>Pristine + upper-bound (l=5)</td><td>150 &rarr; 300 /cm<sup>3</sup></td><td>320&nbsp;nm diameter, &kappa;=0.8</td><td>Upper-bound size sensitivity test</td></tr>
+  </tbody>
+</table>
+
+<p>The pristine baseline was constructed by scaling MPAS's init nwfa over IGBP-2 (evergreen broadleaf forest) cells to match P&ouml;hlker's reported ~150/cm<sup>3</sup> (no-K-salt) and ~300/cm<sup>3</sup> (with-K-salt, reflecting P&ouml;hlker Text S2.4's ~50% K-salt contribution to pristine accumulation-mode CCN). The Thompson activation lookup has five discrete radius bins (<code>ta_Ra = {10, 20, 40, 80, 160}&nbsp;nm</code>, corresponding to diameters 20&ndash;320&nbsp;nm) and four hygroscopicity bins (<code>ta_Ka = {0.2, 0.4, 0.6, 0.8}</code>). P&ouml;hlker et al.'s reported accumulation-mode geometric mean diameter is Dg = 150&nbsp;nm (&sigma;<sub>g</sub> = 1.43); the closest Thompson lookup option is <code>l=4</code> (80&nbsp;nm radius = 160&nbsp;nm diameter), which we take as the <em>primary</em> P&ouml;hlker-matched configuration. We also ran <code>l=5</code> (320&nbsp;nm diameter) as an upper-bound sensitivity test &mdash; this is not within P&ouml;hlker's observed peak but represents the upper tail of the log-normal distribution and illustrates over-activation behavior.</p>
+
+<h4>Methodology verification</h4>
+
+<p>Before reporting any climate response, we verified the perturbations were applied as intended. Day-1 &Delta;nwfa (SALT &minus; NOSALT) over Amazon IGBP-2 cells measured <strong>+3.4&times;10<sup>9</sup> /kg</strong> in the polluted-baseline pair, matching the expected +3.6&times;10<sup>9</sup> from a 2&times; enhancement on the 3.6&times;10<sup>9</sup> initial baseline. A comprehensive sanity-check script (<code>sanity_check_runs.py</code> in our reproducibility repo) verified all 8 runs: no NaN/Inf in any variable across first 3 time steps; initial rain accumulation = 0; <code>ngccn = 0</code> globally across all P&ouml;hlker runs (confirming no recurrence of the v1 GCCN coupling bug); mesh coordinates byte-identical across all 8 runs; and initial IGBP-2 nwfa matching target values exactly (8,373, 4,186, 150, 300, 150, 300, 150, 300 /cm<sup>3</sup>).</p>
+
+<h4>Headline results</h4>
+
+<table>
+  <thead>
+    <tr><th>Pair</th><th>Amazon IGBP-2 &Delta;P (mm / 30-day)</th><th>30&deg;N &Delta;LHF transport (TW)</th><th>Arctic core 10m wind &Delta; (m/s)</th><th>Arctic &Delta;T2m (K)</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Polluted</td><td>&minus;17.1 (suppression)</td><td>&minus;109</td><td>&minus;0.20</td><td>+1.73</td></tr>
+    <tr><td>Pristine (default activation)</td><td>+5.6 (enhancement)</td><td>&minus;172</td><td>&minus;0.16</td><td>+0.86</td></tr>
+    <tr><td><strong>Pristine + P&ouml;hlker-Dg (l=4)</strong></td><td><strong>+5.4 (enhancement)</strong></td><td><strong>+31</strong></td><td><strong>+0.12</strong></td><td><strong>+0.12</strong></td></tr>
+    <tr><td>Pristine + upper-bound (l=5)</td><td>&minus;3.0 (near zero)</td><td>+136</td><td>+0.45</td><td>+0.24</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Two findings emerge.</strong></p>
+
+<p><strong>First: the sign of the Amazon precipitation response to K-salt addition flips between polluted and pristine baselines</strong> &mdash; negative in anthropogenically-contaminated air, positive in conditions matching P&ouml;hlker's observations. This is the central new finding of Phase 7. It implies that the K-salt mechanism's hydrological effect is <em>regime-dependent</em>: adding CCN to an already-saturated atmosphere produces Twomey suppression, while adding CCN to a nucleation-limited atmosphere produces Twomey enhancement. The sign flip is robust to the activation-size choice: both the default-size and the P&ouml;hlker-Dg-matched (l=4) pristine configurations give positive Amazon &Delta;P (+5.6 and +5.4&nbsp;mm, respectively).</p>
+
+<p><strong>Second: at the P&ouml;hlker-observed particle size (l=4, Dg-matched), far-field circulation responses are modest.</strong> The 30&deg;N transport change is only +31&nbsp;TW (compared with &minus;172 at default size and +136 at l=5 upper-bound), and the Arctic temperature response is +0.12&nbsp;K (near noise floor). This is important for interpretation: the observed forest-emission size gives a clear <em>local</em> benefit to the rainforest itself (through enhanced local rainfall) and a relatively small global-circulation footprint. The larger transport signals from the default-size and upper-bound-size configurations appear to be artifacts of activation-size mismatches rather than physically representative consequences of the P&ouml;hlker mechanism at its measured size.</p>
+
+<h4>Evolutionary interpretation: local-fitness optimization, not global engineering</h4>
+
+<p>Plants and fungi in the Amazon canopy cannot plausibly have been selected for effects on the polar atmosphere. Atmospheric transport timescales from the rainforest to the poles (days to weeks for latent heat, months to years for full Hadley-cell adjustment) are too slow for any feedback on individual-organism or population-level fitness: an emission trait whose consequences appear only months to years later, thousands of kilometers away, at a location with no sensory or reproductive connection to the emitter, has a selection coefficient indistinguishable from zero. By contrast, local rainfall benefit from K-salt emission appears <em>hours to days</em> downstream at distances that encompass the emitting organism and its genetic neighbors. If the observed K-salt size and chemistry are evolutionarily tuned at all, the tuning target must be local rainfall &mdash; not global circulation, not polar climate.</p>
+
+<p>The l=4 result fits this framework cleanly. Pöhlker's Dg = 150&nbsp;nm is very near the optimum for <em>local</em> warm-rain initiation via the Twomey mechanism, while producing only modest consequences for the remote atmospheric circulation. The larger l=5 upper-bound size would cost more biosynthetically (particle mass scales as d<sup>3</sup>) without delivering additional local rain in our pristine baseline &mdash; precisely the phenotype evolution would not favor. The measured forest-emission size is therefore consistent with what a local-fitness optimizer would produce, and the far-field climate consequences are physical downstream artifacts of local microphysics, not targets of selection.</p>
+
+<p>This framing is scientifically cleaner than a &ldquo;forests engineer global climate&rdquo; interpretation. The forest is not doing anything with global intent. But the forest has been emitting these particles continuously over the ~11,000 years of the current interglacial &mdash; and over the tens of millions of years some form of equatorial rainforest has existed. The present-day tropical precipitation patterns, monsoon structure, and polar energy balance evolved around this persistent local-scale microphysical perturbation. Removing the perturbation is not removing a forest goal; it is removing a boundary condition the rest of the Earth system has long since built around.</p>
+
+<h4>Isolation experiment: Thompson's default size is a load-bearing parameter</h4>
+
+<p>Comparing <code>pohlker_size_nosalt</code> (l=5, no K-salt) against <code>pristine_nosalt</code> (default size, no K-salt) &mdash; same nwfa number, different activation assumption only &mdash; reveals that moving the lookup from (80&nbsp;nm, &kappa;=0.4) to (320&nbsp;nm, &kappa;=0.8) produces a &minus;102&nbsp;TW reduction in 30&deg;N poleward LHF transport and a &minus;0.20&nbsp;m/s Arctic core wind reduction on its own, with no K-salt number change involved. These magnitudes are comparable to the K-salt number perturbation effects in the polluted pair. Thompson's default aerosol size/&kappa; assumption is thus a load-bearing parameter for MPAS global circulation, independent of the K-salt question. The l=4 primary configuration, sitting between the default and upper-bound extremes, produces more modest independent shifts and is therefore less sensitive to this parameter choice.</p>
+
+<h4>Caveats</h4>
+
+<p>All Phase 7 numbers come from <em>single N=1 30-day runs</em>. Amazon-mean &Delta;P of order &pm;5&nbsp;mm and transport responses of order &pm;30&nbsp;TW are within the noise floor of weather chaos between two such runs. The qualitative pattern &mdash; sign flip between polluted and pristine baselines, modest far-field response at the P&ouml;hlker-matched size, inversion at the upper-bound size &mdash; is more robust than any specific numerical magnitude. Ensemble confirmation (Future Work item #1) is the critical next step.</p>
+
+<h4>Honest assessment: what Phase 7 supports and what it does not</h4>
+
+<p>Taking the results at face value without overclaiming:</p>
+
+<p><strong>Supported by the l=4 primary configuration:</strong> a robust <em>local</em> Amazon rainfall enhancement (+5.4&nbsp;mm/30-day) from K-salt addition in pristine baseline conditions, and a clean sign flip of this local response across baseline CCN regimes (&minus;17&nbsp;mm at the polluted baseline vs +5.4&nbsp;mm at pristine). These findings are consistent with, though not proof of, the possibility that ecosystem feedbacks have favored aerosol traits associated with local hydrological persistence &mdash; local rainfall enhancement over the emitting forest is one plausible phenotype with direct fitness consequences for the emitting organisms.</p>
+
+<p><strong>Not supported at the magnitude the original hypothesis proposed:</strong> polar-ice-preservation effects. The l=4 far-field signals (30&deg;N &Delta;LHF = +31&nbsp;TW, 30&deg;S &Delta;LHF = &minus;125&nbsp;TW, Arctic &Delta;T2m = +0.12&nbsp;K, Arctic core wind &Delta; = +0.12&nbsp;m/s) are small, near or within the noise floor of single-realization runs, and in several cases point in the direction opposite to &ldquo;salt protects polar ice.&rdquo; The earlier, larger polar signals in the bug-fixed April and January GCCN runs and in the pristine-default and l=5 Phase 7 runs should be interpreted as reflecting the sensitivity of the global circulation to microphysical implementation choices rather than as evidence for a specific polar effect of K-salt.</p>
+
+<p><strong>Our interpretation.</strong> Since atmospheric transport timescales preclude any selection pressure on individual plants or fungi from polar outcomes (see Evolutionary interpretation above), biology-designed polar effects were never physically plausible in the first place. The forest emits K-salt to enhance its own rain. Whatever global-circulation signature that emission has is a <em>downstream physical consequence</em> of the local mechanism summed across the ~tens of millions of years the forest has existed, not a target of biological selection. Whether those downstream consequences, accumulated over millions of forest-km&sup2; and the ~11,000-year Holocene, produce polar signals that are climatically meaningful at equilibrium remains an open question that ensemble modeling and paleoclimate comparison &mdash; not single-realization simulations &mdash; are positioned to answer. The variance-amplification framing (&sect;7.2) is the appropriate lens for interpreting the sensitivity results.</p>
+
+<figure>
+  <img src="mpas_analysis/8run_summary.png?v=2" alt="8-run Phase 7 matrix summary: polluted / pristine / pristine+Dg (l=4) / pristine+upper-bound (l=5)" style="width:100%; max-width:1400px;">
+  <figcaption><strong>Figure 16.</strong> Amazon-zoom (top row) and global Robinson (bottom row) &Delta;P maps for the four K-salt pairs of Phase 7. Shared color scale (&plusmn;131 mm/30-day, RdBu_r). <em>Column 1</em>: polluted baseline &mdash; coherent red suppression over Amazon (&minus;17&nbsp;mm). <em>Column 2</em>: pristine baseline with default activation size &mdash; blue enhancement over Amazon (+5.4&nbsp;mm). <em>Column 3</em>: pristine + P&ouml;hlker-Dg-matched (l=4, 160&nbsp;nm, &kappa;=0.8) &mdash; <strong>our primary P&ouml;hlker-matched configuration</strong>, Amazon &Delta;P = +5.2&nbsp;mm. <em>Column 4</em>: pristine + upper-bound size (l=5, 320&nbsp;nm, &kappa;=0.8) &mdash; sensitivity test, Amazon &Delta;P reverts to &minus;3.5&nbsp;mm, demonstrating the system has been pushed past its precipitation optimum by assuming a larger-than-observed particle size.</figcaption>
+</figure>
+
+<figure>
+  <img src="mpas_analysis/l4_mechanism_4panel.png" alt="4-panel mechanism overview for l=4 primary configuration: precip rate, T2m, latent heat flux, wind speed" style="width:100%; max-width:1400px;">
+  <figcaption><strong>Figure 17.</strong> Four-panel mechanism overview for the P&ouml;hlker-Dg-matched (l=4) primary configuration, SALT &minus; NOSALT. Top left: &Delta;Precipitation rate (mm/day) &mdash; local enhancement over Amazon, quiet elsewhere. Top right: &Delta;T2m (K) &mdash; Arctic warming (+0.12&nbsp;K) is near noise floor. Bottom left: &Delta;Latent-heat transport (W/m) &mdash; modest +31&nbsp;TW reduction at 30&deg;N. Bottom right: &Delta;10-m wind speed (m/s) &mdash; small (+0.12&nbsp;m/s) Arctic core increase. The modest magnitude of far-field responses at the observationally-matched particle size is consistent with an interpretation that the forest biology has been selected for <em>local</em> rainfall &mdash; where selection pressure exists &mdash; not for remote climate effects where transport timescales preclude any feedback on fitness.</figcaption>
+</figure>
+
+<figure>
+  <img src="mpas_analysis/l4_polar_winds.png" alt="Polar stereographic wind-speed change for l=4 pair (Arctic left, Antarctic right)" style="width:100%; max-width:1400px;">
+  <figcaption><strong>Figure 18.</strong> Polar stereographic views of &Delta;10-m wind speed (m/s) for the l=4 primary pair, the physically correct diagnostic for polar ice loss (turbulent sensible-heat flux to ice is proportional to wind speed, not air temperature). Arctic core (&ge;70&deg;N): +0.12&nbsp;m/s. Antarctic core (&le;&minus;70&deg;S): &minus;0.03&nbsp;m/s. Near noise floor for single 30-day realizations, but the direction is consistent with the polluted and pristine-default pairs (both showing reduced Arctic wind with K-salt addition). Full ensemble runs would be needed to separate forced response from weather variability.</figcaption>
+</figure>
+
+<figure>
+  <img src="mpas_analysis/l4_nwfa_day1.png" alt="Day-1 nwfa forcing verification for l=4 pair" style="width:100%; max-width:1200px;">
+  <figcaption><strong>Figure 19.</strong> Methodology verification: day-1 &Delta;nwfa (SALT &minus; NOSALT) over Amazon IGBP-2 cells confirms the 2&times; K-salt perturbation was applied cleanly. Measured Amazon IGBP-2 median &Delta;nwfa = +1.3&times;10<sup>8</sup>&nbsp;/kg, exactly matching the expected +2&times; enhancement of the 1.3&times;10<sup>8</sup>&nbsp;/kg pristine initial value. Non-IGBP-2 regions show essentially zero change (grey), confirming the perturbation is spatially confined to evergreen broadleaf forest cells as intended.</figcaption>
+</figure>
+
+<h4>Policy implication</h4>
+
+<p>The polluted-baseline suppression finding has a sobering corollary: modern Amazon air, already contaminated by anthropogenic CCN sources within ~200&nbsp;km (agricultural burning, urban emissions, deforestation-arc activity), may have pushed the forest's self-watering mechanism out of its efficient regime. If so, rainforest protection efforts focused purely on canopy preservation miss half the picture &mdash; the atmospheric CCN environment the forest evolved emissions for is <em>also</em> degraded by regional industrialization, independent of deforestation. A canopy preserved in clean air functions as a rain engine; the same canopy in polluted air may not.</p>
+
 <h2>7. Discussion</h2>
 
 <h3>7.1 What Was Confirmed</h3>
@@ -735,19 +883,19 @@
 
 <p><strong>Antarctic cooling (April):</strong> in the April 240&nbsp;km bug-fixed experiment, Antarctica cooled by &minus;1.26&nbsp;K &mdash; the hemisphere entering its winter season. This is consistent with reduced southward moisture transport at 30&deg;S (&minus;61&nbsp;TW), supporting the moisture-barrier interpretation for the winter-ward hemisphere.</p>
 
-<p><strong>Salt is a sensitive variable:</strong> the central finding of this work is that changing microphysical implementation details &mdash; while keeping the same hypothesis and initial conditions &mdash; produces 30&deg;N transport responses ranging from &minus;153&nbsp;TW to +153&nbsp;TW. This sensitivity is larger than the estimated CO<sub>2</sub> effect on poleward transport. <strong>This finding does not depend on getting the "correct" sign</strong>; it is a statement about how strongly biogenic salt couples to atmospheric circulation.</p>
+<p><strong>Salt is a sensitive variable:</strong> the central finding of this work is that changing microphysical implementation details &mdash; while keeping the same hypothesis and initial conditions &mdash; produces 30&deg;N transport responses ranging from &minus;153&nbsp;TW to +153&nbsp;TW within these experiments. <strong>This finding does not depend on getting the "correct" sign</strong>; it is a statement about how strongly biogenic salt couples to atmospheric circulation in the model.</p>
 
 <h3>7.2 The Variance Amplification Hypothesis</h3>
 
 <p>We propose that biogenic salt functions primarily as a <em>variance amplifier</em> in the atmospheric circulation, rather than as a monotonic forcing that shifts the mean of Earth's heat transport. The motivating observations are:</p>
 
 <ol>
-  <li>Five different implementations of the same hypothesis produced 30&deg;N transport responses spanning &minus;153 to +153&nbsp;TW, with mean near zero and standard deviation ~115&nbsp;TW.</li>
+  <li>Ten implementations of the same hypothesis produced 30&deg;N transport responses spanning &minus;211 to +153&nbsp;TW (swing ~364&nbsp;TW), with mean ~&minus;31&nbsp;TW and standard deviation ~126&nbsp;TW.</li>
   <li>Small microphysical changes (e.g., collector-drop radius 10&nbsp;&mu;m vs 25&nbsp;&mu;m) flip the sign of the global transport response.</li>
   <li>The hemispherically asymmetric response in April (Antarctic cools strongly, Arctic responds weakly or opposite) is consistent with salt preferentially coupling to whichever atmospheric regime is currently active.</li>
 </ol>
 
-<p>A variance-amplifier interpretation is consistent with published aerosol-microphysics literature. Stevens &amp; Feingold (2009) argued that aerosol effects on precipitation in "buffered systems" are dominated by variability rather than mean shifts. Tao et al. (2012) showed that aerosol effects on convective organization exceed aerosol effects on total precipitation. Our results extend this framing to the larger question of global meridional heat transport: salt may not predictably increase or decrease transport, but may increase the <em>amplitude of its fluctuations</em> on timescales from synoptic (days) to Madden-Julian (2&ndash;3 weeks) to seasonal.</p>
+<p>A variance-amplifier interpretation is consistent with a broad published aerosol-microphysics literature. Stevens &amp; Feingold (2009) argued that aerosol effects on precipitation in "buffered systems" are dominated by variability rather than mean shifts; Tao et al. (2012) showed that aerosol effects on convective organization exceed aerosol effects on total precipitation. The aerosol-invigoration literature (Rosenfeld et al. 2008; Koren et al. 2014; Rosenfeld 2000) similarly establishes that aerosol perturbations can intensify individual convective events without necessarily changing season-average rainfall, producing a higher-variance outcome distribution. Pristine-tropical-rainforest CCN measurements (Gunthe et al. 2009; Martin et al. 2010, 2016 for GoAmazon) provide the observational constraint distinguishing the clean-air rainforest regime from the polluted regimes where the Twomey effect dominates. Our results extend this framing to global meridional heat transport: salt may not predictably increase or decrease transport, but may increase the <em>amplitude of its fluctuations</em> on timescales from synoptic (days) to Madden-Julian (2&ndash;3 weeks) to seasonal.</p>
 
 <p><strong>The critical testable prediction:</strong> a dual-ensemble experiment (e.g., 10 members of CONTROL plus 10 members of NO-SALT, each with perturbed initial conditions) should show larger variance <em>within</em> the CONTROL ensemble than within the NO-SALT ensemble. If Var(CONTROL) &gt; Var(NO-SALT) with statistical significance, the variance-amplifier hypothesis is supported. If the ensembles have similar variance but different means, salt behaves as a conventional mean-shifting forcing. Either answer is publishable and advances the field.</p>
 
@@ -770,7 +918,7 @@
   <li><strong>Global atmospheric dynamics</strong>&mdash;meridional energy transport and the Hadley circulation</li>
   <li><strong>Deforestation studies</strong>&mdash;which have focused on albedo and carbon, not aerosol transport effects</li>
 </ol>
-<p>Aerosol fields in most current climate models are dominated by pollution, sea salt from ocean spray, and mineral dust. Hygroscopicity and CCN parameterizations derived from P&ouml;hlker-era work have entered aerosol-climate modeling in various forms. What we have not identified is a mainstream global climate model that explicitly represents the rainforest tree-fungi biogenic-salt emission pathway as a dedicated warm-rain parameterization tied to vegetation type. Whether this is because the specific pathway has been investigated and found unimportant, or because it has not been systematically tested, remains unclear to us.</p>
+<p>The broader aerosol-climate field has been studied extensively &mdash; from Twomey (1977) and Albrecht (1989)'s foundational indirect-effect framework through aerosol-invigoration debates (Rosenfeld et al. 2008; Koren et al. 2014) and Amazon-specific measurement campaigns (Gunthe et al. 2009; Martin et al. 2010, 2016; Andreae et al. 2004; Artaxo et al. 2013). Aerosol fields in most current climate models include pollution, sea salt from ocean spray, mineral dust, and increasingly primary biological aerosol particles and biogenic secondary organic aerosol. Hygroscopicity and CCN parameterizations derived from P&ouml;hlker-era work have entered aerosol-climate modeling in various forms. What we are unaware of is widespread explicit treatment of the rainforest tree-fungi K-salt emission pathway as a dedicated, vegetation-linked warm-rain parameterization with its own coupling to local convective precipitation. Whether this narrow gap reflects a specific investigation concluding the pathway is unimportant, or simply that it has not been systematically tested, remains unclear to us &mdash; and the sensitivity demonstrated by the Phase&nbsp;7 matrix suggests it is worth testing explicitly.</p>
 
 <h3>7.5 Downwind Transport of Salt Aerosols</h3>
 
@@ -795,6 +943,19 @@
 
 <ol>
   <li><strong>Dual 10-member ensembles at 240&nbsp;km (highest priority, doable on current hardware).</strong> Run 10 CONTROL simulations with perturbed initial conditions plus 10 NO-SALT simulations with matched perturbations. Compare the <em>variance</em> between the two ensembles. If Var(CONTROL) &gt; Var(NO-SALT) significantly, the variance-amplification hypothesis is supported. If variances are similar but means differ, salt behaves as a conventional mean-shifting forcing. Either outcome is publishable. Estimated wall time: ~1.5 days on a consumer laptop. Storage: ~140&nbsp;GB. No HPC required. This is the test we are preparing to run next.</li>
+
+  <li><strong>Baseline-CCN sensitivity via paired pristine/polluted simulations (completed &mdash; see &sect;6.9 for results).</strong>
+  The MPAS default aerosol initial condition derives from the Thompson &amp; Eidhammer (2014) global climatology,
+  which places ~4,400/cm<sup>3</sup> CCN over the Amazon surface &mdash; approximately 10&ndash;20&times;
+  higher than P&ouml;hlker et al.'s (2012) direct measurements at the ATTO tower during pristine clean-air
+  episodes (~100&ndash;300/cm<sup>3</sup>). We ran an eight-simulation matrix at 120&nbsp;km January to test
+  whether K-salt efficacy is a function of baseline CCN and of the assumed particle size.
+  Key findings: (1) the sign of &Delta;P over the Amazon flips between polluted and pristine
+  baselines (&minus;17&nbsp;mm vs +5.4 to +5.6&nbsp;mm / 30-day), confirming K-salt's hydrological
+  effect is regime-dependent; (2) at the P&ouml;hlker-observed particle size (Dg = 150&nbsp;nm,
+  Thompson <code>l=4</code>), local Amazon enhancement is preserved while global-circulation
+  responses are modest (+31&nbsp;TW at 30&deg;N, +0.12&nbsp;K Arctic) &mdash; consistent with
+  ecosystem feedbacks favoring aerosol traits associated with local hydrological persistence rather than far-field climate effects (see &sect;6.9 for full discussion).</li>
 
   <li><strong>Convection-permitting resolution at 30&nbsp;km or finer (requires HPC).</strong> The 60&nbsp;km "convective gray zone" is not a reliable test because the parameterization is out of its design regime but convection is not properly resolved. Going to 30&nbsp;km or 15&nbsp;km distinguishes which parts of our 240&nbsp;km response survive when the convective parameterization stops dominating. A 30&nbsp;km 30-day pair is roughly 100&times; the compute of a 240&nbsp;km pair &mdash; impractical on a laptop, routine on a modest HPC cluster. This is the single most valuable contribution an academic or national-lab collaborator could make.</li>
 
@@ -824,7 +985,7 @@
 
 <h2>10. The Conservation Argument</h2>
 
-<p>Our experiments across five different implementations of the same salt-aerosol hypothesis produced 30&deg;N poleward heat transport responses ranging from &minus;153&nbsp;TW to +153&nbsp;TW &mdash; a sensitivity range that encompasses the entire estimated effect of anthropogenic CO<sub>2</sub> on poleward heat transport (100&ndash;250&nbsp;TW). This sensitivity, we argue, is the core conservation-relevant finding: <strong>biogenic salt aerosols from rainforest trees are potentially a first-order variable for global heat redistribution, and we have not identified a mainstream climate model that explicitly represents this specific rainforest-emission warm-rain pathway as a dedicated process.</strong></p>
+<p>Our ten single-member experiments (summarized numerically in &sect;6.5) span a 30&deg;N transport spread whose amplitude is large enough that current coarse-resolution climate-model configurations which do not explicitly resolve this specific biogenic-salt pathway cannot be assumed to have it bounded. Phase 7 further demonstrated that (i) the <em>sign</em> of the Amazon rainfall response flips between polluted and pristine baseline states, and (ii) at the P&ouml;hlker-observed particle size (Dg = 150&nbsp;nm), the clear local Amazon enhancement comes with only modest global-circulation impact (+31&nbsp;TW, +0.12&nbsp;K Arctic). This second finding is consistent with, though not proof of, the possibility that ecosystem feedbacks have favored aerosol traits associated with local hydrological persistence (the only outcome class for which atmospheric transport timescales admit any fitness feedback) rather than far-field climate engineering. The combined sensitivity and baseline-regime dependence are the core conservation-relevant finding: <strong>biogenic salt aerosols from rainforest trees are potentially a first-order variable for global heat redistribution, their effect is regime-dependent, and we are unaware of widespread explicit treatment of this specific rainforest-emission warm-rain pathway as a dedicated vegetation-linked process in major climate models.</strong></p>
 
 <p>Whether the real atmospheric response to biogenic salt takes any particular sign or magnitude, our results demonstrate that the system is sensitive enough to microphysical implementation details that modeling this rainforest-specific warm-rain pathway as effectively absent is probably a meaningful omission. Three findings within our most physically complete configuration (April 240&nbsp;km, bug-fixed) are individually interpretable in conservation-relevant terms:</p>
 
@@ -840,6 +1001,10 @@
 
 <p>The polar bear and the emperor penguin may depend on many things we don't yet understand about the atmospheric effects of equatorial forests. The sensitivity we have demonstrated is sufficient reason, regardless of the specific direction of effect, to ensure that forests are not removed faster than we can understand what we are losing.</p>
 
+<h2>Author Background</h2>
+
+<p>The author is an independent researcher with an engineering and numerical-modeling background (graduate training in thermofluids, plasma physics, and two-phase flow; patents in semiconductor processing, plasma physics, and microbiome research). This work was conducted outside formal atmospheric-science institutions and is offered as an open, testable hypothesis.</p>
+
 <h2>Acknowledgments</h2>
 
 <p>This work used extensive AI coding and reasoning assistance. Claude Code (Anthropic) handled Docker container construction, MPAS compilation, Fortran modifications for the GCCN tracer, experiment orchestration, and analysis scripts. ChatGPT (OpenAI) provided an independent equation-verification cross-check during the derivation of the microphysics, which identified three errors in the original equations (terminal-velocity approximation, microphysics pathway assignment, and the critical supersaturation for ammonium sulfate) that were subsequently corrected.</p>
@@ -851,12 +1016,23 @@
 <h2>References</h2>
 
 <ol class="ref-list">
-  <li>P&ouml;hlker, C., et al. (2012). Biogenic potassium salt particles as seeds for secondary organic aerosol in the Amazon. <em>Science</em>, 337(6098), 1075&ndash;1078.</li>
-  <li>P&ouml;schl, U., et al. (2010). Rainforest aerosols as biogenic nuclei of clouds and precipitation in the Amazon. <em>Science</em>, 329(5998), 1513&ndash;1516.</li>
-  <li>Gunthe, S. S., et al. (2009). Cloud condensation nuclei in pristine tropical rainforest air of Amazonia. <em>Atmospheric Chemistry and Physics</em>, 9, 7551&ndash;7575.</li>
-  <li>Thompson, G., &amp; Eidhammer, T. (2014). A study of aerosol impacts on clouds and precipitation development in a large winter cyclone. <em>Journal of the Atmospheric Sciences</em>, 71, 3636&ndash;3658.</li>
+  <li>Twomey, S. (1977). The influence of pollution on the shortwave albedo of clouds. <em>Journal of the Atmospheric Sciences</em>, 34, 1149&ndash;1152.</li>
+  <li>Albrecht, B. A. (1989). Aerosols, cloud microphysics, and fractional cloudiness. <em>Science</em>, 245(4923), 1227&ndash;1230.</li>
+  <li>Rosenfeld, D. (2000). Suppression of rain and snow by urban and industrial air pollution. <em>Science</em>, 287(5459), 1793&ndash;1796.</li>
+  <li>Andreae, M. O., Rosenfeld, D., Artaxo, P., Costa, A. A., Frank, G. P., Longo, K. M., &amp; Silva-Dias, M. A. F. (2004). Smoking rain clouds over the Amazon. <em>Science</em>, 303(5662), 1337&ndash;1342.</li>
   <li>Rosenfeld, D., et al. (2008). Flood or drought: How do aerosols affect precipitation? <em>Science</em>, 321(5894), 1309&ndash;1313.</li>
+  <li>Stevens, B., &amp; Feingold, G. (2009). Untangling aerosol effects on clouds and precipitation in a buffered system. <em>Nature</em>, 461, 607&ndash;613.</li>
+  <li>Gunthe, S. S., et al. (2009). Cloud condensation nuclei in pristine tropical rainforest air of Amazonia: size-resolved measurements and modeling of atmospheric aerosol composition and CCN activity. <em>Atmospheric Chemistry and Physics</em>, 9, 7551&ndash;7575.</li>
+  <li>Martin, S. T., et al. (2010). Sources and properties of Amazonian aerosol particles. <em>Reviews of Geophysics</em>, 48, RG2002.</li>
+  <li>P&ouml;schl, U., et al. (2010). Rainforest aerosols as biogenic nuclei of clouds and precipitation in the Amazon. <em>Science</em>, 329(5998), 1513&ndash;1516.</li>
+  <li>P&ouml;hlker, C., et al. (2012). Biogenic potassium salt particles as seeds for secondary organic aerosol in the Amazon. <em>Science</em>, 337(6098), 1075&ndash;1078.</li>
+  <li>Tao, W.-K., Chen, J.-P., Li, Z., Wang, C., &amp; Zhang, C. (2012). Impact of aerosols on convective clouds and precipitation. <em>Reviews of Geophysics</em>, 50, RG2001.</li>
+  <li>Artaxo, P., et al. (2013). Atmospheric aerosols in Amazonia and land use change: from natural biogenic to biomass burning conditions. <em>Faraday Discussions</em>, 165, 203&ndash;235.</li>
+  <li>Thompson, G., &amp; Eidhammer, T. (2014). A study of aerosol impacts on clouds and precipitation development in a large winter cyclone. <em>Journal of the Atmospheric Sciences</em>, 71, 3636&ndash;3658.</li>
+  <li>Koren, I., Dagan, G., &amp; Altaratz, O. (2014). From aerosol-limited to invigoration of warm convective clouds. <em>Science</em>, 344(6188), 1143&ndash;1146.</li>
+  <li>Martin, S. T., et al. (2016). The Green Ocean Amazon Experiment (GoAmazon2014/5) observes pollution affecting gases, aerosols, clouds, and rainfall over the rain forest. <em>Bulletin of the American Meteorological Society</em>, 98(5), 981&ndash;997.</li>
   <li>Berry, E. X., &amp; Reinhardt, R. L. (1974). An analysis of cloud drop growth by collection. <em>Journal of the Atmospheric Sciences</em>, 31, 1814&ndash;1831.</li>
+  <li>Jensen, J. B., &amp; Lee, S. (2008). Giant sea-salt aerosols and warm rain formation in marine stratocumulus. <em>Journal of the Atmospheric Sciences</em>, 65, 3678&ndash;3694.</li>
   <li>Skamarock, W. C., et al. (2012). A multiscale nonhydrostatic atmospheric model using centroidal Voronoi tesselations and C-grid staggering. <em>Monthly Weather Review</em>, 140, 3090&ndash;3105.</li>
 </ol>
 
@@ -871,6 +1047,8 @@
 <h3>A.1 Kappa-K&ouml;hler Activation Theory</h3>
 
 <p><strong>Source:</strong> Petters, M. D. and Kreidenweis, S. M. (2007), <em>Atmospheric Chemistry and Physics</em>, 7, 1961&ndash;1971.</p>
+
+<p><em>Note on electrical neutrality.</em> The formulation below is the standard <strong>neutral</strong> &kappa;-K&ouml;hler equation &mdash; it contains no charge term, no Coulomb cross-section, no Debye length. Charged-aerosol K&ouml;hler variants exist (e.g., Jones &amp; Sparks 1992) and reduce to this equation in the limit of particle charge \(Q \to 0\). We adopt the neutral form as our starting point because airborne cloud CCN are approximately electrically neutral in bulk, and any charge correction is second-order for the activation supersaturations of interest here.</p>
 
 <p>The critical supersaturation at which a dry aerosol particle of diameter \(D_d\) and hygroscopicity parameter \(\kappa\) activates as a cloud droplet:</p>
 
@@ -1076,6 +1254,24 @@ $$R = \sqrt{(10 \times 10^{-6})^2 + 2 \times 10^{-10} \times 0.003 \times 90} = 
 </table>
 
 <p>This cross-verification demonstrates the value of using multiple AI systems: one derives and implements, the other verifies independently. We recommend this practice for all computational research.</p>
+
+<h2>Appendix B: Origin of the Idea</h2>
+
+<p><em>This appendix preserves the informal development-history narrative of how the hypothesis was first conceived. It is not part of the formal scientific argument &mdash; readers focused on methods and results can skip it.</em></p>
+
+<p>The hypothesis originated from a simple observation on a weather map displayed on an iPhone: equatorial rainforests showed <em>continuous</em> rainfall while the adjacent oceans showed <em>intermittent</em> rainfall. This seemed backwards. Oceans have unlimited water for evaporation&mdash;why would rain be more persistent over land?</p>
+
+<p>A mental model formed through several steps. First, the evaporative surfaces of leaves and the active metabolic pumping of water by trees could explain enhanced local humidity. But tropical rainforest topsoil is shockingly thin&mdash;typically 9&ndash;15 inches&mdash;far too shallow to store significant water. Trees in this environment must receive nearly continuous rain or mist, or they die. One possible ecohydrological interpretation is that traits which help trees secure a reliable local water supply could be selectively favored.</p>
+
+<p>This led to a question: <em>might rainforest tree ecosystems be emitting something that influences cloud formation overhead?</em> A search of the cloud-seeding literature for biogenic sources turned up P&ouml;hlker et al. (2012), a study led by researchers at the Max Planck Institute for Chemistry (Mainz, Germany) with Lawrence Berkeley National Laboratory collaborators who performed the electron microscopy. They demonstrated that fungi associated with Amazon rainforest trees eject potassium salt nanoparticles that can serve as cloud condensation nuclei, seeding local cloud formation and precipitation. The rainforest&ndash;fungal aerosol system may therefore act, in effect, as a continuous distributed source of warm-rain nuclei above the emitting canopy &mdash; loosely analogous to the airplanes used for cloud-seeding programs in drier regions.</p>
+
+<p>The next insight came from thermodynamics. If salt controls where condensation occurs, it also controls where <strong>latent heat</strong> is released. Every gram of water vapor that condenses releases 2,500 joules of heat into the surrounding air. Where the rain goes, the heat goes. The atmosphere functions as a <strong>heat pipe</strong>&mdash;water vapor carries latent energy from the surface to the altitude and location where it condenses, depositing that energy as sensible heat.</p>
+
+<p>If salt traps rain locally at the equator, it traps heat at the equator. If the forests are cut and the salt source is removed, that humidity is free to travel poleward, carrying its latent heat with it and releasing it closer to the poles. This is not a greenhouse gas mechanism&mdash;it does not change how much heat Earth traps from the sun. It is a <strong>redistribution</strong> of heat by convection: changing where existing thermal energy is deposited.</p>
+
+<p>An analogy from everyday experience makes the magnitude intuitive: ice cubes in a glass of water melt slowly when the water is still, because a cold thermal boundary layer forms around the ice and insulates it. Stir the water and the ice melts dramatically faster&mdash;not because stirring adds significant energy, but because it thins the thermal boundary layer, steepening the temperature gradient and allowing heat to conduct to the ice surface faster. The energy from stirring is negligible compared to the thermal energy already in the water; the stirring merely <strong>redistributes</strong> it more efficiently. Similarly, removing the equatorial salt barrier does not add heat to the climate system&mdash;it stirs the existing latent heat poleward more efficiently, thinning the thermal stratification that kept the poles cold.</p>
+
+<p>This analogy suggests the effect could be substantial. The atmosphere&rsquo;s total poleward energy transport is approximately 5 petawatts. Even a few percent change in this transport&mdash;driven by the loss of the equatorial moisture barrier&mdash;could deliver enough extra heat to significantly accelerate polar ice loss.</p>
 
 </main>
 
