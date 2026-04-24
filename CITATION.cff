@@ -19,7 +19,7 @@ url: "https://bluesaltbarrier.github.io/blue-salt-barrier/"
 license: CC-BY-4.0
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.TODO-ZENODO-DOI"
+    value: "10.5281/zenodo.19739392"
     description: "Zenodo archive of the v3.0 software release"
 keywords:
   - MPAS-Atmosphere

@@ -3,7 +3,7 @@
 **An open research project on rainforest biogenic salt aerosols in Earth's climate system.**
 
 - **Preprint (v3, EarthArxiv):** DOI assignment pending — update here when live.
-- **Software archive (Zenodo):** DOI mint pending on first release tag — update here when live.
+- **Software archive (Zenodo):** [10.5281/zenodo.19739392](https://doi.org/10.5281/zenodo.19739392) &nbsp; [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19739392.svg)](https://doi.org/10.5281/zenodo.19739392)
 - **Website:** https://bluesaltbarrier.github.io/blue-salt-barrier/
 - **Docker container:** `ghcr.io/bluesaltbarrier/mpas8-gccn:slim` (2.2 GB)
 - **License:** CC BY 4.0 for text/figures; MPAS-derived code follows the original MPAS license.
@@ -92,7 +92,7 @@ Open an issue or pull request. Fork the repo. Tell us what you find — includin
 If this work informs your research, please cite both the preprint and the software archive:
 
 - **Preprint (v3):** Lue, B. (2026). *Exploratory MPAS Sensitivity Experiments on Rainforest Biogenic Salt Aerosols, Tropical Rainfall, and Poleward Moisture Transport.* EarthArxiv. DOI: *pending — will be updated here once assigned.*
-- **Software archive:** Lue, B. (2026). *Blue Salt Barrier: MPAS-Atmosphere sensitivity experiments on rainforest biogenic salt aerosols (v3.0).* Zenodo. DOI: *pending — will be updated here on first release tag.*
+- **Software archive:** Lue, B. (2026). *Blue Salt Barrier: MPAS-Atmosphere sensitivity experiments on rainforest biogenic salt aerosols (v3.0).* Zenodo. [https://doi.org/10.5281/zenodo.19739392](https://doi.org/10.5281/zenodo.19739392)
 
 Underlying tools and observations that should also be cited when appropriate:
 
