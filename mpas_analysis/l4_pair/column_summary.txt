@@ -1,0 +1,15 @@
+Column diagnostic (l=4 Pohlker-Dg pair, Amazon box)
+  max-ΔP cell (idx 34357): lat=-9.05, lon=-62.91, ΔP=+106.84 mm/30d
+  min-ΔP cell (idx 16568): lat=-13.41, lon=-70.46, ΔP=-157.14 mm/30d
+
+metric                           max cell SALT   max cell NOSALT   min cell SALT   min cell NOSALT
+---------------------------------------------------------------------------------------------------------
+Surface LH flux (W/m^2)                  67.33             70.99           25.21             22.33
+Surface HFX flux (W/m^2)                 13.71             13.10           -1.67             -0.67
+Surface QFX (kg/m^2/s)                2.69e-05          2.84e-05        1.01e-05          8.93e-06
+PBL height (m)                           118.4             123.3            94.1              68.8
+10m wind speed (m/s)                      1.09              1.14            0.62              0.50
+Precipitable water (mm)                  52.14             51.51           25.98             26.83
+Column condensate (g/m^2)               82.179            76.342         155.228           218.332
+<w>_q (m/s)                             0.0107            0.0131          0.0191            0.0280
+30-day rain total (mm)                   222.5             182.9           388.8             429.0

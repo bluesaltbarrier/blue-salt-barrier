@@ -1,0 +1,26 @@
+=== Pöhlker-Dg pair — 10+10 ensemble column diagnostic ===
+Region of interest: lat (-15.0, 5.0), lon (-75.0, -50.0)
+
+Top-10 max-ΔP cells (median ΔP=+91.19 mm, range +80.3 to +106.8):
+  idx  34357  lat= -9.05  lon= -62.91  ΔP=+106.84 mm
+  idx   5490  lat= -6.35  lon= -69.25  ΔP=+106.08 mm
+  idx  32127  lat= -1.08  lon= -60.16  ΔP= +98.34 mm
+  idx  34386  lat= -7.25  lon= -69.83  ΔP= +92.29 mm
+  idx  24687  lat= -7.22  lon= -66.38  ΔP= +92.02 mm
+  idx  34380  lat=-14.23  lon= -65.19  ΔP= +90.36 mm
+  idx  10089  lat= -8.11  lon= -68.11  ΔP= +89.00 mm
+  idx  13170  lat= -6.37  lon= -70.40  ΔP= +88.61 mm
+  idx  24697  lat= -9.87  lon= -68.11  ΔP= +86.46 mm
+  idx  16575  lat= -9.20  lon= -74.45  ΔP= +80.26 mm
+
+Bottom-10 min-ΔP cells (median ΔP=-96.34 mm, range -157.1 to -89.8):
+  idx  16568  lat=-13.41  lon= -70.46  ΔP=-157.14 mm
+  idx  34344  lat=-13.70  lon= -50.42  ΔP=-150.38 mm
+  idx   5476  lat=-14.57  lon= -50.97  ΔP=-116.40 mm
+  idx  34345  lat=-13.57  lon= -51.53  ΔP=-110.48 mm
+  idx  16569  lat=-12.56  lon= -71.04  ΔP= -97.35 mm
+  idx  10953  lat= -0.03  lon= -66.39  ΔP= -95.33 mm
+  idx  12423  lat= -7.92  lon= -52.70  ΔP= -92.54 mm
+  idx   5485  lat=-13.37  lon= -69.30  ΔP= -91.94 mm
+  idx  16567  lat=-14.31  lon= -71.05  ΔP= -91.76 mm
+  idx  12421  lat= -6.86  lon= -54.40  ΔP= -89.84 mm

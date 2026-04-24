@@ -1,0 +1,135 @@
+# Citation File Format 1.2.0
+# GitHub parses this file and renders a "Cite this repository" button on the
+# repository landing page. When EarthArxiv and Zenodo DOIs are assigned,
+# replace the two `TODO` placeholders.
+
+cff-version: 1.2.0
+title: "Blue Salt Barrier: MPAS-Atmosphere sensitivity experiments on rainforest biogenic salt aerosols"
+message: "If you use this code, please cite both the software (Zenodo DOI below) and the preprint it supports (EarthArxiv DOI in preferred-citation)."
+type: software
+version: "v3.0"
+date-released: "2026-04-24"
+authors:
+  - family-names: "Lue"
+    given-names: "Brian"
+    email: "bluesaltbarrier@gmail.com"
+    affiliation: "Independent researcher"
+repository-code: "https://github.com/bluesaltbarrier/blue-salt-barrier"
+url: "https://bluesaltbarrier.github.io/blue-salt-barrier/"
+license: CC-BY-4.0
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.TODO-ZENODO-DOI"
+    description: "Zenodo archive of the v3.0 software release"
+keywords:
+  - MPAS-Atmosphere
+  - biogenic aerosols
+  - potassium salt
+  - GCCN
+  - warm-rain microphysics
+  - Amazon rainforest
+  - cloud condensation nuclei
+  - poleward heat transport
+  - climate model sensitivity
+  - kappa-Kohler theory
+  - Pohlker 2012
+
+preferred-citation:
+  type: article
+  title: "Exploratory MPAS Sensitivity Experiments on Rainforest Biogenic Salt Aerosols, Tropical Rainfall, and Poleward Moisture Transport"
+  authors:
+    - family-names: "Lue"
+      given-names: "Brian"
+      email: "bluesaltbarrier@gmail.com"
+      affiliation: "Independent researcher"
+  year: 2026
+  month: 4
+  journal: "EarthArxiv"
+  doi: "10.31223/TODO-EARTHARXIV-DOI"
+  url: "https://eartharxiv.org/repository/view/TODO/"
+  abstract: >
+    Rainforest ecosystems emit biologically influenced aerosol particles,
+    including potassium-rich and other hygroscopic components that may
+    affect warm-rain microphysics. We present exploratory sensitivity
+    experiments using MPAS-Atmosphere to test whether rainforest biogenic
+    salt aerosol parameterizations can alter modeled tropical precipitation
+    and large-scale moisture-transport diagnostics. Across ten single-
+    member 30-day implementations, diagnosed latent-heat transport at
+    30 N varies substantially; the sign of the Amazon rainfall response
+    depends on baseline aerosol loading, consistent with regime-dependent
+    aerosol-cloud theory. The results motivate follow-up using convection-
+    permitting ensembles, observational constraints on rainforest aerosol
+    emissions, and higher-fidelity cloud microphysics.
+
+references:
+  - type: article
+    authors:
+      - family-names: "Pöhlker"
+        given-names: "Christopher"
+      - family-names: "Wiedemann"
+        given-names: "Kenia T."
+      - family-names: "Sinha"
+        given-names: "Bärbel"
+      - family-names: "Shiraiwa"
+        given-names: "Manabu"
+      - family-names: "Gunthe"
+        given-names: "Sachin S."
+      - family-names: "Smith"
+        given-names: "Mackenzie"
+      - name: "et al."
+    title: "Biogenic potassium salt particles as seeds for secondary organic aerosol in the Amazon"
+    journal: "Science"
+    year: 2012
+    volume: 337
+    issue: 6098
+    doi: "10.1126/science.1223264"
+  - type: article
+    authors:
+      - family-names: "Petters"
+        given-names: "Markus D."
+      - family-names: "Kreidenweis"
+        given-names: "Sonia M."
+    title: "A single parameter representation of hygroscopic growth and cloud condensation nucleus activity"
+    journal: "Atmospheric Chemistry and Physics"
+    year: 2007
+    volume: 7
+    doi: "10.5194/acp-7-1961-2007"
+  - type: article
+    authors:
+      - family-names: "Thompson"
+        given-names: "Gregory"
+      - family-names: "Eidhammer"
+        given-names: "Trude"
+    title: "A study of aerosol impacts on clouds and precipitation development in a large winter cyclone"
+    journal: "Journal of the Atmospheric Sciences"
+    year: 2014
+    volume: 71
+    issue: 10
+    doi: "10.1175/JAS-D-13-0305.1"
+  - type: article
+    authors:
+      - family-names: "Skamarock"
+        given-names: "William C."
+      - family-names: "Klemp"
+        given-names: "Joseph B."
+      - family-names: "Duda"
+        given-names: "Michael G."
+      - family-names: "Fowler"
+        given-names: "Laura D."
+      - family-names: "Park"
+        given-names: "Sang-Hun"
+      - family-names: "Ringler"
+        given-names: "Todd D."
+    title: "A multiscale nonhydrostatic atmospheric model using centroidal Voronoi tessellations and C-grid staggering"
+    journal: "Monthly Weather Review"
+    year: 2012
+    volume: 140
+    issue: 9
+    doi: "10.1175/MWR-D-11-00215.1"
+  - type: software
+    title: "MPAS-Atmosphere"
+    authors:
+      - name: "NCAR/LANL MPAS development team"
+    year: 2022
+    version: "8.3.1"
+    url: "https://mpas-dev.github.io/"

@@ -192,6 +192,83 @@ Output plots go to `mpas_analysis/`. Compare against our published plots in the 
 
 ---
 
+## Step 9 (Phase 7). Baseline-CCN sensitivity matrix
+
+Phase 7 is the Pöhlker-anchored sensitivity matrix that drives the paper's main result: the sign of the Amazon rainfall response to K-salt depends on the background CCN state. It requires four paired runs at 120 km, each using a different Thompson-activation configuration and/or background-nwfa setting. The three patch scripts that prepare the required binaries live in `reproducibility/mpas_modifications/`:
+
+| Patch | Configuration built |
+|---|---|
+| `patch_pohlker_ccn.sh` | Rainforest K-salt modelled as ordinary CCN (2× nwfa over IGBP-2), GCCN pathway zeroed. Used for the polluted and pristine baseline pairs. |
+| `patch_pohlker_l4.sh` | Thompson activation index `l=4` (160 nm dry diameter), `m=4` (κ=0.8). Matches Pöhlker 2012 Dg=150 nm. |
+| `patch_pohlker_size.sh` | Thompson activation index `l=5` (320 nm dry diameter), `m=4` (κ=0.8). Upper-bound sensitivity test. |
+
+Apply a patch, rebuild, run the paired simulation, and save output under `mpas_analysis/<pair_key>/` (e.g. `pohlker_pair`, `pristine_pair`, `l4_pair`, `size_pair`).
+
+### Path conventions
+
+All the analysis scripts below are path-portable via argparse. They expect a Docker-mounted `/host` prefix only in the examples — you can point them at any directory.
+
+### Per-pair analysis (repeat for each of the four pairs)
+
+```bash
+# Takes three positional args: salt_dir nosalt_dir out_dir
+docker exec mpas8 bash -c "python3 /host/reproducibility/analysis/analyze_pohlker_pair.py \
+  /host/simulation_outputs/results_120km_jan_pohlker_l4_salt \
+  /host/simulation_outputs/results_120km_jan_pohlker_l4_nosalt \
+  /host/mpas_analysis/l4_pair"
+
+# Analogous for heat-flux and winds
+docker exec mpas8 bash -c "python3 /host/reproducibility/analysis/analyze_pohlker_heat_flux.py \
+  /host/simulation_outputs/results_120km_jan_pohlker_l4_salt \
+  /host/simulation_outputs/results_120km_jan_pohlker_l4_nosalt \
+  /host/mpas_analysis/l4_pair"
+
+docker exec mpas8 bash -c "python3 /host/reproducibility/analysis/analyze_pohlker_winds.py \
+  /host/simulation_outputs/results_120km_jan_pohlker_l4_salt \
+  /host/simulation_outputs/results_120km_jan_pohlker_l4_nosalt \
+  /host/mpas_analysis/l4_pair"
+```
+
+Each pair directory ends up containing `deltaP_data.npz`, `heat_flux_data.npz`, `wind_data.npz`, a `plots/` folder with per-field PNGs, and text summaries.
+
+### Phase 7 summary figure (all four pairs)
+
+```bash
+docker exec mpas8 bash -c "python3 /host/reproducibility/analysis/plot_8run_summary.py \
+  --base /host/mpas_analysis \
+  --salt-ref /host/simulation_outputs/results_120km_jan_pohlker_salt/history.2025-02-11_00.00.00.nc \
+  --out-file /host/mpas_analysis/8run_summary.png"
+```
+
+The `--pairs` and `--pair-labels` flags let you build summary figures for any subset or extension of the default four-pair matrix.
+
+### Paper composite figures (from the l=4 primary pair)
+
+```bash
+docker exec mpas8 bash -c "python3 /host/reproducibility/analysis/make_paper_composites.py \
+  --pair-dir /host/mpas_analysis/l4_pair \
+  --out-dir /host/mpas_analysis \
+  --salt-ref /host/simulation_outputs/results_120km_jan_pohlker_l4_salt/history.2025-02-11_00.00.00.nc"
+```
+
+Produces `l4_mechanism_4panel.png`, `l4_polar_winds.png`, `l4_nwfa_day1.png` — the figures used in the EarthArxiv preprint.
+
+### Column diagnostic (mechanistic explanation of sign-flip)
+
+```bash
+docker exec mpas8 bash -c "python3 /host/reproducibility/analysis/column_diag_ensemble_l4.py \
+  --salt-dir /host/simulation_outputs/results_120km_jan_pohlker_l4_salt \
+  --nosalt-dir /host/simulation_outputs/results_120km_jan_pohlker_l4_nosalt \
+  --dp-npz /host/mpas_analysis/l4_pair/deltaP_data.npz \
+  --out-dir /host/mpas_analysis/l4_pair"
+```
+
+Produces three figures (`column_timemean_ens.png`, `column_heat_budget.png`, `column_peak_snapshot.png`) and a summary text file documenting the 10 max-ΔP and 10 min-ΔP cells inside the Amazon box. `--n-cells`, `--box-lat`, `--box-lon` let you retune the ensemble and the region of interest.
+
+> **Git Bash on Windows:** if you launch from Git Bash, wrap the whole `docker exec mpas8 ...` invocation in `bash -c "..."` (as shown above) so MSYS doesn't rewrite the `/host/` paths on the way in. On Linux or WSL2 native shells the wrapping is unnecessary.
+
+---
+
 ## What Our Results Showed
 
 **240 km April, full GCCN lifecycle physics:**

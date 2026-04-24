@@ -1,0 +1,13 @@
+=== Wind analysis: results_120km_jan_pohlker_l4_salt minus results_120km_jan_pohlker_l4_nosalt ===
+
+Absolute 10m wind speed (m/s, time-avg):
+  Arctic (lat>=60):   A=6.21  B=6.17  Δ=+0.036
+  Arctic core (>=70): A=6.49  B=6.38  Δ=+0.115
+  Antarctic (<=-60):  A=5.69  B=5.86  Δ=-0.175
+  Antarctic (<=-70):  A=4.48  B=4.52  Δ=-0.034
+
+Surface meridional wind (m/s, time-avg; + = northward):
+  30N band:  A=-0.433  B=-0.283  Δ=-0.149
+  30S band:  A=+1.067  B=+1.123  Δ=-0.056
+  Arctic:    A=+0.318  B=+0.368  Δ=-0.050
+  Antarctic: A=+0.832  B=+0.902  Δ=-0.070
