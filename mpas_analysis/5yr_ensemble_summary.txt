@@ -1,0 +1,25 @@
+============================================================
+5-year January Ensemble (240 km, l=4 Pohlker-Dg pristine)
+Amazon IGBP-2 cells: 113
+============================================================
+
+Per-year results:
+   year     salt amzP   nosalt amzP     ΔP (mm)    salt tr30    nosalt tr30    Δtr (TW)
+   2022        234.88        238.39       -3.51     +4546.43       +5153.47     -607.04
+   2023        244.54        229.58      +14.95     +4288.27       +4730.80     -442.52
+   2024        190.15        189.26       +0.89     +4541.24       +4153.15     +388.09
+   2025        263.57        267.35       -3.79     +4238.44       +4106.76     +131.68
+   2026        260.64        247.09      +13.55     +4150.66       +3944.89     +205.76
+
+5-year ensemble means and spreads:
+  Amazon ΔP: mean +4.42 mm/30-day, std 9.18, range [-3.79, +14.95]
+  Δ30°N transport: mean -64.81 TW, std 434.05
+  Sign-flip persistence: 3/5 years positive
+
+Variance amplification F-test (Var(SALT)/Var(NOSALT) at 30°N transport):
+  Var(SALT)   = 32777.28 TW²
+  Var(NOSALT) = 257401.44 TW²
+  F = 0.127  (df=4,4)
+  F-critical at p=0.05 one-sided: 6.388
+  F-critical at p=0.10 one-sided: 4.107
+  Result: variance lower in SALT — does NOT support amplification
