@@ -325,3 +325,75 @@ Specifically seeking contributions from:
 ## License
 
 CC BY 4.0. Use, adapt, redistribute, with attribution.
+
+---
+
+## v4 Reproducibility: Prescribed-CCN 5-Pair January Ensemble (Phase 9)
+
+v4 introduces the Heikenfeld et al. (2019, *Atmos. Chem. Phys.* 19, 2601–2627) prescribed-CCN methodology, holding cloud-base water-friendly aerosol concentrations (`nwfa`) at observed pristine values throughout each 30-day simulation. This removes the surface-emission-feedback dynamics that produced the v3 baseline-convergence behavior documented in §6.9 v3 historical subsection of the manuscript.
+
+### v4 Step 1: Apply the prescribed-CCN patch
+
+Inside the `mpas8` container (or your local MPAS-A v8.3.1 source tree):
+
+```bash
+cd /opt/MPAS-Model
+python3 /host/reproducibility/mpas_modifications/apply_prescribed_ccn_patch.py
+make clean && make gfortran CORE=atmosphere PRECISION=single
+```
+
+The patch modifies `module_mp_thompson.F` to reset `nwfa` to its initialized profile at the end of each microphysics timestep over IGBP-2 (evergreen broadleaf forest) cells, implementing the Heikenfeld 2019 "prescribed at cloudy points" methodology. The patch is idempotent (safe to re-run).
+
+This patch must be applied *on top of* the v3 Pöhlker l=4 patch (`reproducibility/mpas_modifications/patch_pohlker_l4.sh`) since v4 uses the same Pöhlker-Dg-matched activation configuration.
+
+### v4 Step 2: Run the 5-pair ensemble
+
+Each year requires a fresh GFS analysis init for January 12 of that year, plus a SALT and NO-SALT phase. The run scripts in `reproducibility/run_scripts/` orchestrate this:
+
+```bash
+# Per-year SALT + NO-SALT pair (run sequentially or split across machines):
+bash reproducibility/run_scripts/run_ensemble_120km_2022.sh
+bash reproducibility/run_scripts/run_ensemble_120km_2023.sh
+bash reproducibility/run_scripts/run_ensemble_2023_2026.sh    # remaining years
+```
+
+Each pair takes ~9 hours per phase on a 12-core consumer laptop (~18 hours per pair, ~90 hours total for 5 pairs). Output goes to `simulation_outputs/results_120km_jan_pohlker_l4_<year>_prescribed_ccn_<phase>/`.
+
+The `run_validation_*_prescribed_ccn.sh` scripts reproduce the boundary-layer-preservation diagnostic at 240 km that supports Figure 20.
+
+### v4 Step 3: Generate Figures 21–24 and the v4 ensemble summary
+
+```bash
+docker exec mpas8 python3 /host/reproducibility/analysis/v4_figures.py
+```
+
+Outputs land in `mpas_analysis/v4_figures/`:
+- `fig1_per_year_dLHF.png` (Figure 21 in the manuscript)
+- `fig2_meridional_dLHF.png` (Figure 22)
+- `fig3_amazon_dP.png` (Figure 23)
+- `fig4_sign_consistency.png` (Figure 24)
+- `v4_ensemble_data.npz` (raw per-year ΔLHF profiles)
+- `v4_ensemble_summary.txt` (textual statistical summary)
+
+To compute the additional v4 ensemble metrics shown in the website comparison table (5°S/5°N zonal rain, equatorial-band rain, 30°S transport, polar temperatures, Arctic 10 m wind):
+
+```bash
+docker exec mpas8 python3 /host/reproducibility/analysis/v4_table_column.py
+```
+
+### v4 Step 4: Boundary-layer diagnostic (supports §6.9 v3 historical subsection)
+
+```bash
+docker exec mpas8 python3 /host/reproducibility/analysis/bl_preservation_120km_prescribed_ccn.py
+docker exec mpas8 python3 /host/reproducibility/analysis/bl_preservation_240km_prescribed_ccn.py
+```
+
+These produce `mpas_analysis/bl_preservation_*.png` and the `nwfa_convergence_v4.png` summary figure (Figure 20 in the manuscript), which document how the prescribed-CCN methodology preserves cloud-base concentrations across the full simulation while the v3 surface-emission term continues to drive surface-only convergence (the "fake sfc source" / "very far from ideal" `nwfa2d` formula documented in the v4 retraction note in §6.9).
+
+### v4 Reproducibility Notes
+
+- **Compute requirements:** 5 pairs × 2 phases × ~9 hours per phase at 120 km = ~90 hours of single-machine wall time. The work for the published v4 was split across two consumer laptops to reduce calendar time.
+- **Storage:** ~25 GB per simulation × 10 simulations = ~250 GB of NetCDF output for the full ensemble.
+- **Not yet GPU-ported:** the prescribed-CCN patch has been tested only with the CPU build of MPAS-A v8.3.1. The OpenACC GPU port has not been validated for this code path; see the manuscript §9 future-work item on GPU acceleration.
+- **Bit-identical reproduction:** GFS analysis files for January 12 of each year (2022–2026) are required as inputs. Use `init_atmosphere_model` to generate the static init files; identical SALT and NO-SALT initial conditions are required (perturbation is in the prescribed-CCN reset, not in init).
+
