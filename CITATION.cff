@@ -7,8 +7,8 @@ cff-version: 1.2.0
 title: "Blue Salt Barrier: MPAS-Atmosphere sensitivity experiments on rainforest biogenic salt aerosols"
 message: "If you use this code, please cite both the software (Zenodo DOI below) and the preprint it supports (EarthArxiv DOI in preferred-citation)."
 type: software
-version: "v3.0"
-date-released: "2026-04-24"
+version: "v4.0"
+date-released: "2026-05-07"
 authors:
   - family-names: "Lue"
     given-names: "Brian"
@@ -45,10 +45,11 @@ preferred-citation:
       affiliation: "Independent researcher"
       orcid: "https://orcid.org/0009-0004-7980-2168"
   year: 2026
-  month: 4
+  month: 5
   journal: "EarthArxiv"
   doi: "10.31223/X5H19T"
   url: "https://doi.org/10.31223/X5H19T"
+  notes: "v4 (Version 2 in EarthArxiv version history) published 2026-05-07; v3 (Version 1) published 2026-04-25; the DOI resolves to the latest version."
   abstract: >
     Rainforest ecosystems emit biologically influenced aerosol particles,
     including potassium-rich and other hygroscopic components that may
