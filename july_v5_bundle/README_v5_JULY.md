@@ -9,11 +9,28 @@ reverses under flipped (NH-summer / SH-winter) Hadley geometry.
 
 | File | Size | What it is |
 |---|---|---|
-| `mpas8-v5-july.tar` | ~10 GB | A complete Docker image — MPAS, init_atmosphere, the v4 patched binaries, the 120 km mesh, physics tables, WPS ungrib, and all the v5 step scripts, baked in. |
+| `mpas8-v5-july.tar.part.00` … `.03` | ~10.5 GB total | The Docker image, **split into 4 parts** (the USB stick is FAT32, which cannot hold a >4 GB file). Reassemble before use. |
+| `mpas8-v5-july.tar.md5` | — | Checksum to verify the reassembled tar |
+| `REASSEMBLE_FIRST.txt` | — | How to reassemble the 4 parts into `mpas8-v5-july.tar` |
 | `README_v5_JULY.md` | — | This file |
 
-Everything needed to run v5 is **inside the image**. The only external step is
-downloading GFS analysis data (needs a free NCAR RDA account).
+**FIRST STEP — on the Ubuntu travel machine, just run `SETUP_ubuntu.sh`.**
+Copy the whole `july_v5_bundle` folder off the USB onto a local disk, then in
+that folder run:
+
+```bash
+bash SETUP_ubuntu.sh
+```
+
+It automatically reassembles the 4 image parts, verifies the MD5, loads the
+image into Docker, and offers to start the container — the entire setup in one
+step. (`REASSEMBLE_FIRST.txt` documents the manual reassembly if you ever need
+to do it by hand.) Everything below assumes setup is done.
+
+The reassembled image is a complete Docker image — MPAS, init_atmosphere, the v4
+patched binaries, the 120 km mesh, physics tables, WPS ungrib, and all the v5
+step scripts, baked in. The only external step is downloading GFS analysis data
+(needs a free NCAR RDA account).
 
 ## Travel-machine requirements
 

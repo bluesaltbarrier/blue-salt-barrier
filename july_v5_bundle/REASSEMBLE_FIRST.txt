@@ -1,0 +1,55 @@
+==============================================================================
+ REASSEMBLE THE DOCKER IMAGE TAR BEFORE USE
+==============================================================================
+
+The Docker image (mpas8-v5-july.tar, ~10.5 GB) was split into 4 parts because
+the USB stick is FAT32, which cannot hold a single file larger than 4 GB.
+
+On the TRAVEL MACHINE, copy all 4 parts off the USB to a local folder, then
+reassemble them into the single tar before running `docker load`.
+
+Files you should have:
+    mpas8-v5-july.tar.part.00   (3 GB)
+    mpas8-v5-july.tar.part.01   (3 GB)
+    mpas8-v5-july.tar.part.02   (3 GB)
+    mpas8-v5-july.tar.part.03   (1.3 GB)
+    mpas8-v5-july.tar.md5       (checksum of the reassembled tar)
+
+------------------------------------------------------------------------------
+ REASSEMBLE — pick the line for your travel machine
+------------------------------------------------------------------------------
+
+Windows (Command Prompt / cmd.exe), from the folder with the parts:
+
+    copy /b mpas8-v5-july.tar.part.00+mpas8-v5-july.tar.part.01+mpas8-v5-july.tar.part.02+mpas8-v5-july.tar.part.03 mpas8-v5-july.tar
+
+Linux / macOS / WSL, from the folder with the parts:
+
+    cat mpas8-v5-july.tar.part.* > mpas8-v5-july.tar
+
+------------------------------------------------------------------------------
+ VERIFY the reassembled tar (strongly recommended)
+------------------------------------------------------------------------------
+
+The reassembled mpas8-v5-july.tar must have this MD5 checksum:
+
+    795fbb5649dbc23ef15a10ec78a5f1a4
+
+Check it:
+
+  Windows PowerShell:   Get-FileHash mpas8-v5-july.tar -Algorithm MD5
+  Linux / macOS / WSL:  md5sum mpas8-v5-july.tar
+
+If the checksum matches, the tar is intact — proceed with README_v5_JULY.md
+(docker load -i mpas8-v5-july.tar, etc.).
+
+If it does NOT match, one of the parts copied incorrectly off the USB —
+re-copy all 4 parts and reassemble again.
+
+------------------------------------------------------------------------------
+ After reassembly
+------------------------------------------------------------------------------
+
+You can delete the 4 .part. files once the reassembled tar verifies. Then
+follow README_v5_JULY.md from the top.
+==============================================================================
