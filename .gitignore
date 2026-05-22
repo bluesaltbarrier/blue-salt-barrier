@@ -11,6 +11,10 @@ mpas30_*/
 # Docker data
 Docker2/
 *.tar.gz
+*.tar
+# v5 July bundle: ship the Docker image tar out-of-band (too large for git);
+# the README and reference scripts in july_v5_bundle/ are tracked.
+july_v5_bundle/mpas8-v5-july.tar
 
 # Python
 __pycache__/
