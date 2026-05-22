@@ -23,6 +23,12 @@ __pycache__/
 .env
 
 Exploratory MPAS Sensitivity Experiments on Rainforest Biogenic Salt Aerosols, Tropical Rainfall*.pdf
+# Browser-rendered copies of the manuscript PDF (e.g. "Edge ..." prefix)
+*Exploratory MPAS Sensitivity Experiments on Rainforest Biogenic Salt Aerosols*.pdf
+
+# Depletion diagnostic outputs (exploratory scratch, not paper figures)
+mpas_analysis/depletion_*.png
+mpas_analysis/depletion_*.txt
 
 # OS
 .DS_Store
