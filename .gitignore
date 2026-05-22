@@ -26,8 +26,8 @@ Exploratory MPAS Sensitivity Experiments on Rainforest Biogenic Salt Aerosols, T
 # Browser-rendered copies of the manuscript PDF (e.g. "Edge ..." prefix)
 *Exploratory MPAS Sensitivity Experiments on Rainforest Biogenic Salt Aerosols*.pdf
 
-# Depletion diagnostic outputs (exploratory scratch, not paper figures)
-mpas_analysis/depletion_*.png
+# Depletion diagnostic outputs — .txt here; .png re-excluded below after the
+# "Allow the final plot images" negation (gitignore: last match wins)
 mpas_analysis/depletion_*.txt
 
 # OS
@@ -49,6 +49,10 @@ run_120km/
 
 # Allow the final plot images
 !mpas_analysis/*.png
+
+# ...but still exclude depletion diagnostic PNGs (must come after the negation
+# above, since gitignore applies last-match-wins)
+mpas_analysis/depletion_*.png
 
 # Preprint PDFs — kept local until submission to EarthArXiv
 blue-salt-barrier-preprint-*.pdf
