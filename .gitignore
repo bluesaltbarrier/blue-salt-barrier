@@ -61,3 +61,31 @@ blue-salt-barrier-preprint-*.pdf
 
 # Claude Code settings (local tooling, not public)
 .claude/
+
+# Reusable website revision-cycle hold page (local)
+paper-hold.html
+
+# v5 release: internal working material (kept local, not published)
+# paper_strategy.md + handoff memo are internal notes
+files_transferred/
+# paste-helper for the EarthArxiv abstract field
+eartharxiv_v5_abstract.txt
+# PDF-generation vehicle; the .md is the canonical repo copy
+corrigendum_v4_2026-05-23.html
+
+# jan_v2_rerun: exclude local machine artifacts; keep the science scripts
+# backup/transfer state files (local)
+jan_v2_rerun/backup_state.json
+jan_v2_rerun/v2_transfer_state.json
+# USB/watchdog utilities (contain local drive letters)
+jan_v2_rerun/backup_240km_and_delete.ps1
+jan_v2_rerun/backup_to_usb.ps1
+jan_v2_rerun/cleanup_local.ps1
+jan_v2_rerun/install_watchdog.ps1
+jan_v2_rerun/transfer_v2_to_usb.ps1
+jan_v2_rerun/watchdog.ps1
+# local buggy-data USB-backup workflow doc
+jan_v2_rerun/BACKUP_README.md
+# manuscript-editing helpers, not reproducibility
+jan_v2_rerun/renumber_figures.py
+jan_v2_rerun/renumber_for_ens_figure.py

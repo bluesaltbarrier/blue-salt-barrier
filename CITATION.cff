@@ -7,8 +7,8 @@ cff-version: 1.2.0
 title: "Blue Salt Barrier: MPAS-Atmosphere sensitivity experiments on rainforest biogenic salt aerosols"
 message: "If you use this code, please cite both the software (Zenodo DOI below) and the preprint it supports (EarthArxiv DOI in preferred-citation)."
 type: software
-version: "v4.0"
-date-released: "2026-05-07"
+version: "v5.0"
+date-released: "2026-06-30"
 authors:
   - family-names: "Lue"
     given-names: "Brian"
@@ -19,9 +19,11 @@ repository-code: "https://github.com/bluesaltbarrier/blue-salt-barrier"
 url: "https://bluesaltbarrier.github.io/blue-salt-barrier/"
 license: CC-BY-4.0
 identifiers:
+  # The v5.0 Zenodo DOI is minted when the GitHub v5.0 release is cut. Insert it here as the
+  # "this version" identifier at that time. Until then, the concept DOI (below) resolves to latest.
   - type: doi
     value: "10.5281/zenodo.20071932"
-    description: "Zenodo archive of the v4.0 software release (this version)"
+    description: "Zenodo archive of the v4.0 software release (previous version; v4 lead finding retracted — see corrigendum_v4_2026-05-23.md)"
   - type: doi
     value: "10.5281/zenodo.19739392"
     description: "Zenodo archive of the v3.0 software release"
@@ -51,24 +53,28 @@ preferred-citation:
       affiliation: "Independent researcher"
       orcid: "https://orcid.org/0009-0004-7980-2168"
   year: 2026
-  month: 5
+  month: 6
   journal: "EarthArxiv"
   doi: "10.31223/X5H19T"
   url: "https://doi.org/10.31223/X5H19T"
-  notes: "v4 (Version 2 in EarthArxiv version history) published 2026-05-07; v3 (Version 1) published 2026-04-25; the DOI resolves to the latest version."
+  notes: "v5 (Version 3 in EarthArxiv version history) posted 2026-06-30, retracting the v4 30N transport finding (initialization defect; see corrigendum_v4_2026-05-23.md); v4 (Version 2) 2026-05-07; v3 (Version 1) 2026-04-25; the DOI resolves to the latest version."
   abstract: >
     Rainforest ecosystems emit biologically influenced aerosol particles,
-    including potassium-rich and other hygroscopic components that may
-    affect warm-rain microphysics. We present exploratory sensitivity
-    experiments using MPAS-Atmosphere to test whether rainforest biogenic
-    salt aerosol parameterizations can alter modeled tropical precipitation
-    and large-scale moisture-transport diagnostics. Across ten single-
-    member 30-day implementations, diagnosed latent-heat transport at
-    30 N varies substantially; the sign of the Amazon rainfall response
-    depends on baseline aerosol loading, consistent with regime-dependent
-    aerosol-cloud theory. The results motivate follow-up using convection-
-    permitting ensembles, observational constraints on rainforest aerosol
-    emissions, and higher-fidelity cloud microphysics.
+    including potassium-rich hygroscopic components that may affect warm-rain
+    microphysics. We present exploratory sensitivity experiments using
+    MPAS-Atmosphere to test whether rainforest biogenic salt aerosol
+    parameterizations alter modeled tropical precipitation and large-scale
+    moisture transport. A corrected 5-pair January ensemble and a July
+    seasonal-robustness ensemble find the 30 N latent-heat-transport
+    response is not statistically resolved at this ensemble size
+    (-12 +/- 101 TW, p = 0.80); this version retracts the v4 finding of a
+    resolved -80 TW reduction, which was an initialization-defect artifact.
+    At the Amazon source the corrected pipeline reproduces the expected
+    Twomey activation response (a consistency check); the precipitation
+    response bifurcates regime-dependently across years, and the transport
+    response is dominated by internal atmospheric variability. A completed
+    initial-condition perturbation pilot is reported; resolving the forced
+    transport magnitude requires its extension.
 
 references:
   - type: article
