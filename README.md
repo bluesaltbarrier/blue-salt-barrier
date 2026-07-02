@@ -3,7 +3,7 @@
 **An open research project on rainforest biogenic salt aerosols in Earth's climate system.**
 
 - **Preprint (v5, EarthArxiv Version 3):** [10.31223/X5H19T](https://doi.org/10.31223/X5H19T) &nbsp; *(EarthArxiv preserves version history; the DOI resolves to the latest version — v5 — with v4 retained as Version 2 and v3 as Version 1)*
-- **Software archive (Zenodo, v5.0):** DOI minted on release — until then, cite the concept DOI below, which always resolves to the latest version.
+- **Software archive (Zenodo, v5.0):** [10.5281/zenodo.21117113](https://doi.org/10.5281/zenodo.21117113) &nbsp; [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21117113.svg)](https://doi.org/10.5281/zenodo.21117113)
 - **Zenodo concept DOI** (always latest version): [10.5281/zenodo.19739391](https://doi.org/10.5281/zenodo.19739391)
 - **Previous software archives:** v4.0 [10.5281/zenodo.20071932](https://doi.org/10.5281/zenodo.20071932) · v3.0 [10.5281/zenodo.19739392](https://doi.org/10.5281/zenodo.19739392)
 - **Corrigendum to v4:** [`corrigendum_v4_2026-05-23.md`](corrigendum_v4_2026-05-23.md) — documents the initialization defect that led to the v4 retraction.
@@ -115,7 +115,7 @@ Open an issue or pull request. Fork the repo. Tell us what you find — includin
 If this work informs your research, please cite both the preprint and the software archive:
 
 - **Preprint (v5):** Lue, B. (2026). *Exploratory MPAS Sensitivity Experiments on Rainforest Biogenic Salt Aerosols, Tropical Rainfall, and Poleward Moisture Transport* (v5). EarthArxiv. [https://doi.org/10.31223/X5H19T](https://doi.org/10.31223/X5H19T) &nbsp; *(the DOI resolves to the latest version; v4 retained as Version 2, v3 as Version 1)*
-- **Software archive:** Lue, B. (2026). *Blue Salt Barrier: MPAS-Atmosphere sensitivity experiments on rainforest biogenic salt aerosols (v5.0).* Zenodo. Cite the concept DOI [https://doi.org/10.5281/zenodo.19739391](https://doi.org/10.5281/zenodo.19739391) to always resolve to the latest version.
+- **Software archive (v5.0):** Lue, B. (2026). *Blue Salt Barrier: MPAS-Atmosphere sensitivity experiments on rainforest biogenic salt aerosols (v5.0).* Zenodo. [https://doi.org/10.5281/zenodo.21117113](https://doi.org/10.5281/zenodo.21117113) &nbsp; *(or cite the concept DOI [10.5281/zenodo.19739391](https://doi.org/10.5281/zenodo.19739391) to always resolve to the latest version)*
 
 Underlying tools and observations that should also be cited when appropriate:
 

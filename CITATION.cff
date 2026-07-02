@@ -19,8 +19,9 @@ repository-code: "https://github.com/bluesaltbarrier/blue-salt-barrier"
 url: "https://bluesaltbarrier.github.io/blue-salt-barrier/"
 license: CC-BY-4.0
 identifiers:
-  # The v5.0 Zenodo DOI is minted when the GitHub v5.0 release is cut. Insert it here as the
-  # "this version" identifier at that time. Until then, the concept DOI (below) resolves to latest.
+  - type: doi
+    value: "10.5281/zenodo.21117113"
+    description: "Zenodo archive of the v5.0 software release (this version)"
   - type: doi
     value: "10.5281/zenodo.20071932"
     description: "Zenodo archive of the v4.0 software release (previous version; v4 lead finding retracted — see corrigendum_v4_2026-05-23.md)"
