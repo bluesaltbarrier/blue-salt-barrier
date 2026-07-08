@@ -1,0 +1,37 @@
+{
+  "upload_type": "software",
+  "title": "Blue Salt Barrier: MPAS-Atmosphere sensitivity experiments on rainforest biogenic salt aerosols",
+  "creators": [
+    {
+      "name": "Lue, Brian",
+      "affiliation": "Independent researcher",
+      "orcid": "0009-0004-7980-2168"
+    }
+  ],
+  "description": "<p>Equatorial rainforest trees and their associated fungi emit hygroscopic potassium-salt (K-salt) aerosols that activate readily as cloud condensation nuclei and can accelerate warm rain — a biogenic, vegetation-linked pathway not represented as a dedicated process in major climate models. We ask whether this source measurably modulates the poleward transport of latent heat, using MPAS-Atmosphere ensembles with a prescribed-CCN methodology that holds rainforest CCN at observed pristine values (Pöhlker et al. 2012).</p><p>The response separates cleanly into three levels. At the source, adding K-salt roughly doubles Amazon cloud-droplet number in every ensemble member — the expected Twomey activation response, confirming the forcing is applied as designed. Downstream, the Amazon precipitation response bifurcates regime-dependently across years (invigoration or suppression), a clean multi-year demonstration of the aerosol–cloud precipitation duality. In the far field, the 30°N latent-heat-transport response is dominated by internal atmospheric variability: corrected January and July five-pair ensembles both return nulls (30°N = −12 ± 101 TW, p = 0.80), so single-realization-per-year ensembles cannot separate a forced signal from weather noise. We show that an initial-condition perturbation ensemble is the method that can, and report a completed pilot that resolves an apparent large single-year outlier (+159 TW) as a chaotic draw reproduced by no member — turning an apparent contradiction into a measurement of the internal-variability noise floor.</p><p>This version supersedes an earlier one whose headline 30°N reduction (−80 ± 22 TW, p = 0.0013) was traced to an initialization defect and is retracted. This archive contains the corrected initialization pipeline, its four-zone verification scripts, the v5 manuscript and figures, and a full corrigendum documenting the defect and its diagnosis. Repository: github.com/bluesaltbarrier/blue-salt-barrier.</p>",
+  "access_right": "open",
+  "license": {
+    "id": "cc-by-4.0"
+  },
+  "keywords": [
+    "MPAS-Atmosphere",
+    "biogenic aerosols",
+    "potassium salt",
+    "GCCN",
+    "warm-rain microphysics",
+    "Amazon rainforest",
+    "cloud condensation nuclei",
+    "poleward heat transport",
+    "climate model sensitivity",
+    "kappa-Kohler theory",
+    "Pohlker 2012"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.31223/X5H19T",
+      "relation": "isSupplementTo",
+      "resource_type": "publication-preprint",
+      "scheme": "doi"
+    }
+  ]
+}
